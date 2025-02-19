@@ -1,0 +1,23 @@
+<!-- Large version -->
+@for (chart of exampleChart; track chart.id) {
+  <nz-card style="width:240px" [nzCover]="coverTemplate" [nzActions]="[viewTemplate, favoriteTemplate]">
+    <div>
+        <span class="chart-title">{{ chart.title }}</span>
+        <span>by {{ chart.username }}</span>
+      
+    </div>
+    {{ chart.description | paragraph : 200 }}
+  </nz-card>
+
+  <ng-template #viewTemplate>View more</ng-template>
+  <ng-template #favoriteTemplate><nz-icon nzType="heart" [nzTheme]="chart.isFavourited ? 'fill' : 'outline'" /></ng-template>
+  
+  <ng-template #coverTemplate>
+    <img alt="example" [src]="chart.imgSource" />
+  </ng-template>
+}
+
+<!-- Small version -->
+@for (chart of exampleChart; track chart.id) {
+
+}
