@@ -1,23 +1,28 @@
 <!-- Large version -->
-@for (chart of exampleChart; track chart.id) {
-  <nz-card style="width:240px" [nzCover]="coverTemplate" [nzActions]="[viewTemplate, favoriteTemplate]">
-    <div>
-        <span class="chart-title">{{ chart.title }}</span>
-        <span>by {{ chart.username }}</span>
+<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+  @for (chart of exampleChart; track chart.id) {
+    <!-- TODO responsive card -->
+    <div nz-col [nzSpan]="4">
+      <nz-card [nzCover]="coverTemplate" [nzActions]="[viewTemplate, favoriteTemplate]">
+        <div>
+            <span class="chart-title">{{ chart.title }}</span>
+            <span>by <a [routerLink]="'/users/' + chart.username">{{ chart.username }}</a></span>
+          
+        </div>
+        {{ chart.description | paragraph : 200 }}
+      </nz-card>
+
+      <ng-template #viewTemplate>View more</ng-template>
+      <ng-template #favoriteTemplate><nz-icon nzType="heart" [nzTheme]="chart.isFavourited ? 'fill' : 'outline'" /></ng-template>
       
+      <ng-template #coverTemplate>
+        <img alt="example" [src]="chart.imgSource" />
+      </ng-template>
     </div>
-    {{ chart.description | paragraph : 200 }}
-  </nz-card>
+  }
+</div>
 
-  <ng-template #viewTemplate>View more</ng-template>
-  <ng-template #favoriteTemplate><nz-icon nzType="heart" [nzTheme]="chart.isFavourited ? 'fill' : 'outline'" /></ng-template>
-  
-  <ng-template #coverTemplate>
-    <img alt="example" [src]="chart.imgSource" />
-  </ng-template>
-}
-
-<!-- Small version -->
+<!-- Small version - for collapsed view -->
 @for (chart of exampleChart; track chart.id) {
 
 }

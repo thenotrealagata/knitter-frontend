@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
@@ -13,10 +14,16 @@ const ngZorroModules = [
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,  RouterLink, ...ngZorroModules],
+  imports: [RouterOutlet,  RouterLink, NgIf, ...ngZorroModules],
   templateUrl: './app.component.html',
   styleUrl: './app.component.less'
 })
 export class AppComponent {
   title = 'knitter-frontend';
+
+  user = {
+    id: 0,
+    username: "annie-the-knitter",
+    favorites: [1, 2],
+  };
 }
