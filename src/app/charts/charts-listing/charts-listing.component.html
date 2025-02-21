@@ -5,7 +5,7 @@
     <div nz-col [nzSpan]="4">
       <nz-card [nzCover]="coverTemplate" [nzActions]="[viewTemplate, favoriteTemplate]">
         <div>
-            <span class="chart-title">{{ chart.title }}</span>
+            <span class="block-title">{{ chart.title }}</span>
             <span>by <a [routerLink]="'/users/' + chart.username">{{ chart.username }}</a></span>
           
         </div>
@@ -16,7 +16,7 @@
       <ng-template #favoriteTemplate><nz-icon nzType="heart" [nzTheme]="chart.isFavourited ? 'fill' : 'outline'" /></ng-template>
       
       <ng-template #coverTemplate>
-        <img alt="example" [src]="chart.imgSource" />
+        <img [src]="chart.imgSource" />
       </ng-template>
     </div>
   }

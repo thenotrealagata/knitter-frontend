@@ -12,12 +12,12 @@ export interface Stitch {
 }
 
 export enum AtomicStitchType {
-    Knit,
-    Purl,
-    K2tog,
-    P2tog,
-    Yo,
-    Ktbl,
+    Knit = "Knit",
+    Purl = "Purl",
+    K2tog = "K2tog",
+    P2tog = "P2tog",
+    Yo = "Yo",
+    Ktbl = "Ktbl",
 }
 
 export class AtomicStitch implements Stitch {

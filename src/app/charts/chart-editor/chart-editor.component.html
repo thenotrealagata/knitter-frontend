@@ -1,11 +1,17 @@
 <nz-layout style="height: 100%;">
-    <nz-sider nzWidth="300px" nzTheme="dark">
-      
+    <nz-sider class="left-sider" nzTheme="light">
+      <span class="block-title">Stitches</span>
+      <div class="stitch-inventory" nz-flex nzGap="middle" nzWrap="wrap">
+        @for (atomicStitch of atomicStitchInventory; track atomicStitch.type) {
+            <app-stitch [stitch]="atomicStitch" [colors]="colors"></app-stitch>
+        }
+      </div>
+      <span class="block-title">Composite stitches</span>
     </nz-sider>
     <nz-layout class="inner-layout">
       <nz-content>Content</nz-content>
     </nz-layout>
-    <nz-sider nzWidth="300px" nzTheme="dark">
+    <nz-sider nzWidth="300px" nzTheme="light">
       
     </nz-sider>
 </nz-layout>
