@@ -1,3 +1,15 @@
-<div class="stitch">
-
-</div>
+@if (isAtomicStitch | curry : stitch()) {
+    <ng-container *ngTemplateOutlet="atomicStitch; context: { stitch: stitch() }"></ng-container>
+} @else if (isCompositeStitch | curry : stitch()) {
+    @let compositeStitch = stitch() | as : CompositeStitch;
+    @for(sequenceElement of compositeStitch.sequence; track sequenceElement) {
+        <ng-container *ngTemplateOutlet="atomicStitch; context: { stitch: sequenceElement }"></ng-container>
+    }
+}
+<ng-template #atomicStitch let-stitch="stitch">
+    <div class="stitch" nz-tooltip [nzTooltipTitle]="stitch.type" [nzTooltipTrigger]="showDescription() ? 'hover' : null">
+        <svg width="20px" height="20px">
+            <circle cx="10" cy="10" r="5" fill="black"/>
+        </svg>
+    </div>
+</ng-template>

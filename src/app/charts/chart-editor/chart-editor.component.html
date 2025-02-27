@@ -3,13 +3,31 @@
       <span class="block-title">Stitches</span>
       <div class="stitch-inventory" nz-flex nzGap="middle" nzWrap="wrap">
         @for (atomicStitch of atomicStitchInventory; track atomicStitch.type) {
-            <app-stitch [stitch]="atomicStitch" [colors]="colors"></app-stitch>
+            <app-stitch [stitch]="atomicStitch" [colors]="colors" [showDescription]="true"></app-stitch>
         }
       </div>
       <span class="block-title">Composite stitches</span>
     </nz-sider>
     <nz-layout class="inner-layout">
-      <nz-content>Content</nz-content>
+      <nz-content>
+        <div class="chart">
+          @let height = chartForm.controls.height;
+          @for(row of chartForm.controls.pattern.value;  let i = $index, isEvenRow = $even; track i) {
+            @let rowCount = height.value - i;
+            <div class="chart-row">
+              <div class="row-label align-right">
+                <span *ngIf="chartForm.controls.isFlat.value && isEvenRow">{{ rowCount }}</span>
+              </div>
+              @for(stitch of row; let j = $index; track j) {
+                <app-stitch [stitch]="stitch" [colors]="colors"></app-stitch>
+              }
+              <div class="row-label align-left">
+                <span *ngIf="!chartForm.controls.isFlat.value || !isEvenRow"  class="row-label">{{ rowCount }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </nz-content>
     </nz-layout>
     <nz-sider nzWidth="300px" nzTheme="light">
       

@@ -20,6 +20,11 @@ export enum AtomicStitchType {
     Ktbl = "Ktbl",
 }
 
+export enum CompositeStitchType {
+    Cable = "Cable",
+    Wrapped = "Wrapped"
+}
+
 export class AtomicStitch implements Stitch {
     color: Color;
     type: AtomicStitchType;
@@ -30,8 +35,16 @@ export class AtomicStitch implements Stitch {
     }
 }
 
-export interface CompositeStitch extends Stitch {
+export class CompositeStitch implements Stitch {
+    compositeType: CompositeStitchType;
+    color: Color;
     sequence: AtomicStitch[];
+
+    constructor(compositeType: CompositeStitchType, color: Color, sequence: AtomicStitch[]) {
+        this.compositeType = compositeType;
+        this.color = color;
+        this.sequence = sequence;
+    }
 }
 
 export enum CableNeedleDirection {
@@ -39,30 +52,22 @@ export enum CableNeedleDirection {
     HOLD_IN_FRONT_OF_WORK
 }
 
-export class CableStitch implements CompositeStitch {
-    color: Color;
-    sequence: AtomicStitch[];
+export class CableStitch extends CompositeStitch {
     toCableNeedle: number;
     holdCableNeedle: CableNeedleDirection;
 
-    constructor(color: Color, sequence: AtomicStitch[], toCableNeedle: number, holdCableNeedle: CableNeedleDirection) {
-        this.color = color;
-        this.sequence = sequence;
+    constructor(compositeType: CompositeStitchType, color: Color, sequence: AtomicStitch[], toCableNeedle: number, holdCableNeedle: CableNeedleDirection) {
+        super(compositeType, color, sequence);
         this.toCableNeedle = toCableNeedle;
         this.holdCableNeedle = holdCableNeedle;
     }
 }
 
-export class WrappedStitch implements CompositeStitch {
-    color: Color;
-    sequence: AtomicStitch[];
-
-    constructor(color: Color, sequence: AtomicStitch[]) {
-        this.color = color;
-        this.sequence = sequence;
-    }
-}
-
 export type Chart = {
+    title: string;
+    description: string;
+    width: number;
+    height: number;
+    isFlat: boolean;
     pattern: Stitch[][];
 }
