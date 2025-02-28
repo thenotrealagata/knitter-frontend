@@ -1,10 +1,9 @@
 export enum Color {
-    MC,
-    CC1,
-    CC2,
-    CC3,
-    CC4,
-    CC5
+    MC = "MC",
+    CC1 = "CC1",
+    CC2 = "CC2",
+    CC3 = "CC3",
+    CC4 = "CC4",
 }
 
 export interface Stitch {

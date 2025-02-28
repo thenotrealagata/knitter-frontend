@@ -3,7 +3,7 @@
       <span class="block-title">Stitches</span>
       <div class="stitch-inventory" nz-flex nzGap="middle" nzWrap="wrap">
         @for (atomicStitch of atomicStitchInventory; track atomicStitch.type) {
-            <app-stitch [stitch]="atomicStitch" [colors]="colors" [showDescription]="true"></app-stitch>
+            <app-stitch [stitch]="atomicStitch" [colors]="colorPaletteForm" [showDescription]="true"></app-stitch>
         }
       </div>
       <span class="block-title">Composite stitches</span>
@@ -19,13 +19,21 @@
                 <span *ngIf="chartForm.controls.isFlat.value && isEvenRow">{{ rowCount }}</span>
               </div>
               @for(stitch of row; let j = $index; track j) {
-                <app-stitch [stitch]="stitch" [colors]="colors"></app-stitch>
+                <app-stitch [stitch]="stitch" [colors]="colorPaletteForm"></app-stitch>
               }
               <div class="row-label align-left">
                 <span *ngIf="!chartForm.controls.isFlat.value || !isEvenRow"  class="row-label">{{ rowCount }}</span>
               </div>
             </div>
           }
+        </div>
+
+        <app-color-palette class="color-palette" [colors]="colorPaletteForm" [allowSelectMode]="true" [editorMode]="colorPaletteEditorMode" (colorSelected)="colorSelected($event)"></app-color-palette>
+
+        <div class="selected-element">
+          <nz-card>
+            123456
+          </nz-card>
         </div>
       </nz-content>
     </nz-layout>

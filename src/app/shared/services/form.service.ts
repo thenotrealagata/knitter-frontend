@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { Chart, Stitch } from '../../charts/model/Chart';
+import { Chart, Stitch, Color } from '../../charts/model/Chart';
 
 export enum ChartFormError {
 
@@ -13,6 +13,18 @@ export interface ChartForm {
   height: FormControl<number>;
   isFlat: FormControl<boolean>;
   pattern: FormControl<Stitch[][]>;
+}
+
+export interface ColorPaletteForm {
+  [Color.MC]: FormControl<string>;
+  [Color.CC1]?: FormControl<string>;
+  [Color.CC2]?: FormControl<string>;
+  [Color.CC3]?: FormControl<string>;
+  [Color.CC4]?: FormControl<string>;
+}
+
+export interface ColorPickerForm {
+  color: FormControl<string>;
 }
 
 @Injectable({
@@ -56,6 +68,29 @@ export class FormService {
       control = control as FormControl<Stitch[][]>;
 
       return null;
+    }
+  }
+
+  colorPaletteForm(colors?: {[key in Color]?: string}): FormGroup<ColorPaletteForm> {
+    if (colors) {
+      const controls = Object.keys(colors).reduce((controls, color) => {
+        const colorKey = color as Color;
+        if (colors[colorKey]) {
+          controls[colorKey] = new FormControl(colors[colorKey], {
+            validators: Validators.required,
+            nonNullable: true,
+          });
+        }
+        return controls;
+      }, {} as ColorPaletteForm);
+      return new FormGroup(controls as ColorPaletteForm);
+    } else {
+      return new FormGroup({
+        [Color.MC]: new FormControl("#fff", {
+          validators: Validators.required,
+          nonNullable: true,
+        })
+      });
     }
   }
 }

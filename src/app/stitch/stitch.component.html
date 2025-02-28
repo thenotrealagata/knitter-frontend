@@ -7,7 +7,8 @@
     }
 }
 <ng-template #atomicStitch let-stitch="stitch">
-    <div class="stitch" nz-tooltip [nzTooltipTitle]="stitch.type" [nzTooltipTrigger]="showDescription() ? 'hover' : null">
+    @let atomicStitch = stitch | as : AtomicStitch;
+    <div class="stitch" [style.background-color]="colors().get(atomicStitch.color)?.value" nz-tooltip [nzTooltipTitle]="stitch.type" [nzTooltipTrigger]="showDescription() ? 'hover' : null">
         <svg width="20px" height="20px">
             <circle cx="10" cy="10" r="5" fill="black"/>
         </svg>

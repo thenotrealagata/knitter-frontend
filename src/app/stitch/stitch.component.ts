@@ -1,19 +1,21 @@
-import { Component, input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, input, OnChanges, SimpleChanges } from '@angular/core';
 import { Color, Stitch, AtomicStitch, CompositeStitch } from '../charts/model/Chart';
-import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { AsPipe } from '../shared/pipes/as.pipe';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { CurryPipe } from '../shared/services/curry.pipe';
+import { FormGroup } from '@angular/forms';
+import { ColorPaletteForm } from '../shared/services/form.service';
 
 @Component({
   selector: 'app-stitch',
-  imports: [NgIf, AsPipe, NgTemplateOutlet, NzToolTipModule, CurryPipe],
+  imports: [AsPipe, NgTemplateOutlet, NzToolTipModule, CurryPipe],
   templateUrl: './stitch.component.html',
   styleUrl: './stitch.component.less'
 })
 export class StitchComponent implements OnChanges {
   stitch = input.required<Stitch>();
-  colors = input<{ [key in Color]: string | undefined }>();
+  colors = input.required<FormGroup<ColorPaletteForm>>();
   isHoverable = input<boolean>();
   showDescription = input<boolean>(false);
 

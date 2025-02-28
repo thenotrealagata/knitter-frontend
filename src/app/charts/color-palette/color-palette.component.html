@@ -1,0 +1,28 @@
+<nz-card>
+    <form nz-form [formGroup]="colors()">
+        <div class="color-palette" nz-flex nzGap="'large'" [nzWrap]="'nowrap'">
+            @for (controlKey of Object.keys(colors().controls); track controlKey) {
+                @let control = colors().get(controlKey) | as : StringFormControl;
+
+                @if (editorMode()) {
+                    <nz-form-control>
+                        <nz-color-picker [formControl]="control" [nzDisabledAlpha]="true"></nz-color-picker>
+                    </nz-form-control>
+                } @else if (control && control.value) {
+                    <nz-form-control>
+                        <nz-color-block (click)="colorBlockSelected(controlKey)" [nzColor]="control.value"></nz-color-block>
+                    </nz-form-control>
+                }
+            }
+
+            @if(allowSelectMode()) {
+                @if(editorMode()) {
+                    <nz-icon nzType="plus" nzTheme="outline" />
+                    <nz-icon nzType="close" nzTheme="outline" (click)="toggleEditorMode()"/>
+                } @else {
+                    <nz-icon nzType="edit" nzTheme="outline" (click)="toggleEditorMode()"/>
+                }
+            }
+        </div>
+    </form>
+</nz-card>
