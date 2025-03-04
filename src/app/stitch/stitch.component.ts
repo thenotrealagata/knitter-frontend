@@ -5,7 +5,7 @@ import { AsPipe } from '../shared/pipes/as.pipe';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { CurryPipe } from '../shared/services/curry.pipe';
 import { FormGroup } from '@angular/forms';
-import { ColorPaletteForm } from '../shared/services/form.service';
+import { ColorPaletteForm } from '../shared/services/form.interfaces';
 
 @Component({
   selector: 'app-stitch',

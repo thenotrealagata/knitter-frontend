@@ -1,6 +1,6 @@
 import { Component, input, model, output } from '@angular/core';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
-import { ColorPaletteForm } from '../../shared/services/form.service';
+import { ColorPaletteForm } from '../../shared/services/form.interfaces';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzColorPickerModule } from 'ng-zorro-antd/color-picker';

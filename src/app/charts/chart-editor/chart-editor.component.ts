@@ -3,21 +3,32 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { AtomicStitch, AtomicStitchType, Color, Stitch } from '../model/Chart';
 import { StitchComponent } from '../../stitch/stitch.component';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
-import { ChartForm, ColorPaletteForm, FormService } from '../../shared/services/form.service';
-import { FormGroup } from '@angular/forms';
+import { FormService } from '../../shared/services/form.service';
+import { ChartForm, ColorPaletteForm } from '../../shared/services/form.interfaces';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { ColorPaletteComponent } from "../color-palette/color-palette.component";
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { PatternDescriptionPipe } from '../../shared/pipes/pattern-description.pipe';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzUploadComponent } from 'ng-zorro-antd/upload';
+
+const ngZorroModules = [NzLayoutModule, NzFlexModule, NzCardModule, NzFormModule, NzInputModule, NzPageHeaderModule, NzButtonModule, NzSwitchModule, NzUploadComponent];
 
 @Component({
   selector: 'app-chart-editor',
-  imports: [NzLayoutModule, StitchComponent, NzFlexModule, NgIf, ColorPaletteComponent, NzCardModule],
+  imports: [StitchComponent, NgIf, ColorPaletteComponent, PatternDescriptionPipe, ReactiveFormsModule, ...ngZorroModules],
   templateUrl: './chart-editor.component.html',
   styleUrl: './chart-editor.component.less'
 })
 export class ChartEditorComponent {
   selectedStitch: Stitch | undefined;
   selectedColor: Color = Color.MC;
+  selectedStitchTrigger = 0;
 
   chartForm: FormGroup<ChartForm>;
   colorPaletteForm: FormGroup<ColorPaletteForm>;
@@ -48,13 +59,37 @@ export class ChartEditorComponent {
   initializePattern(width: number, height: number): Stitch[][] {
     // TODO on WS it should be purl?
     // Initialize with stockinette pattern
-    return Array.from({ length: width }).fill(
-      Array.from({ length: height }).fill(new AtomicStitch(Color.MC, AtomicStitchType.Knit)) as Stitch[]
-    ) as Stitch[][];
+    const pattern = [];
+    for (let i = 0; i < height; i++) {
+      const column = [];
+      for (let j = 0; j < width; j++) {
+        column.push(new AtomicStitch(Color.MC, AtomicStitchType.Knit));
+      }
+      pattern.push(column);
+    }
+
+    return pattern;
   }
 
   colorSelected(color: Color) {
     this.selectedColor = color;
     this.atomicStitchInventory.forEach(stitch => stitch.color = this.selectedColor);
+    this.selectedStitchTrigger++;
+  }
+
+  stitchSelected(stitch: Stitch) {
+    this.selectedStitch = stitch;
+  }
+
+  drawStitch(stitch: Stitch) {
+    if (stitch instanceof AtomicStitch && this.selectedStitch instanceof AtomicStitch) {
+      stitch.color = this.selectedStitch.color;
+      stitch.type = this.selectedStitch.type;
+    }
+    // TODO other cases
+  }
+
+  uploadFile(event: unknown) {
+    console.log('upload file', event);
   }
 }

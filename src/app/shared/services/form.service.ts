@@ -1,31 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Chart, Stitch, Color } from '../../charts/model/Chart';
-
-export enum ChartFormError {
-
-}
-
-export interface ChartForm {
-  title: FormControl<string>;
-  description: FormControl<string>;
-  width: FormControl<number>;
-  height: FormControl<number>;
-  isFlat: FormControl<boolean>;
-  pattern: FormControl<Stitch[][]>;
-}
-
-export interface ColorPaletteForm {
-  [Color.MC]: FormControl<string>;
-  [Color.CC1]?: FormControl<string>;
-  [Color.CC2]?: FormControl<string>;
-  [Color.CC3]?: FormControl<string>;
-  [Color.CC4]?: FormControl<string>;
-}
-
-export interface ColorPickerForm {
-  color: FormControl<string>;
-}
+import { ChartForm, ColorPaletteForm } from './form.interfaces';
 
 @Injectable({
   providedIn: 'root'
