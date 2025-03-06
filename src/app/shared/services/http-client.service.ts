@@ -22,4 +22,8 @@ export class HttpClientService {
   getChartById(id: number): Observable<Chart> {
     return this.http.get<Chart>(`${this.baseUrl}/charts/${id}`);
   }
+
+  createChart(chart: Chart): Observable<Chart> {
+    return this.http.post<Chart>(`${this.baseUrl}/charts`, chart);
+  }
 }

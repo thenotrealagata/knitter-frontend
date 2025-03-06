@@ -1,12 +1,11 @@
-import { Component, ViewChildren } from '@angular/core';
+import { Component } from '@angular/core';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { AtomicStitch, AtomicStitchType, Color, Stitch } from '../model/Chart';
+import { AtomicStitch, AtomicStitchType, Chart, Color, Stitch } from '../model/Chart';
 import { StitchComponent } from '../../stitch/stitch.component';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { FormService } from '../../shared/services/form.service';
-import { ChartForm, ColorPaletteForm } from '../../shared/services/form.interfaces';
+import { ChartForm } from '../../shared/services/form.interfaces';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
 import { ColorPaletteComponent } from "../color-palette/color-palette.component";
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { PatternDescriptionPipe } from '../../shared/pipes/pattern-description.pipe';
@@ -16,12 +15,16 @@ import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzUploadComponent } from 'ng-zorro-antd/upload';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClientService } from '../../shared/services/http-client.service';
+import { ChartBlockComponent } from "../chart-block/chart-block.component";
 
 const ngZorroModules = [NzLayoutModule, NzFlexModule, NzCardModule, NzFormModule, NzInputModule, NzPageHeaderModule, NzButtonModule, NzSwitchModule, NzUploadComponent];
 
 @Component({
   selector: 'app-chart-editor',
-  imports: [StitchComponent, NgIf, ColorPaletteComponent, PatternDescriptionPipe, ReactiveFormsModule, ...ngZorroModules],
+  providers: [HttpClientService],
+  imports: [StitchComponent, ColorPaletteComponent, PatternDescriptionPipe, ReactiveFormsModule, ...ngZorroModules, ChartBlockComponent],
   templateUrl: './chart-editor.component.html',
   styleUrl: './chart-editor.component.less'
 })
@@ -30,8 +33,10 @@ export class ChartEditorComponent {
   selectedColor: Color = Color.MC;
   selectedStitchTrigger = 0;
 
-  chartForm: FormGroup<ChartForm>;
-  colorPaletteForm: FormGroup<ColorPaletteForm>;
+  chartForm: FormGroup<ChartForm> | undefined;
+
+  // Creating a variation
+  isLoading: boolean;
 
   colorPaletteEditorMode = true;
 
@@ -39,21 +44,46 @@ export class ChartEditorComponent {
     .filter(key => isNaN(Number(key)))
     .map(stitchType => new AtomicStitch(this.selectedColor, stitchType as AtomicStitchType));
 
-  constructor(formService: FormService) {
-    this.chartForm = formService.chartForm({
-      title: '',
-      description: '',
-      width: 10,
-      height: 10,
-      isFlat: true,
-      pattern: this.initializePattern(10, 10)
-    });
+  httpClient: HttpClientService;
+  formService: FormService;
 
-    this.colorPaletteForm = formService.colorPaletteForm({
-      [Color.MC]: "#fefefe",
-      [Color.CC1]: "#792960",
-      [Color.CC2]: "#CE7DA5"
-    });
+  constructor(formService: FormService, activatedRoute: ActivatedRoute, httpClient: HttpClientService) {
+    this.httpClient = httpClient;
+    this.formService = formService;
+
+    const forkedChartId = Number(activatedRoute.snapshot.paramMap.get("id"));
+    
+    if (forkedChartId) {
+      this.isLoading = true;
+      // Created chart is a variation on an existing chart
+      httpClient.getChartById(forkedChartId).subscribe({
+        next: (chart) => {
+          console.log('get', chart);
+          this.chartForm = formService.chartForm(chart);
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.chartForm = formService.chartForm();
+        }
+      });
+    } else {
+      this.isLoading = false;
+      // Initialize chart
+      this.chartForm = formService.chartForm({
+        title: '',
+        description: '',
+        width: 10,
+        height: 10,
+        flat: true,
+        pattern: this.initializePattern(10, 10),
+        parentId: undefined,
+        colors: {
+          [Color.MC]: "#fefefe",
+          [Color.CC1]: "#792960",
+          [Color.CC2]: "#CE7DA5"
+        }
+      });
+    }
   }
 
   initializePattern(width: number, height: number): Stitch[][] {
@@ -91,5 +121,23 @@ export class ChartEditorComponent {
 
   uploadFile(event: unknown) {
     console.log('upload file', event);
+  }
+
+  isSaving: boolean = false;
+
+  saveChart() {
+    if (!this.chartForm) return;
+
+    this.isSaving = true;
+    this.httpClient.createChart(this.formService.chartFormToChart(this.chartForm)).subscribe(
+      {
+        next: (chart: Chart) => {
+          this.isSaving = false;
+        },
+        error: (err: any) => {
+          this.isSaving = false;
+        }
+      }
+    )
   }
 }

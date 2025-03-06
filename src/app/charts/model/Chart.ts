@@ -15,8 +15,7 @@ export enum AtomicStitchType {
     Purl = "Purl",
     K2tog = "K2tog",
     P2tog = "P2tog",
-    Yo = "Yo",
-    Ktbl = "Ktbl",
+    Yo = "Yo"
 }
 
 export enum CompositeStitchType {
@@ -63,10 +62,14 @@ export class CableStitch extends CompositeStitch {
 }
 
 export type Chart = {
+    id?: number;
     title: string;
     description: string;
     width: number;
     height: number;
-    isFlat: boolean;
+    flat: boolean;
     pattern: Stitch[][];
+    createdAt?: string;
+    parentId?: number;
+    colors: Partial<{ [key in Color]: string }>;
 }

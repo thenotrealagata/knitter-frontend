@@ -9,7 +9,7 @@ import { PanelsListingComponent } from './panels/panels-listing/panels-listing.c
 export const routes: Routes = [
     { path: 'charts/list', component: ChartsListingComponent, },
     { path: 'charts/create', component: ChartEditorComponent },
-    { path: 'charts/edit/:id', component: ChartEditorComponent },
+    { path: 'charts/create/:id', component: ChartEditorComponent },
     { path: 'charts/view/:id', component: ChartViewerComponent },
     { path: 'users/:username', component: UserViewerComponent },
     { path: 'panels/list', component: PanelsListingComponent },

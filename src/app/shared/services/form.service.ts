@@ -28,13 +28,14 @@ export class FormService {
         validators: Validators.required,
         nonNullable: true
       }),
-      isFlat: new FormControl<boolean>(chart ? chart.isFlat : true, {
+      isFlat: new FormControl<boolean>(chart ? chart.flat : true, {
         validators: Validators.required,
         nonNullable: true,
       }),
       pattern: new FormControl<Stitch[][]>(
         chart ? chart.pattern : [], { validators: [Validators.required, this.getChartValidator()], nonNullable: true }
       ),
+      colors: this.colorPaletteForm(chart?.colors)
     });
   }
 
@@ -68,5 +69,17 @@ export class FormService {
         })
       });
     }
+  }
+
+  chartFormToChart(chartForm: FormGroup<ChartForm>): Chart {
+    return {
+      title: chartForm.controls.title.value,
+      description: chartForm.controls.description.value,
+      flat: chartForm.controls.isFlat.value,
+      pattern: chartForm.controls.pattern.value,
+      width: chartForm.controls.width.value,
+      height: chartForm.controls.height.value,
+      colors: chartForm.controls.colors.value,
+    };
   }
 }

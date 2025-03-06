@@ -1,5 +1,5 @@
 import { Color, Stitch } from "../../charts/model/Chart";
-import { FormControl } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 
 export enum ChartFormError {
 
@@ -12,6 +12,7 @@ export interface ChartForm {
   height: FormControl<number>;
   isFlat: FormControl<boolean>;
   pattern: FormControl<Stitch[][]>;
+  colors: FormGroup<ColorPaletteForm>;
 }
 
 export interface ChartRowForm {
@@ -26,8 +27,4 @@ export interface ColorPaletteForm {
   [Color.CC2]?: FormControl<string>;
   [Color.CC3]?: FormControl<string>;
   [Color.CC4]?: FormControl<string>;
-}
-
-export interface ColorPickerForm {
-  color: FormControl<string>;
 }

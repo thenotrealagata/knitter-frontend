@@ -3,36 +3,22 @@
     <span class="block-title">Stitches</span>
     <div class="stitch-inventory" nz-flex nzGap="middle" nzWrap="wrap">
       @for (atomicStitch of atomicStitchInventory; track atomicStitch.type) {
-          <app-stitch [stitch]="atomicStitch" [colors]="colorPaletteForm" [showDescription]="true" (click)="stitchSelected(atomicStitch)"></app-stitch>
+          <app-stitch [stitch]="atomicStitch" [colors]="chartForm?.controls?.colors?.value ?? {}" [showDescription]="true" (click)="stitchSelected(atomicStitch)"></app-stitch>
       }
     </div>
     <span class="block-title">Composite stitches</span>
   </nz-sider>
   <nz-layout class="inner-layout">
     <nz-content>
-      <div class="chart">
-        @let height = chartForm.controls.height;
-        @for(row of chartForm.controls.pattern.value;  let i = $index, isEvenRow = $even; track i) {
-          @let rowCount = height.value - i;
-          <div class="chart-row">
-            <div class="row-label align-right">
-              <span *ngIf="chartForm.controls.isFlat.value && isEvenRow">{{ rowCount }}</span>
-            </div>
-            @for(stitch of row; let j = $index; track j) {
-              <app-stitch [stitch]="stitch" [colors]="colorPaletteForm" (click)="drawStitch(stitch)"></app-stitch>
-            }
-            <div class="row-label align-left">
-              <span *ngIf="!chartForm.controls.isFlat.value || !isEvenRow"  class="row-label">{{ rowCount }}</span>
-            </div>
-          </div>
-        }
-      </div>
-      <app-color-palette class="color-palette" [colors]="colorPaletteForm" [allowSelectMode]="true" [editorMode]="colorPaletteEditorMode" (colorSelected)="colorSelected($event)"></app-color-palette>
+      @if (chartForm) {
+        <app-chart-block [chartForm]="chartForm" (stitchClicked)="drawStitch($event)"></app-chart-block>
+        <app-color-palette class="color-palette" [colors]="chartForm.controls.colors" [allowSelectMode]="true" [editorMode]="colorPaletteEditorMode" (colorSelected)="colorSelected($event)"></app-color-palette>
+      }
       @if (selectedStitch) {
         <div class="selected-element">
           <nz-card nz-row>
             <div nz-col>
-              <app-stitch [stitch]="selectedStitch" [colors]="colorPaletteForm"></app-stitch>
+              <app-stitch [stitch]="selectedStitch" [colors]="chartForm?.controls?.colors?.value ?? {}"></app-stitch>
             </div>
             <div nz-col>
               {{
@@ -45,67 +31,70 @@
     </nz-content>
   </nz-layout>
   <nz-sider nzWidth="400px" nzTheme="light">
-    <form nz-form [formGroup]="chartForm">
-      <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Title</nz-form-label>
-        <nz-form-control [nzSm]="16" [nzXs]="24">
-          <input nz-input formControlName="title" placeholder="Title" type="text" />
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Description</nz-form-label>
-        <nz-form-control [nzSm]="16" [nzXs]="24">
-          <input nz-input formControlName="description" placeholder="Description" type="text" />
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Size</nz-form-label>
-        <nz-input-group nzCompact>
-          <input formControlName="width" type="text" nz-input placeholder="Width" style="width:50px; text-align: center;" />
-          <input
-            type="text"
-            disabled
-            nz-input
-            placeholder="×"
-            class="demo-input-split"
-            style="width: 30px; border-left: 0px; border-right: 0px; pointer-events: none; background-color: rgb(255, 255, 255);"
-          />
-          <input formControlName="height" type="text" nz-input placeholder="Height" class="demo-input-right" style="width:50px; text-align: center; border-left-width: 0px;" />
-        </nz-input-group>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Knitted flat</nz-form-label>
-        <nz-form-control [nzSm]="16" [nzXs]="24">
-          <nz-switch formControlName="isFlat" nzSize="small"></nz-switch>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>
-          Tags
-        </nz-form-label>
-        <nz-form-control [nzSm]="16" [nzXs]="24">
+    @if (chartForm) {
+      <form nz-form [formGroup]="chartForm">
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Title</nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24">
+            <input nz-input formControlName="title" placeholder="Title" type="text" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Description</nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24">
+            <input nz-input formControlName="description" placeholder="Description" type="text" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Size</nz-form-label>
+          <nz-input-group nzCompact>
+            <input formControlName="width" type="text" nz-input placeholder="Width" style="width:50px; text-align: center;" />
+            <input
+              type="text"
+              disabled
+              nz-input
+              placeholder="×"
+              class="demo-input-split"
+              style="width: 30px; border-left: 0px; border-right: 0px; pointer-events: none; background-color: rgb(255, 255, 255);"
+            />
+            <input formControlName="height" type="text" nz-input placeholder="Height" class="demo-input-right" style="width:50px; text-align: center; border-left-width: 0px;" />
+          </nz-input-group>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Knitted flat</nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24">
+            <nz-switch formControlName="isFlat" nzSize="small"></nz-switch>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>
+            Tags
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24">
 
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>
-          Image
-        </nz-form-label>
-        <nz-form-control [nzSm]="16" [nzXs]="24">
-          <nz-upload
-          nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          [nzHeaders]="{ authorization: 'authorization-text' }"
-          (nzChange)="uploadFile($event)"
-        >
-          <button nz-button>
-            <nz-icon nzType="upload" />
-            Click to Upload
-          </button>
-        </nz-upload>
-        </nz-form-control>
-      </nz-form-item>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>
+            Image
+          </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24">
+            <nz-upload
+            nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            [nzHeaders]="{ authorization: 'authorization-text' }"
+            (nzChange)="uploadFile($event)"
+          >
+            <button nz-button>
+              <nz-icon nzType="upload" />
+              Click to Upload
+            </button>
+          </nz-upload>
+          </nz-form-control>
+        </nz-form-item>
 
+        <button nz-button [nzLoading]="isSaving" nzType="primary" (click)="saveChart()">Save</button>
 
-    </form>
+      </form>
+    }
   </nz-sider>
 </nz-layout>

@@ -1,0 +1,40 @@
+@let chartFormInstance = chartForm();
+@let chartInstance = chart();
+@if (chartFormInstance && chartFormInstance.controls) {
+    <ng-container *ngTemplateOutlet="chartBlock; context: {
+        height: chartFormInstance.controls.height.value,
+        pattern: chartFormInstance.controls.pattern.value,
+        isFlat: chartFormInstance.controls.isFlat.value,
+        colors: chartFormInstance.controls.colors.value
+    }"></ng-container>
+} @else if (chartInstance) {
+    <ng-container *ngTemplateOutlet="chartBlock; context: {
+        height: chartInstance.height,
+        pattern: chartInstance.pattern,
+        isFlat: chartInstance.flat,
+        colors: chartInstance.colors
+    }"></ng-container>
+}
+
+<ng-template #chartBlock let-pattern="pattern" let-height="height" let-colors="colors" let-isFlat="isFlat">
+    <div class="chart">
+        @for(row of pattern; let i = $index, isEvenRow = $even; track i) {
+            @let rowCount = height - i;
+            <div class="chart-row">
+                <div class="row-label align-right">
+                    @if (isFlat && isEvenRow) {
+                        <span>{{ rowCount }}</span>
+                    }
+                </div>
+                @for(stitch of row; let j = $index; track j) {
+                    <app-stitch [stitch]="stitch" [colors]="colors" (click)="stitchClicked.emit(stitch)"></app-stitch>
+                }
+                <div class="row-label align-left">
+                    @if (!isFlat || !isEvenRow) {
+                        <span class="row-label">{{ rowCount }}</span>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</ng-template>
