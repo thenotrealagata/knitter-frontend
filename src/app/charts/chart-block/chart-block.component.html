@@ -5,18 +5,16 @@
         height: chartFormInstance.controls.height.value,
         pattern: chartFormInstance.controls.pattern.value,
         isFlat: chartFormInstance.controls.isFlat.value,
-        colors: chartFormInstance.controls.colors.value
     }"></ng-container>
 } @else if (chartInstance) {
     <ng-container *ngTemplateOutlet="chartBlock; context: {
         height: chartInstance.height,
         pattern: chartInstance.pattern,
-        isFlat: chartInstance.flat,
-        colors: chartInstance.colors
+        isFlat: chartInstance.flat
     }"></ng-container>
 }
 
-<ng-template #chartBlock let-pattern="pattern" let-height="height" let-colors="colors" let-isFlat="isFlat">
+<ng-template #chartBlock let-pattern="pattern" let-height="height" let-isFlat="isFlat">
     <div class="chart">
         @for(row of pattern; let i = $index, isEvenRow = $even; track i) {
             @let rowCount = height - i;
@@ -27,7 +25,22 @@
                     }
                 </div>
                 @for(stitch of row; let j = $index; track j) {
-                    <app-stitch [stitch]="stitch" [colors]="colors" (click)="stitchClicked.emit(stitch)"></app-stitch>
+                    <app-stitch
+                        [stitch]="stitch"
+                        [colors]="colors()"
+                        (mouseenter)="stitchEvent.emit({
+                                stitch: stitch,
+                                event: 'mouseenter'
+                        })"
+                        (mouseout)="stitchEvent.emit({
+                            stitch: stitch,
+                            event: 'mouseout'
+                        })"
+                        (click)="stitchEvent.emit({
+                                stitch: stitch,
+                                event: 'click'
+                        })">
+                    </app-stitch>
                 }
                 <div class="row-label align-left">
                     @if (!isFlat || !isEvenRow) {

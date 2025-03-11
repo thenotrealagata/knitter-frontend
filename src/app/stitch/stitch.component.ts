@@ -4,6 +4,8 @@ import { NgTemplateOutlet } from '@angular/common';
 import { AsPipe } from '../shared/pipes/as.pipe';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { CurryPipe } from '../shared/services/curry.pipe';
+import { ColorPaletteForm } from '../shared/services/form.interfaces';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-stitch',
@@ -13,7 +15,7 @@ import { CurryPipe } from '../shared/services/curry.pipe';
 })
 export class StitchComponent implements OnChanges {
   stitch = input.required<Stitch>();
-  colors = input<Partial<{ [key in Color]: string }>>();
+  colors = input<FormGroup<ColorPaletteForm>>();
   isHoverable = input<boolean>();
   showDescription = input<boolean>(false);
 
@@ -35,11 +37,11 @@ export class StitchComponent implements OnChanges {
   }
 
   isAtomicStitch(stitch: Stitch): boolean {
-    return stitch instanceof AtomicStitch;
+    return 'type' in stitch;
   }
 
   isCompositeStitch(stitch: Stitch): boolean {
-    return stitch instanceof CompositeStitch;
+    return 'sequence' in stitch;
   }
 
 }

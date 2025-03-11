@@ -4,7 +4,7 @@ import { AtomicStitch, AtomicStitchType, Chart, Color, Stitch } from '../model/C
 import { StitchComponent } from '../../stitch/stitch.component';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { FormService } from '../../shared/services/form.service';
-import { ChartForm } from '../../shared/services/form.interfaces';
+import { ChartForm, ColorPaletteForm } from '../../shared/services/form.interfaces';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ColorPaletteComponent } from "../color-palette/color-palette.component";
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -18,8 +18,9 @@ import { NzUploadComponent } from 'ng-zorro-antd/upload';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClientService } from '../../shared/services/http-client.service';
 import { ChartBlockComponent } from "../chart-block/chart-block.component";
+import { NzGridModule } from 'ng-zorro-antd/grid';
 
-const ngZorroModules = [NzLayoutModule, NzFlexModule, NzCardModule, NzFormModule, NzInputModule, NzPageHeaderModule, NzButtonModule, NzSwitchModule, NzUploadComponent];
+const ngZorroModules = [NzLayoutModule, NzFlexModule, NzCardModule, NzFormModule, NzInputModule, NzPageHeaderModule, NzButtonModule, NzSwitchModule, NzUploadComponent, NzGridModule];
 
 @Component({
   selector: 'app-chart-editor',
@@ -34,6 +35,7 @@ export class ChartEditorComponent {
   selectedStitchTrigger = 0;
 
   chartForm: FormGroup<ChartForm> | undefined;
+  colorPaletteForm: FormGroup<ColorPaletteForm> | undefined;
 
   // Creating a variation
   isLoading: boolean;
@@ -83,6 +85,11 @@ export class ChartEditorComponent {
           [Color.CC2]: "#CE7DA5"
         }
       });
+      this.colorPaletteForm = formService.colorPaletteForm({
+        [Color.MC]: "#fefefe",
+        [Color.CC1]: "#792960",
+        [Color.CC2]: "#CE7DA5"
+      });
     }
   }
 
@@ -111,6 +118,17 @@ export class ChartEditorComponent {
     this.selectedStitch = stitch;
   }
 
+  stitchEvent(event: { stitch: Stitch; event: "click" | "mouseenter" | "mouseout"; }) {
+    switch (event.event) {
+      case "click":
+        this.drawStitch(event.stitch);
+        break;
+      case "mouseenter":
+        // TODO stitch hover with selected stitch
+        break;
+    }
+  }
+
   drawStitch(stitch: Stitch) {
     if (stitch instanceof AtomicStitch && this.selectedStitch instanceof AtomicStitch) {
       stitch.color = this.selectedStitch.color;
@@ -126,10 +144,10 @@ export class ChartEditorComponent {
   isSaving: boolean = false;
 
   saveChart() {
-    if (!this.chartForm) return;
+    if (!(this.chartForm && this.colorPaletteForm)) return;
 
     this.isSaving = true;
-    this.httpClient.createChart(this.formService.chartFormToChart(this.chartForm)).subscribe(
+    this.httpClient.createChart(this.formService.chartFormToChart(this.chartForm, this.colorPaletteForm)).subscribe(
       {
         next: (chart: Chart) => {
           this.isSaving = false;

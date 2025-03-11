@@ -3,22 +3,22 @@
     <span class="block-title">Stitches</span>
     <div class="stitch-inventory" nz-flex nzGap="middle" nzWrap="wrap">
       @for (atomicStitch of atomicStitchInventory; track atomicStitch.type) {
-          <app-stitch [stitch]="atomicStitch" [colors]="chartForm?.controls?.colors?.value ?? {}" [showDescription]="true" (click)="stitchSelected(atomicStitch)"></app-stitch>
+          <app-stitch [stitch]="atomicStitch" [colors]="colorPaletteForm" [showDescription]="true" (click)="stitchSelected(atomicStitch)"></app-stitch>
       }
     </div>
     <span class="block-title">Composite stitches</span>
   </nz-sider>
   <nz-layout class="inner-layout">
     <nz-content>
-      @if (chartForm) {
-        <app-chart-block [chartForm]="chartForm" (stitchClicked)="drawStitch($event)"></app-chart-block>
-        <app-color-palette class="color-palette" [colors]="chartForm.controls.colors" [allowSelectMode]="true" [editorMode]="colorPaletteEditorMode" (colorSelected)="colorSelected($event)"></app-color-palette>
+      @if (chartForm && colorPaletteForm) {
+        <app-chart-block [chartForm]="chartForm" [colors]="colorPaletteForm" (stitchEvent)="stitchEvent($event)"></app-chart-block>
+        <app-color-palette class="color-palette" [colors]="colorPaletteForm" [allowSelectMode]="true" [editorMode]="colorPaletteEditorMode" (colorSelected)="colorSelected($event)"></app-color-palette>
       }
       @if (selectedStitch) {
         <div class="selected-element">
           <nz-card nz-row>
             <div nz-col>
-              <app-stitch [stitch]="selectedStitch" [colors]="chartForm?.controls?.colors?.value ?? {}"></app-stitch>
+              <app-stitch [stitch]="selectedStitch" [colors]="colorPaletteForm"></app-stitch>
             </div>
             <div nz-col>
               {{

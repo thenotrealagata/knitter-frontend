@@ -34,8 +34,7 @@ export class FormService {
       }),
       pattern: new FormControl<Stitch[][]>(
         chart ? chart.pattern : [], { validators: [Validators.required, this.getChartValidator()], nonNullable: true }
-      ),
-      colors: this.colorPaletteForm(chart?.colors)
+      )
     });
   }
 
@@ -71,7 +70,7 @@ export class FormService {
     }
   }
 
-  chartFormToChart(chartForm: FormGroup<ChartForm>): Chart {
+  chartFormToChart(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>): Chart {
     return {
       title: chartForm.controls.title.value,
       description: chartForm.controls.description.value,
@@ -79,7 +78,7 @@ export class FormService {
       pattern: chartForm.controls.pattern.value,
       width: chartForm.controls.width.value,
       height: chartForm.controls.height.value,
-      colors: chartForm.controls.colors.value,
+      colors: colorPaletteForm.value,
     };
   }
 }

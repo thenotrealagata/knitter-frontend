@@ -1,6 +1,6 @@
-<nz-card>
+<nz-card class="width-max-content">
     <form nz-form [formGroup]="colors()">
-        <div class="color-palette" nz-flex nzGap="'large'" [nzWrap]="'nowrap'">
+        <div class="color-palette">
             @for (controlKey of Object.keys(colors().controls); track controlKey) {
                 @let control = colors().get(controlKey) | as : StringFormControl;
 

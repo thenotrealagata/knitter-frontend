@@ -1,6 +1,6 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, OnChanges, output, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ChartForm } from '../../shared/services/form.interfaces';
+import { ChartForm, ColorPaletteForm } from '../../shared/services/form.interfaces';
 import { StitchComponent } from '../../stitch/stitch.component';
 import { Chart, Stitch } from '../model/Chart';
 import { NgTemplateOutlet } from '@angular/common';
@@ -14,5 +14,10 @@ import { NgTemplateOutlet } from '@angular/common';
 export class ChartBlockComponent {
   chartForm = input<FormGroup<ChartForm>>();
   chart = input<Chart>();
-  stitchClicked = output<Stitch>();
+  colors = input.required<FormGroup<ColorPaletteForm>>();
+
+  stitchEvent = output<{
+    stitch: Stitch;
+    event: 'click' | 'mouseenter' | 'mouseout'
+  }>();
 }
