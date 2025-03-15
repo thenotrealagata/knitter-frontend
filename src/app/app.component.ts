@@ -7,6 +7,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { SessionService } from './session.service';
 
 const ngZorroModules = [
   NzPageHeaderModule, NzDropDownModule, NzSpaceModule, NzIconModule, NzButtonModule, NzAvatarComponent
@@ -14,16 +15,16 @@ const ngZorroModules = [
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,  RouterLink, NgIf, ...ngZorroModules],
+  imports: [RouterOutlet,  RouterLink, ...ngZorroModules],
   templateUrl: './app.component.html',
   styleUrl: './app.component.less'
 })
 export class AppComponent {
   title = 'knitter-frontend';
 
-  user = {
-    id: 0,
-    username: "annie-the-knitter",
-    favorites: [1, 2],
-  };
+  sessionService: SessionService;
+
+  constructor (sessionService: SessionService) {
+    this.sessionService = sessionService;
+  }
 }

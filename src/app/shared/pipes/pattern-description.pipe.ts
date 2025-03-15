@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AtomicStitch, CompositeStitch, Stitch } from '../../charts/model/Chart';
+import { AtomicStitch, CompositeStitch, Stitch } from '../../model/Chart';
 
 @Pipe({
   name: 'patternDescription'

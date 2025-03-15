@@ -5,6 +5,7 @@ import { ChartViewerComponent } from './charts/chart-viewer/chart-viewer.compone
 import { UserViewerComponent } from './users/user-viewer/user-viewer.component';
 import { PanelsListingComponent } from './panels/panels-listing/panels-listing.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { LoginComponent } from './login/login.component';
 
 // Keep in mind: Angular uses first-match strategy
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
     { path: 'users/:username', component: UserViewerComponent },
     { path: 'panels/list', component: PanelsListingComponent },
     { path: 'panels/create', component: ChartEditorComponent }, // TODO separate panel create component?
+    { path: 'login', component: LoginComponent },
     { path: '404', component: NotFoundComponent},
     { path: '**', redirectTo: '/404' },
 ];

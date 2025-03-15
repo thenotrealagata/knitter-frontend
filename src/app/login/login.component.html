@@ -1,0 +1,39 @@
+<div class="container">
+    <h2>
+        @if(login) {
+            Log in
+        } @else {
+            Register
+        }
+    </h2>
+    <form nz-form [formGroup]="authForm" nzLabelAlign="right">
+        <nz-form-item>
+            <nz-form-label nzRequired>Username</nz-form-label>
+            <nz-form-control>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="username" placeholder="Username" type="text" />
+                  </nz-form-control>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzRequired>Password</nz-form-label>
+            <nz-form-control>
+                <nz-form-control [nzSm]="16" [nzXs]="24">
+                    <input nz-input formControlName="password" placeholder="Password" type="password" />
+                  </nz-form-control>
+            </nz-form-control>
+        </nz-form-item>
+        @if(login) {
+            <button nz-button (click)="authenticate()">
+                Log in
+            </button>
+            <p>Don't have an account yet? <a (click)="toggleLoginMode()">Register here.</a></p>
+        } @else {
+            <button nz-button (click)="authenticate()">
+                Register
+            </button>
+            <p>Already registered? <a (click)="toggleLoginMode()">Log in here.</a></p>
+        }
+        
+    </form>
+</div>

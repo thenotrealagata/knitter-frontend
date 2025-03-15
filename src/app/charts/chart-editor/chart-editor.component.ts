@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { AtomicStitch, AtomicStitchType, Chart, Color, Stitch } from '../model/Chart';
+import { AtomicStitch, AtomicStitchType, Chart, Color, Stitch } from '../../model/Chart';
 import { StitchComponent } from '../../stitch/stitch.component';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { FormService } from '../../shared/services/form.service';
@@ -147,7 +147,7 @@ export class ChartEditorComponent {
     if (!(this.chartForm && this.colorPaletteForm)) return;
 
     this.isSaving = true;
-    this.httpClient.createChart(this.formService.chartFormToChart(this.chartForm, this.colorPaletteForm)).subscribe(
+    this.httpClient.createChart(this.formService.formToChart(this.chartForm, this.colorPaletteForm)).subscribe(
       {
         next: (chart: Chart) => {
           this.isSaving = false;

@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Chart } from '../../charts/model/Chart';
+import { Chart } from '../../model/Chart';
+import { AuthenticationRequest, User } from '../../model/User';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +26,25 @@ export class HttpClientService {
 
   createChart(chart: Chart): Observable<Chart> {
     return this.http.post<Chart>(`${this.baseUrl}/charts`, chart);
+  }
+
+  login(user: AuthenticationRequest): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}/login`, user);
+  }
+
+  register(user: AuthenticationRequest): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/register`, user);
+  }
+
+  getUser(username: string): Observable<User> {
+    return this.http.get<User>(`${this.baseUrl}/users/${username}`);
+  }
+
+  addFavorite(username: string, chartId: number): Observable<User> {
+    return this.http.post<User>(`${this.baseUrl}/users/${username}/favorites/${chartId}`, null);
+  }
+
+  removeFavorite(username: string, chartId: number): Observable<User> {
+    return this.http.delete<User>(`${this.baseUrl}/users/${username}/favorites/${chartId}`);
   }
 }

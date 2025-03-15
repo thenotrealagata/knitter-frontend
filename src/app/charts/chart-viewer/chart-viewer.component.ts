@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClientService } from '../../shared/services/http-client.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChartBlockComponent } from "../chart-block/chart-block.component";
-import { Chart, Stitch } from '../model/Chart';
+import { Chart, Stitch } from '../../model/Chart';
 import { ColorPaletteComponent } from "../color-palette/color-palette.component";
 import { FormGroup } from '@angular/forms';
 import { ColorPaletteForm } from '../../shared/services/form.interfaces';

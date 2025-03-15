@@ -1,5 +1,5 @@
 import { Component, input, OnChanges, SimpleChanges } from '@angular/core';
-import { Stitch, AtomicStitch, CompositeStitch, Color } from '../charts/model/Chart';
+import { Stitch, AtomicStitch, CompositeStitch, Color } from '../model/Chart';
 import { NgTemplateOutlet } from '@angular/common';
 import { AsPipe } from '../shared/pipes/as.pipe';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';

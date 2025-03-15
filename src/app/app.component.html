@@ -6,18 +6,29 @@
       <a routerLink="/panels/list" routerLinkActive="active" *nzSpaceItem>Panels</a>
     </nz-space>
   </nz-page-header-subtitle>
-  <nz-page-header-extra *ngIf="user">
+  <nz-page-header-extra>
     <nz-space nzAlign="center" nzSize="middle">
-      <button nz-button nz-dropdown [nzDropdownMenu]="addNewMenu" nzPlacement="bottomRight" nzSize="small" *nzSpaceItem>
-        <nz-icon nzType="plus" nzTheme="outline" />
-      </button>
-      <nz-dropdown-menu #addNewMenu="nzDropdownMenu">
-        <ul nz-menu nzSelectable>
-          <li routerLink="/charts/create" nz-menu-item>New chart</li>
-          <li routerLink="/panels/create" nz-menu-item>New panel</li>
-        </ul>
-      </nz-dropdown-menu>
-      <nz-avatar routerLink="/users/{{user.username}}" nzIcon="user" style="background-color:#792960; cursor: pointer;" *nzSpaceItem></nz-avatar>
+      @if (sessionService.getToken()) {
+        @let username = sessionService.getUsername();
+        <button nz-button nz-dropdown [nzDropdownMenu]="addNewMenu" nzPlacement="bottomRight" nzSize="small" *nzSpaceItem>
+          <nz-icon nzType="plus" nzTheme="outline" />
+        </button>
+        <nz-dropdown-menu #addNewMenu="nzDropdownMenu">
+          <ul nz-menu nzSelectable>
+            <li routerLink="/charts/create" nz-menu-item>New chart</li>
+            <li routerLink="/panels/create" nz-menu-item>New panel</li>
+          </ul>
+        </nz-dropdown-menu>
+        <nz-avatar nz-dropdown [nzDropdownMenu]="userActionsMenu" routerLink="/users/{{username}}" nzIcon="user" style="background-color:#792960; cursor: pointer;" *nzSpaceItem></nz-avatar>
+        <nz-dropdown-menu #userActionsMenu>
+          <ul nz-menu>
+            <li nz-menu-item routerLink="/users/{{username}}">View profile</li>
+            <li nz-menu-item (click)="sessionService.logout()">Log out</li>
+          </ul>
+        </nz-dropdown-menu>
+      } @else {
+        <button nz-button nzType="primary" routerLink="/login" *nzSpaceItem>Login</button>
+      }
     </nz-space>
   </nz-page-header-extra>
 </nz-page-header>

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { Chart, Stitch, Color } from '../../charts/model/Chart';
-import { ChartForm, ColorPaletteForm } from './form.interfaces';
+import { Chart, Stitch, Color } from '../../model/Chart';
+import { AuthenticationForm, ChartForm, ColorPaletteForm } from './form.interfaces';
+import { AuthenticationRequest } from '../../model/User';
 
 @Injectable({
   providedIn: 'root'
@@ -70,7 +71,7 @@ export class FormService {
     }
   }
 
-  chartFormToChart(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>): Chart {
+  formToChart(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>): Chart {
     return {
       title: chartForm.controls.title.value,
       description: chartForm.controls.description.value,
@@ -79,6 +80,20 @@ export class FormService {
       width: chartForm.controls.width.value,
       height: chartForm.controls.height.value,
       colors: colorPaletteForm.value,
+    };
+  }
+
+  authenticationForm(): FormGroup<AuthenticationForm> {
+    return new FormGroup({
+      username: new FormControl<string>("", { validators: Validators.required, nonNullable: true }),
+      password: new FormControl<string>("", { validators: Validators.required, nonNullable: true })
+    });
+  }
+
+  formToAuthRequest(form: FormGroup<AuthenticationForm>): AuthenticationRequest {
+    return {
+      username: form.controls.username.value,
+      password: form.controls.password.value
     };
   }
 }

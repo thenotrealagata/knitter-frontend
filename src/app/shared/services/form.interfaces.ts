@@ -1,4 +1,4 @@
-import { Color, Stitch } from "../../charts/model/Chart";
+import { Color, Stitch } from "../../model/Chart";
 import { FormControl, FormGroup } from "@angular/forms";
 
 export enum ChartFormError {
@@ -26,4 +26,9 @@ export interface ColorPaletteForm {
   [Color.CC2]?: FormControl<string>;
   [Color.CC3]?: FormControl<string>;
   [Color.CC4]?: FormControl<string>;
+}
+
+export interface AuthenticationForm {
+  username: FormControl<string>;
+  password: FormControl<string>;
 }
