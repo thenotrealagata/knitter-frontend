@@ -5,7 +5,7 @@
             <h2>{{ chart.title }}</h2>
         </div>
         <div nz-col [nzSpan]="12" class="interaction-buttons">
-            <button nz-button nzType="default">
+            <button (click)="toggleFavorite()" nz-button nzType="default">
                 @if(isFavorite) {
                     <nz-icon nzType="heart" nzTheme="fill" />
                     In favorites

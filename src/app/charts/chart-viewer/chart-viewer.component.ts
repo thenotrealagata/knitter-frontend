@@ -11,6 +11,7 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { PatternDescriptionPipe } from '../../shared/pipes/pattern-description.pipe';
+import { UserService } from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-chart-viewer',
@@ -25,14 +26,20 @@ export class ChartViewerComponent {
 
   hoveredStitch?: Stitch;
 
-  isFavorite: boolean = false;
+  isFavorite: boolean;
   patternToDescription?: Stitch[][];
 
-  constructor(httpClient: HttpClientService, activatedRoute: ActivatedRoute, formService: FormService, router: Router) {
+  userService: UserService;
+
+  constructor(
+    httpClient: HttpClientService,
+    activatedRoute: ActivatedRoute,
+    formService: FormService,
+    router: Router,
+    userService: UserService) {
     const chartId = Number(activatedRoute.snapshot.paramMap.get("id"));
     httpClient.getChartById(chartId).subscribe({
       next: (chart) => {
-        console.log('get', chart);
         this.chart = chart;
         this.colorPaletteForm = formService.colorPaletteForm(chart.colors);
         this.patternToDescription = [...chart.pattern].reverse();
@@ -44,6 +51,9 @@ export class ChartViewerComponent {
         }
       }
     });
+
+    this.userService = userService;
+    this.isFavorite = userService.isFavorite(chartId);
   }
 
   stitchEvent(event: { stitch: Stitch; event: "click" | "mouseenter" | "mouseout"; }) {
@@ -57,4 +67,10 @@ export class ChartViewerComponent {
     }
   }
 
+  async toggleFavorite() {
+    if (!this.chart?.id) return;
+    await this.userService.toggleFavorite(this.chart?.id, !this.isFavorite);
+
+    this.isFavorite = this.userService.getUser()?.favorites.some(chart => chart.id === this.chart?.id) ?? false;
+  }
 }

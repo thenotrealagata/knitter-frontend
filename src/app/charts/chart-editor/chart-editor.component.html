@@ -7,6 +7,9 @@
       }
     </div>
     <span class="block-title">Composite stitches</span>
+    <nz-divider nzPlain nzText="Cable stitches" nzOrientation="left"></nz-divider>
+    <app-stitch [stitch]="cableStitch1"></app-stitch>
+    <nz-divider nzPlain nzText="Wrapped stitches" nzOrientation="left"></nz-divider>
   </nz-sider>
   <nz-layout class="inner-layout">
     <nz-content>
@@ -18,7 +21,7 @@
         <div class="selected-element">
           <nz-card nz-row>
             <div nz-col>
-              <app-stitch [stitch]="selectedStitch" [colors]="colorPaletteForm"></app-stitch>
+              <app-stitch [stitch]="selectedStitch" [colors]="colorPaletteForm" [size]="30"></app-stitch>
             </div>
             <div nz-col>
               {{
@@ -47,18 +50,50 @@
         </nz-form-item>
         <nz-form-item>
           <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Size</nz-form-label>
-          <nz-input-group nzCompact>
-            <input formControlName="width" type="text" nz-input placeholder="Width" style="width:50px; text-align: center;" />
-            <input
-              type="text"
-              disabled
-              nz-input
-              placeholder="×"
-              class="demo-input-split"
-              style="width: 30px; border-left: 0px; border-right: 0px; pointer-events: none; background-color: rgb(255, 255, 255);"
-            />
-            <input formControlName="height" type="text" nz-input placeholder="Height" class="demo-input-right" style="width:50px; text-align: center; border-left-width: 0px;" />
-          </nz-input-group>
+          <nz-form-control [nzSm]="16" [nzXs]="24">
+            <nz-space-compact nzBlock>
+              <nz-input-number
+                formControlName="width"
+                (change)="onWidthChange()"
+                placeholder="Width"
+                [nzControls]="false"
+                [nzMin]="1"
+                [nzMax]="30"
+                style="width: 50px; text-align: center;"
+                nz-popconfirm
+                [nzPopconfirmTrigger]="null"
+                [nzPopconfirmVisible]="confirmNewWidthPopconfirmVisible"
+                nzPopconfirmTitle="Are you sure you want to decrease the width of this chart?"
+                nzPopconfirmPlacement="bottom"
+                (nzOnConfirm)="confirmNewWidth()"
+                (nzOnCancel)="cancelNewWidth()"
+              />
+              <input
+                type="text"
+                disabled
+                nz-input
+                placeholder="×"
+                class="demo-input-split"
+                style="width: 30px; border-left: 0px; border-right: 0px; pointer-events: none; background-color: rgb(255, 255, 255);"
+              />
+              <nz-input-number
+                formControlName="height"
+                (change)="onHeightChange()"
+                placeholder="Height"
+                [nzControls]="false"
+                [nzMin]="1"
+                [nzMax]="30"
+                style="width:50px; text-align: center; border-left-width: 0px;"
+                nz-popconfirm
+                [nzPopconfirmTrigger]="null"
+                [nzPopconfirmVisible]="confirmNewHeightPopconfirmVisible"
+                nzPopconfirmTitle="Are you sure you want to decrease the height of this chart?"
+                nzPopconfirmPlacement="bottom"
+                (nzOnConfirm)="confirmNewHeight()"
+                (nzOnCancel)="cancelNewHeight()"
+                />
+            </nz-space-compact>
+          </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Knitted flat</nz-form-label>

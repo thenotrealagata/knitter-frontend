@@ -1,0 +1,73 @@
+import { Injectable } from '@angular/core';
+import { User } from '../../model/User';
+import { HttpClientService } from './http-client.service';
+import { firstValueFrom } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  storageKey = 'session_key';
+  userKey = 'user';
+  usernameKey = 'username';
+
+  httpService: HttpClientService;
+
+  constructor(httpService: HttpClientService) { 
+    this.httpService = httpService;
+  }
+
+  createSession(token: string) {
+    localStorage.setItem(this.storageKey, token);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(this.storageKey);
+  }
+
+  setUser(user: User) {
+    localStorage.setItem(this.userKey, JSON.stringify(user));
+  }
+
+  getUser(): User | null {
+    const item = localStorage.getItem(this.userKey);
+    return item ? JSON.parse(item) as User : null;
+  }
+
+  setUsername(username: string) {
+    localStorage.setItem(this.usernameKey, username);
+  }
+
+  getUsername(): string | null {
+    return localStorage.getItem(this.usernameKey);
+  }
+
+  logout() {
+    localStorage.removeItem(this.storageKey);
+    localStorage.removeItem(this.usernameKey);
+    localStorage.removeItem(this.userKey);
+  }
+
+  isFavorite(chartId: number): boolean {
+    return this.getUser()?.favorites.some(favorite => favorite.id === chartId) ?? false;
+  }
+
+  async toggleFavorite(chartId: number, addFavorite: boolean) {
+    const username = this.getUser()?.username;
+    if (!username) return;
+
+    if (addFavorite) {
+      await firstValueFrom(this.httpService.addFavorite(username, chartId)).then((user) => {
+        this.setUser(user);
+      }).catch(err => {
+
+      });
+    } else {
+      await firstValueFrom(this.httpService.removeFavorite(username, chartId)).then((user) => {
+        this.setUser(user);
+      }).catch((err) => {
+        
+      });
+    }
+  }
+}

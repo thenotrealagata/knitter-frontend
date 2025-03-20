@@ -8,7 +8,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClientService } from '../shared/services/http-client.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { SessionService } from '../session.service';
+import { UserService } from '../shared/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -23,13 +23,13 @@ export class LoginComponent {
   httpClient: HttpClientService;
   formService: FormService;
   nzMessageService: NzMessageService;
-  sessionService: SessionService;
+  sessionService: UserService;
   router: Router;
 
   constructor(formService: FormService,
     httpClient: HttpClientService,
     nzMessageService: NzMessageService,
-    sessionService: SessionService,
+    sessionService: UserService,
     router: Router) {
     this.httpClient = httpClient;
     this.formService = formService;

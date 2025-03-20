@@ -71,7 +71,7 @@ export class FormService {
     }
   }
 
-  formToChart(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>): Chart {
+  formToChart(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>, parentId?: number): Chart {
     return {
       title: chartForm.controls.title.value,
       description: chartForm.controls.description.value,
@@ -80,6 +80,7 @@ export class FormService {
       width: chartForm.controls.width.value,
       height: chartForm.controls.height.value,
       colors: colorPaletteForm.value,
+      parentId: parentId
     };
   }
 

@@ -8,9 +8,32 @@
 }
 <ng-template #atomicStitch let-stitch="stitch">
     @let atomicStitch = stitch | as : AtomicStitch;
-    <div class="stitch" [style.background-color]="colors()?.get(atomicStitch.color)?.value ?? defaultColor" nz-tooltip [nzTooltipTitle]="stitch.type" [nzTooltipTrigger]="showDescription() ? 'hover' : null">
-        <svg width="20px" height="20px">
-            <circle cx="10" cy="10" r="5" fill="black"/>
-        </svg>
-    </div>
+    @let unit = size();
+    <svg class="stitch"
+        [style.background-color]="colors()?.get(atomicStitch.color)?.value ?? defaultColor"
+        nz-tooltip
+        [nzTooltipTitle]="stitch.type"
+        [nzTooltipTrigger]="showDescription() ? 'hover' : null"
+        [attr.width]="unit"
+        [attr.height]="unit">
+        @switch(atomicStitch.type) {
+            @case(AtomicStitchType.Knit) {
+            }
+            @case (AtomicStitchType.Purl) {
+                <circle [attr.cx]="unit / 2" [attr.cy]="unit / 2" [attr.r]="0.2 * unit" fill="black"/>
+            }
+            @case (AtomicStitchType.Yo) {
+                <circle [attr.cx]="unit / 2" [attr.cy]="unit / 2" [attr.r]="0.2 * unit" stroke="black" fill="none"/>
+            }
+            @case (AtomicStitchType.K2tog) {
+                <line [attr.x1]="unit * 0.25" [attr.y1]="unit * 0.75" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.25" stroke="black"/>
+                <line [attr.x1]="unit * 0.5" [attr.y1]="unit * 0.5" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.75" stroke="black"/>
+            }
+            @case (AtomicStitchType.P2tog) {
+                <line [attr.x1]="unit * 0.25" [attr.y1]="unit * 0.75" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.25" stroke="black"/>
+                <line [attr.x1]="unit * 0.5" [attr.y1]="unit * 0.5" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.75" stroke="black"/>
+                <line [attr.x1]="unit / 5 * 2" [attr.y1]="unit * 0.75" [attr.x2]="unit / 5 * 3" [attr.y2]="unit * 0.75" stroke="black"></line>
+            }
+        }
+    </svg>
 </ng-template>

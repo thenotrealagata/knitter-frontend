@@ -7,7 +7,7 @@ export enum Color {
 }
 
 export interface Stitch {
-    color: Color;
+    color: Color | "NO_STITCH";
 }
 
 export enum AtomicStitchType {
@@ -21,6 +21,13 @@ export enum AtomicStitchType {
 export enum CompositeStitchType {
     Cable = "Cable",
     Wrapped = "Wrapped"
+}
+
+export class NoStitch implements Stitch {
+    color: "NO_STITCH";
+    constructor() {
+        this.color = "NO_STITCH";
+    }
 }
 
 export class AtomicStitch implements Stitch {
@@ -54,8 +61,8 @@ export class CableStitch extends CompositeStitch {
     toCableNeedle: number;
     holdCableNeedle: CableNeedleDirection;
 
-    constructor(compositeType: CompositeStitchType, color: Color, sequence: AtomicStitch[], toCableNeedle: number, holdCableNeedle: CableNeedleDirection) {
-        super(compositeType, color, sequence);
+    constructor(color: Color, sequence: AtomicStitchType[], toCableNeedle: number, holdCableNeedle: CableNeedleDirection) {
+        super(CompositeStitchType.Cable, color, sequence.map(element => new AtomicStitch(color, element)));
         this.toCableNeedle = toCableNeedle;
         this.holdCableNeedle = holdCableNeedle;
     }

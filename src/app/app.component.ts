@@ -7,7 +7,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { SessionService } from './session.service';
+import { UserService } from './shared/services/user.service';
 
 const ngZorroModules = [
   NzPageHeaderModule, NzDropDownModule, NzSpaceModule, NzIconModule, NzButtonModule, NzAvatarComponent
@@ -22,9 +22,9 @@ const ngZorroModules = [
 export class AppComponent {
   title = 'knitter-frontend';
 
-  sessionService: SessionService;
+  sessionService: UserService;
 
-  constructor (sessionService: SessionService) {
+  constructor (sessionService: UserService) {
     this.sessionService = sessionService;
   }
 }
