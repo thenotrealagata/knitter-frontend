@@ -1,30 +1,9 @@
-<!-- Large version -->
-<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
-  @for (chart of charts; track chart.id) {
-    <div nz-col [nzSm]="8" [nzLg]="4">
-      <nz-card [nzCover]="coverTemplate" [nzActions]="[viewTemplate, favoriteTemplate]">
-        <div>
-            <span class="block-title">{{ chart.title }}</span>          
-        </div>
-        {{ chart.description | paragraph : 200 }}
-      </nz-card>
-
-      <ng-template #viewTemplate><a [routerLink]="'/charts/view/' + chart.id">View more</a></ng-template>
-      <ng-template #favoriteTemplate>
-        @if (user !== null) {
-          @let isFavorite = isFavorited | curry : chart.id : user;
-          <nz-icon (click)="toggleFavorite(chart.id!, !isFavorite)" nzType="heart" [nzTheme]="isFavorite ? 'fill' : 'outline'" />
-        }
-      </ng-template>
-      
-      <ng-template #coverTemplate>
-        <img src="https://i.pinimg.com/736x/3a/be/31/3abe314e77dcaa2653d84ed3bff64093.jpg" />
-      </ng-template>
-    </div>
-  }
+<div style="width: 60%; margin: auto">
+  <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
+    @for (chart of charts; track chart.id) {
+      <div nz-col [nzSm]="8" [nzLg]="6">
+        <app-charts-listing-element [chart]="chart" ></app-charts-listing-element>
+      </div>
+    }
+  </div>
 </div>
-
-<!-- Small version - for collapsed view -->
-<!--@for (chart of exampleChart; track chart.id) {
-
-}-->

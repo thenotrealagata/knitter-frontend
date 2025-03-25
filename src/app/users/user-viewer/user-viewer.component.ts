@@ -3,10 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClientService } from '../../shared/services/http-client.service';
 import { User } from '../../model/User';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzCardModule } from 'ng-zorro-antd/card';
 
 @Component({
   selector: 'app-user-viewer',
-  imports: [],
+  imports: [NzGridModule, NzCardModule],
   templateUrl: './user-viewer.component.html',
   styleUrl: './user-viewer.component.less'
 })

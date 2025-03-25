@@ -1,8 +1,14 @@
+<div style="width: 60%; margin: auto;">
 @if (user) {
     <h2>{{ user.username }}</h2>
-
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }">
     @if (user.favorites) {
         <!-- TODO implement -->
-        
+        <h2>Favorites</h2>
+        @for (chart of user.favorites; track chart.id) {
+            <!--<app-charts-listing-element></app-charts-listing-element>-->
+        }
     }
+    </div>
 }
+</div>

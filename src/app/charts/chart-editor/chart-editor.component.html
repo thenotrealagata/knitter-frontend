@@ -115,10 +115,9 @@
           </nz-form-label>
           <nz-form-control [nzSm]="16" [nzXs]="24">
             <nz-upload
-            nzAction="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            [nzHeaders]="{ authorization: 'authorization-text' }"
-            (nzChange)="uploadFile($event)"
-          >
+              [nzLimit]="1"
+              [nzAction]="onFileUpload"
+            >
             <button nz-button>
               <nz-icon nzType="upload" />
               Click to Upload

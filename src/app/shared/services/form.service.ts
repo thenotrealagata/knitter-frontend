@@ -11,31 +11,32 @@ export class FormService {
 
   constructor() { }
 
-  chartForm(chart?: Chart): FormGroup<ChartForm> {
+  chartForm(chart?: Partial<Chart>): FormGroup<ChartForm> {
     return new FormGroup({
-      title: new FormControl<string>(chart ? chart.title : "", {
+      title: new FormControl<string>(chart && chart.title ? chart.title : "", {
         validators: Validators.required,
         nonNullable: true
       }),
-      description: new FormControl<string>(chart ? chart.description : "", {
+      description: new FormControl<string>(chart && chart.description ? chart.description : "", {
         validators: Validators.required,
         nonNullable: true
       }),
-      width: new FormControl<number>(chart ? chart.width : 0, {
+      width: new FormControl<number>(chart && chart.width ? chart.width : 0, {
         validators: Validators.required,
         nonNullable: true
       }),
-      height: new FormControl<number>(chart ? chart.height : 0, {
+      height: new FormControl<number>(chart && chart.height ? chart.height : 0, {
         validators: Validators.required,
         nonNullable: true
       }),
-      isFlat: new FormControl<boolean>(chart ? chart.flat : true, {
+      isFlat: new FormControl<boolean>(chart && chart.flat ? chart.flat : true, {
         validators: Validators.required,
         nonNullable: true,
       }),
       pattern: new FormControl<Stitch[][]>(
-        chart ? chart.pattern : [], { validators: [Validators.required, this.getChartValidator()], nonNullable: true }
-      )
+        chart && chart.pattern ? chart.pattern : [], { validators: [Validators.required, this.getChartValidator()], nonNullable: true }
+      ),
+      image: new FormControl<string>("", { validators: Validators.required, nonNullable: true })
     });
   }
 
@@ -72,6 +73,7 @@ export class FormService {
   }
 
   formToChart(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>, parentId?: number): Chart {
+    // TODO this will break if image is not provided
     return {
       title: chartForm.controls.title.value,
       description: chartForm.controls.description.value,
@@ -80,7 +82,8 @@ export class FormService {
       width: chartForm.controls.width.value,
       height: chartForm.controls.height.value,
       colors: colorPaletteForm.value,
-      parentId: parentId
+      parentId: parentId,
+      filePath: chartForm.controls.image.value!
     };
   }
 

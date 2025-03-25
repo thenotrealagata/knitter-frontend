@@ -16,6 +16,7 @@ export class HttpClientService {
     this.http = http;
    }
 
+  // Charts
   getCharts(): Observable<Chart[]> {
     return this.http.get<Chart[]>(`${this.baseUrl}/charts`);
   }
@@ -25,9 +26,11 @@ export class HttpClientService {
   }
 
   createChart(chart: Chart): Observable<Chart> {
+    console.log('chart create', chart);
     return this.http.post<Chart>(`${this.baseUrl}/charts`, chart);
   }
 
+  // Authentication/users
   login(user: AuthenticationRequest): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.baseUrl}/login`, user);
   }
@@ -46,5 +49,26 @@ export class HttpClientService {
 
   removeFavorite(username: string, chartId: number): Observable<User> {
     return this.http.delete<User>(`${this.baseUrl}/users/${username}/favorites/${chartId}`);
+  }
+
+  // Image upload
+  uploadImage(file: File): Observable<{ message: string }> {
+    const formData = new FormData();
+    formData.append("file", file);
+    return this.http.post<{ message: string }>(
+      `${this.baseUrl}/images`,
+      formData,
+      {
+        headers: {
+          'enctype': 'multipart/form-data'
+        }
+      }
+    );
+  }
+
+  getImage(fileName: string): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/images/${fileName}`, {
+      responseType: "blob"
+    });
   }
 }

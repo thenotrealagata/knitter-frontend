@@ -2,18 +2,16 @@ import { Component } from '@angular/core';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import { ParagraphPipe } from '../../shared/pipes/paragraph.pipe';
-import { RouterLink } from '@angular/router';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { HttpClientService } from '../../shared/services/http-client.service';
 import { Chart } from '../../model/Chart';
 import { UserService } from '../../shared/services/user.service';
 import { User } from '../../model/User';
-import { CurryPipe } from "../../shared/services/curry.pipe";
+import { ChartsListingElementComponent } from "./charts-listing-element/charts-listing-element.component";
 
 @Component({
   selector: 'app-charts-listing',
-  imports: [NzCardModule, NzIconModule, ParagraphPipe, NzTagModule, NzGridModule, CurryPipe, RouterLink],
+  imports: [NzCardModule, NzIconModule, NzTagModule, NzGridModule, ChartsListingElementComponent],
   templateUrl: './charts-listing.component.html',
   styleUrl: './charts-listing.component.less'
 })
@@ -32,6 +30,7 @@ export class ChartsListingComponent {
     this.httpService = httpService;
     this.userService = sessionService;
 
+    // TODO probably 5 layers of programming war crimes were done here
     if(!this.user && this.username) {
       httpService.getUser(this.username).subscribe({
         next: (user) => {

@@ -79,4 +79,5 @@ export type Chart = {
     createdAt?: string;
     parentId?: number;
     colors: Partial<{ [key in Color]: string }>;
+    filePath: string;
 }

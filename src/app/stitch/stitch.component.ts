@@ -1,5 +1,5 @@
-import { Component, input, OnChanges, SimpleChanges } from '@angular/core';
-import { Stitch, AtomicStitch, CompositeStitch, Color, AtomicStitchType } from '../model/Chart';
+import { Component, input } from '@angular/core';
+import { Stitch, AtomicStitch, CompositeStitch, AtomicStitchType } from '../model/Chart';
 import { NgTemplateOutlet } from '@angular/common';
 import { AsPipe } from '../shared/pipes/as.pipe';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
@@ -13,30 +13,18 @@ import { FormGroup } from '@angular/forms';
   templateUrl: './stitch.component.html',
   styleUrl: './stitch.component.less'
 })
-export class StitchComponent implements OnChanges {
+export class StitchComponent {
   stitch = input.required<Stitch>();
   colors = input<FormGroup<ColorPaletteForm>>();
   isHoverable = input<boolean>();
   showDescription = input<boolean>(false);
   size = input<number>(20); // Stitch component size in pixels
 
-  stitchImage: any;
-
   AtomicStitch = AtomicStitch;
   AtomicStitchType = AtomicStitchType;
   CompositeStitch = CompositeStitch;
 
   defaultColor = "#fff";
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["stitch"]) {
-      this.generateStitchImage();
-    }
-  }
-
-  generateStitchImage(): void {
-    this.stitchImage = "";
-  }
 
   isAtomicStitch(stitch: Stitch): boolean {
     return 'type' in stitch;

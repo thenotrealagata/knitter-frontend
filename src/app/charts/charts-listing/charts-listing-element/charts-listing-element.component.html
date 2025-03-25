@@ -1,0 +1,26 @@
+@if(cardMode() === 'vertical') {
+    <nz-card [nzCover]="coverTemplate" [nzActions]="[viewTemplate, favoriteTemplate]">
+      <div>
+          <span class="block-title">{{ chart().title }}</span>
+          <span>{{ chart().width }} stitches × {{ chart().height }} rows</span>
+      </div>
+      {{ chart().description | paragraph : 200 }}
+    </nz-card>
+
+    <ng-template #viewTemplate><a [routerLink]="'/charts/view/' + chart().id">View more</a></ng-template>
+    <ng-template #favoriteTemplate>
+        <nz-icon (click)="toggleFavorite.emit()" nzType="heart" [nzTheme]="isFavorited() ? 'fill' : 'outline'" />
+    </ng-template>
+    
+    
+    <ng-template #coverTemplate>
+      @if (imageSrc) {
+        <img [src]="imageSrc" />
+      } @else {
+        <!-- TODO placeholder -->
+      }
+      
+    </ng-template>
+} @else {
+
+}

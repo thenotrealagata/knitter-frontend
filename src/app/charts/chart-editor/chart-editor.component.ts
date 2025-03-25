@@ -14,7 +14,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
-import { NzUploadComponent } from 'ng-zorro-antd/upload';
+import { NzUploadComponent, NzUploadFile } from 'ng-zorro-antd/upload';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClientService } from '../../shared/services/http-client.service';
 import { ChartBlockComponent } from "../chart-block/chart-block.component";
@@ -23,6 +23,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzSpaceCompactComponent } from 'ng-zorro-antd/space';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 const ngZorroModules = [NzLayoutModule,
   NzFlexModule,
@@ -71,7 +72,8 @@ export class ChartEditorComponent {
   )
 
   // Creating a variation
-  isLoading: boolean;
+  isLoading: boolean = false;
+  isSaving: boolean = false;
 
   colorPaletteEditorMode = true;
 
@@ -82,11 +84,18 @@ export class ChartEditorComponent {
   httpClient: HttpClientService;
   formService: FormService;
   router: Router;
+  nzMessageService: NzMessageService;
 
-  constructor(formService: FormService, activatedRoute: ActivatedRoute, httpClient: HttpClientService, router: Router) {
+  constructor(
+    formService: FormService,
+    activatedRoute: ActivatedRoute,
+    httpClient: HttpClientService,
+    router: Router,
+    nzMessageService: NzMessageService) {
     this.httpClient = httpClient;
     this.formService = formService;
     this.router = router;
+    this.nzMessageService = nzMessageService;
 
     this.parentId = Number(activatedRoute.snapshot.paramMap.get("id"));
     
@@ -176,14 +185,42 @@ export class ChartEditorComponent {
     // TODO other cases
   }
 
-  uploadFile(event: unknown) {
-    console.log('upload file', event);
-  }
+  onFileUpload = (file: NzUploadFile) => {
+    if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
+      this.nzMessageService.error("Invalid file type: only PNG and JPEG files are allowed.");
+    } else if (file.size && file.size > 3000000) {
+      // File limit on the backend is 3 MB
+      this.nzMessageService.error("File is too large, maximum size is 3 MB.");
+    } else {
+      this.httpClient.uploadImage(file as any).subscribe({
+        next: (imageName) => {
+          this.chartForm?.controls.image.setValue(imageName.message);
+        },
+        error: (error) => {
+          this.nzMessageService.error("Error while uploading file.");
+        }
+      })
+    }
 
-  isSaving: boolean = false;
+    return "";
+  }
 
   saveChart() {
     if (!(this.chartForm && this.colorPaletteForm)) return;
+
+    let hasError = false;
+    Object.values(this.chartForm.controls).forEach(control => {
+      if (control.required && control.value == undefined) {
+        hasError = true;
+        control.markAsDirty();
+        control.updateValueAndValidity({ onlySelf: true });
+      }
+    });
+
+    if (hasError) {
+      this.nzMessageService.error("Can't save chart in this state, please provide all the required fields!");
+      return;
+    }
 
     this.isSaving = true;
     this.httpClient.createChart(this.formService.formToChart(this.chartForm, this.colorPaletteForm, this.parentId)).subscribe(
