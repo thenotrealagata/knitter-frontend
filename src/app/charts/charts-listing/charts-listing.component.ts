@@ -20,19 +20,19 @@ export class ChartsListingComponent {
   username: string | null;
   charts: Chart[] = [];
 
-  httpService: HttpClientService;
+  httpClient: HttpClientService;
   userService: UserService;
   
-  constructor(httpService: HttpClientService, sessionService: UserService) {
+  constructor(httpClient: HttpClientService, sessionService: UserService) {
     this.user = sessionService.getUser();
     this.username = sessionService.getUsername();
 
-    this.httpService = httpService;
+    this.httpClient = httpClient;
     this.userService = sessionService;
 
     // TODO probably 5 layers of programming war crimes were done here
     if(!this.user && this.username) {
-      httpService.getUser(this.username).subscribe({
+      httpClient.getUser(this.username).subscribe({
         next: (user) => {
           sessionService.setUser(user);
           this.user = user;
@@ -43,7 +43,7 @@ export class ChartsListingComponent {
       });
     }
 
-    httpService.getCharts().subscribe({
+    httpClient.getCharts().subscribe({
       next: (charts) => {
         this.charts = charts;
       },

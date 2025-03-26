@@ -1,14 +1,50 @@
+@let unit = size();
+
 @if (isAtomicStitch | curry : stitch()) {
     <ng-container *ngTemplateOutlet="atomicStitch; context: { stitch: stitch() }"></ng-container>
 } @else if (isCompositeStitch | curry : stitch()) {
-    @let compositeStitch = stitch() | as : CompositeStitch;
-    @for(sequenceElement of compositeStitch.sequence; track sequenceElement) {
-        <ng-container *ngTemplateOutlet="atomicStitch; context: { stitch: sequenceElement }"></ng-container>
-    }
+    <!-- TODO: rewrite when other composite types get introduced -->
+    @let cableStitch = stitch() | as : CableStitch;
+    @let backgroundColor = colors()?.get(cableStitch.color)?.value ?? defaultColor;
+    <svg
+        class="stitch"
+        [style.background-color]="backgroundColor"
+        nz-tooltip
+        [nzTooltipTitle]="$any(getCableDescription | curry : cableStitch)"
+        [nzTooltipTrigger]="showDescription() ? 'hover' : null"
+        [attr.width]="unit * cableStitch.sequence.length"
+        [attr.height]="unit">
+        @for (stitch of cableStitch.sequence; let i = $index; track i) {
+            <!-- Generate dividing lines in between stitch units -->
+            @if (i !== 0) {
+                <line [attr.stroke]="stroke()" [attr.x1]="i*unit" [attr.y1]="0" [attr.x2]="i*unit" [attr.y2]="unit"></line>
+            }
+        }
+
+        @let leftCableWidth = cableStitch.sequence.length - cableStitch.toCableNeedle;
+        @let leftCable = ("0," + unit) + " " + (leftCableWidth * unit + ",0") + " " + (cableStitch.sequence.length * unit + ",0") + " " + (leftCableWidth * unit + "," + unit);
+        <!-- Cable should be filled if its directions include at least 1 purl stitch. -->
+        @let fillLeftCable = (leftCableContainsPurl | curry : cableStitch) ? stroke() : backgroundColor;
+
+        @let rightCableWidth = cableStitch.toCableNeedle;
+        @let rightCable = "0,0 " + ((rightCableWidth * unit) + "," + unit) + " " + (unit * cableStitch.sequence.length + "," + unit) + " " + ((rightCableWidth * unit) + "," + 0);
+        @let fillRightCable = (rightCableContainsPurl | curry : cableStitch) ? stroke() : backgroundColor;
+
+        <!-- Depending on cable stitch's cross direction, either render left or right cable on top of the other -->
+        @if (cableStitch.holdCableNeedle === CableNeedleDirection.HOLD_BEHIND_WORK) {
+            <!-- Right cable should appear underneath left cable -->
+            <polygon [attr.points]="rightCable" [attr.fill]="fillRightCable" [attr.stroke]="stroke()"></polygon>
+            <polygon [attr.points]="leftCable" [attr.fill]="fillLeftCable" [attr.stroke]="stroke()"></polygon>
+        } @else {
+            <!-- Left cable should appear underneath right cable -->
+            <polygon [attr.points]="leftCable" [attr.fill]="fillRightCable" [attr.stroke]="stroke()"></polygon>
+            <polygon [attr.points]="rightCable" [attr.fill]="fillLeftCable" [attr.stroke]="stroke()"></polygon>
+        }
+
+    </svg>    
 }
 <ng-template #atomicStitch let-stitch="stitch">
     @let atomicStitch = stitch | as : AtomicStitch;
-    @let unit = size();
     <svg class="stitch"
         [style.background-color]="colors()?.get(atomicStitch.color)?.value ?? defaultColor"
         nz-tooltip
@@ -20,19 +56,19 @@
             @case(AtomicStitchType.Knit) {
             }
             @case (AtomicStitchType.Purl) {
-                <circle [attr.cx]="unit / 2" [attr.cy]="unit / 2" [attr.r]="0.2 * unit" fill="black"/>
+                <circle [attr.cx]="unit / 2" [attr.cy]="unit / 2" [attr.r]="0.2 * unit" [attr.fill]="stroke()"/>
             }
             @case (AtomicStitchType.Yo) {
-                <circle [attr.cx]="unit / 2" [attr.cy]="unit / 2" [attr.r]="0.2 * unit" stroke="black" fill="none"/>
+                <circle [attr.cx]="unit / 2" [attr.cy]="unit / 2" [attr.r]="0.2 * unit" [attr.stroke]="stroke()" fill="none"/>
             }
             @case (AtomicStitchType.K2tog) {
-                <line [attr.x1]="unit * 0.25" [attr.y1]="unit * 0.75" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.25" stroke="black"/>
-                <line [attr.x1]="unit * 0.5" [attr.y1]="unit * 0.5" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.75" stroke="black"/>
+                <line [attr.x1]="unit * 0.25" [attr.y1]="unit * 0.75" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.25" [attr.stroke]="stroke()"/>
+                <line [attr.x1]="unit * 0.5" [attr.y1]="unit * 0.5" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.75" [attr.stroke]="stroke()"/>
             }
             @case (AtomicStitchType.P2tog) {
-                <line [attr.x1]="unit * 0.25" [attr.y1]="unit * 0.75" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.25" stroke="black"/>
-                <line [attr.x1]="unit * 0.5" [attr.y1]="unit * 0.5" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.75" stroke="black"/>
-                <line [attr.x1]="unit / 5 * 2" [attr.y1]="unit * 0.75" [attr.x2]="unit / 5 * 3" [attr.y2]="unit * 0.75" stroke="black"></line>
+                <line [attr.x1]="unit * 0.25" [attr.y1]="unit * 0.75" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.25" [attr.stroke]="stroke()"/>
+                <line [attr.x1]="unit * 0.5" [attr.y1]="unit * 0.5" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.75" [attr.stroke]="stroke()"/>
+                <line [attr.x1]="unit / 5 * 2" [attr.y1]="unit * 0.75" [attr.x2]="unit / 5 * 3" [attr.y2]="unit * 0.75" [attr.stroke]="stroke()"></line>
             }
         }
     </svg>

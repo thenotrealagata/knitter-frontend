@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../../model/User';
 import { HttpClientService } from './http-client.service';
 import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +12,12 @@ export class UserService {
   userKey = 'user';
   usernameKey = 'username';
 
-  httpService: HttpClientService;
+  httpClient: HttpClientService;
+  router: Router;
 
-  constructor(httpService: HttpClientService) { 
-    this.httpService = httpService;
+  constructor(httpClient: HttpClientService, router: Router) { 
+    this.httpClient = httpClient;
+    this.router = router;
   }
 
   createSession(token: string) {
@@ -46,6 +49,7 @@ export class UserService {
     localStorage.removeItem(this.storageKey);
     localStorage.removeItem(this.usernameKey);
     localStorage.removeItem(this.userKey);
+    this.router.navigate(["/charts/list"]);
   }
 
   isFavorite(chartId: number): boolean {
@@ -56,18 +60,12 @@ export class UserService {
     const username = this.getUser()?.username;
     if (!username) return;
 
-    if (addFavorite) {
-      await firstValueFrom(this.httpService.addFavorite(username, chartId)).then((user) => {
-        this.setUser(user);
-      }).catch(err => {
+    const observable = addFavorite ? this.httpClient.addFavorite(chartId) : this.httpClient.removeFavorite(chartId);
+    await firstValueFrom(observable).then((user) => {
+      this.setUser(user);
+    }).catch((err) => {
+      
+    });
 
-      });
-    } else {
-      await firstValueFrom(this.httpService.removeFavorite(username, chartId)).then((user) => {
-        this.setUser(user);
-      }).catch((err) => {
-        
-      });
-    }
   }
 }

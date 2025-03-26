@@ -17,8 +17,10 @@ export class HttpClientService {
    }
 
   // Charts
-  getCharts(): Observable<Chart[]> {
-    return this.http.get<Chart[]>(`${this.baseUrl}/charts`);
+  getCharts(userName?: string): Observable<Chart[]> {
+    let url = `${this.baseUrl}/charts?`;
+    if (userName) url += `userName=${userName}`;
+    return this.http.get<Chart[]>(url);
   }
 
   getChartById(id: number): Observable<Chart> {
@@ -28,6 +30,10 @@ export class HttpClientService {
   createChart(chart: Chart): Observable<Chart> {
     console.log('chart create', chart);
     return this.http.post<Chart>(`${this.baseUrl}/charts`, chart);
+  }
+
+  deleteChart(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/charts/${id}`);
   }
 
   // Authentication/users
@@ -43,12 +49,12 @@ export class HttpClientService {
     return this.http.get<User>(`${this.baseUrl}/users/${username}`);
   }
 
-  addFavorite(username: string, chartId: number): Observable<User> {
-    return this.http.post<User>(`${this.baseUrl}/users/${username}/favorites/${chartId}`, null);
+  addFavorite(chartId: number): Observable<User> {
+    return this.http.post<User>(`${this.baseUrl}/users/favorites/${chartId}`, null);
   }
 
-  removeFavorite(username: string, chartId: number): Observable<User> {
-    return this.http.delete<User>(`${this.baseUrl}/users/${username}/favorites/${chartId}`);
+  removeFavorite(chartId: number): Observable<User> {
+    return this.http.delete<User>(`${this.baseUrl}/users/favorites/${chartId}`);
   }
 
   // Image upload

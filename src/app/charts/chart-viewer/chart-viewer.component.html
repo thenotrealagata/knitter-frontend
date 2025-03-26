@@ -5,6 +5,19 @@
             <h2>{{ chart.title }}</h2>
         </div>
         <div nz-col [nzSpan]="12" class="interaction-buttons">
+            @if(canDelete) {
+                <button
+                    nz-button
+                    nzType="default"
+                    nz-popconfirm
+                    nzPopconfirmTitle="Are you sure you want to delete this chart?"
+                    nzPopconfirmPlacement="bottom"
+                    (nzOnConfirm)="deleteChart()"
+                >
+                    <nz-icon nzType="delete" nzTheme="outline" />
+                    Delete chart
+                </button>
+            }
             <button (click)="toggleFavorite()" nz-button nzType="default">
                 @if(isFavorite) {
                     <nz-icon nzType="heart" nzTheme="fill" />

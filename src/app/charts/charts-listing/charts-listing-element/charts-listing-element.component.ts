@@ -6,10 +6,11 @@ import { ParagraphPipe } from '../../../shared/pipes/paragraph.pipe';
 import { RouterLink } from '@angular/router';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { HttpClientService } from '../../../shared/services/http-client.service';
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 
 @Component({
   selector: 'app-charts-listing-element',
-  imports: [NzGridModule, NzCardModule, ParagraphPipe, RouterLink, NzIconModule],
+  imports: [NzGridModule, NzCardModule, ParagraphPipe, RouterLink, NzIconModule, NzSkeletonModule],
   templateUrl: './charts-listing-element.component.html',
   styleUrl: './charts-listing-element.component.less'
 })

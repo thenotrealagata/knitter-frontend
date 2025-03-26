@@ -17,7 +17,9 @@
       @if (imageSrc) {
         <img [src]="imageSrc" />
       } @else {
-        <!-- TODO placeholder -->
+        <div class="image-placeholder">
+          <nz-icon nzType="file-image" nzTheme="outline" />
+        </div>
       }
       
     </ng-template>

@@ -77,6 +77,7 @@ export type Chart = {
     flat: boolean;
     pattern: Stitch[][];
     createdAt?: string;
+    userId?: number;
     parentId?: number;
     colors: Partial<{ [key in Color]: string }>;
     filePath: string;

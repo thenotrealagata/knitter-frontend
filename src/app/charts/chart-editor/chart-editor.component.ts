@@ -159,6 +159,7 @@ export class ChartEditorComponent {
   colorSelected(color: Color) {
     this.selectedColor = color;
     this.atomicStitchInventory.forEach(stitch => stitch.color = this.selectedColor);
+    this.cableStitch1.color = this.selectedColor;
     this.selectedStitchTrigger++;
   }
 
