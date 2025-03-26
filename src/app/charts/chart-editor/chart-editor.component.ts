@@ -4,7 +4,7 @@ import { AtomicStitch, AtomicStitchType, CableNeedleDirection, CableStitch, Char
 import { StitchComponent } from '../../stitch/stitch.component';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { FormService } from '../../shared/services/form.service';
-import { ChartForm, ColorPaletteForm } from '../../shared/services/form.interfaces';
+import { CableStitchForm, ChartForm, ColorPaletteForm } from '../../shared/services/form.interfaces';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ColorPaletteComponent } from "../color-palette/color-palette.component";
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -24,6 +24,9 @@ import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzSpaceCompactComponent } from 'ng-zorro-antd/space';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 const ngZorroModules = [NzLayoutModule,
   NzFlexModule,
@@ -38,7 +41,10 @@ const ngZorroModules = [NzLayoutModule,
   NzPopconfirmModule,
   NzInputNumberModule,
   NzDividerModule,
-  NzSpaceCompactComponent
+  NzSpaceCompactComponent,
+  NzIconModule,
+  NzModalModule,
+  NzSelectModule
 ];
 
 @Component({
@@ -55,7 +61,7 @@ export class ChartEditorComponent {
 
   parentId: number | undefined;
   chartForm: FormGroup<ChartForm> | undefined;
-  colorPaletteForm: FormGroup<ColorPaletteForm> | undefined;
+  colorPaletteForm: FormGroup<ColorPaletteForm>;
 
   pendingNewWidth: number | undefined;
   pendingNewHeight: number | undefined;
@@ -63,13 +69,6 @@ export class ChartEditorComponent {
   confirmNewHeightPopconfirmVisible: boolean = false;
   previousWidth: number | undefined;
   previousHeight: number | undefined;
-
-  cableStitch1 = new CableStitch(
-    Color.MC,
-    [ AtomicStitchType.Knit, AtomicStitchType.Knit ],
-    1,
-    CableNeedleDirection.HOLD_BEHIND_WORK
-  )
 
   // Creating a variation
   isLoading: boolean = false;
@@ -80,11 +79,43 @@ export class ChartEditorComponent {
   atomicStitchInventory = Object.keys(AtomicStitchType)
     .filter(key => isNaN(Number(key)))
     .map(stitchType => new AtomicStitch(this.selectedColor, stitchType as AtomicStitchType));
+  cableStitchInventory: CableStitch[] = [
+    new CableStitch(
+      Color.MC,
+      [ AtomicStitchType.Knit, AtomicStitchType.Knit ],
+      1,
+      CableNeedleDirection.HOLD_BEHIND_WORK
+    ),
+    new CableStitch(
+      Color.MC,
+      [ AtomicStitchType.Knit, AtomicStitchType.Knit ],
+      1,
+      CableNeedleDirection.HOLD_IN_FRONT_OF_WORK
+    ),
+    new CableStitch(
+      Color.MC,
+      [ AtomicStitchType.Knit, AtomicStitchType.Knit, AtomicStitchType.Knit, AtomicStitchType.Knit ],
+      2,
+      CableNeedleDirection.HOLD_BEHIND_WORK
+    ),
+    new CableStitch(
+      Color.MC,
+      [ AtomicStitchType.Knit, AtomicStitchType.Knit, AtomicStitchType.Knit, AtomicStitchType.Knit ],
+      2,
+      CableNeedleDirection.HOLD_IN_FRONT_OF_WORK
+    )
+  ];
 
   httpClient: HttpClientService;
   formService: FormService;
   router: Router;
   nzMessageService: NzMessageService;
+
+  isNewCableStitchModalVisible = false;
+  cableStitchForm: FormGroup<CableStitchForm>;
+  cableStitchFormPreview: CableStitch;
+  CableNeedleDirection = CableNeedleDirection;
+  AtomicStitchType = AtomicStitchType;
 
   constructor(
     formService: FormService,
@@ -97,8 +128,16 @@ export class ChartEditorComponent {
     this.router = router;
     this.nzMessageService = nzMessageService;
 
+    // TODO remove other colors after testing is done
+    this.colorPaletteForm = formService.colorPaletteForm({
+      [Color.MC]: "#fefefe",
+      [Color.CC1]: "#792960",
+      [Color.CC2]: "#CE7DA5"
+    });
+    this.cableStitchForm = formService.cableStitchForm();
+    this.cableStitchFormPreview = formService.formToCableStitch(this.cableStitchForm, this.selectedColor);
+
     this.parentId = Number(activatedRoute.snapshot.paramMap.get("id"));
-    
     if (this.parentId) {
       this.isLoading = true;
       // Created chart is a variation on an existing chart
@@ -133,11 +172,6 @@ export class ChartEditorComponent {
       });
       this.previousHeight = this.chartForm.controls.height.value;
       this.previousWidth = this.chartForm.controls.width.value;
-      this.colorPaletteForm = formService.colorPaletteForm({
-        [Color.MC]: "#fefefe",
-        [Color.CC1]: "#792960",
-        [Color.CC2]: "#CE7DA5"
-      });
     }
   }
 
@@ -158,8 +192,7 @@ export class ChartEditorComponent {
 
   colorSelected(color: Color) {
     this.selectedColor = color;
-    this.atomicStitchInventory.forEach(stitch => stitch.color = this.selectedColor);
-    this.cableStitch1.color = this.selectedColor;
+    [...this.atomicStitchInventory, ...this.cableStitchInventory].forEach(stitch => stitch.color = this.selectedColor);
     this.selectedStitchTrigger++;
   }
 
@@ -182,6 +215,38 @@ export class ChartEditorComponent {
     if (stitch instanceof AtomicStitch && this.selectedStitch instanceof AtomicStitch) {
       stitch.color = this.selectedStitch.color;
       stitch.type = this.selectedStitch.type;
+    } else if (this.selectedStitch instanceof CableStitch) {
+      const row = this.chartForm?.controls.pattern.value.find(row => row.includes(stitch));
+      const stitchIndex = row?.indexOf(stitch);
+      const stitchSize = this.selectedStitch.sequence.length;
+
+      if (stitchIndex === undefined || !row) return;
+
+      // Copy stitch over existing stitches; if it flows into a composite stitch, remove it and replace remaining spots with knit stitches
+      // If stitch doesn't fit unto row, show error message
+      const affectedStitches = [];
+      let i = stitchIndex;
+      let stitchSum = 0;
+      while (i < row?.length && stitchSum < stitchSize) {
+        const element = row[i];
+        affectedStitches.push(element);
+        stitchSum += element instanceof CompositeStitch ? element.sequence.length : 1;
+        i++;
+      }
+
+      if (stitchSum >= stitchSize) {
+        // Cable stitch can be copied to chart
+        affectedStitches.forEach(stitch => row.splice(row.indexOf(stitch), 1));
+        row.splice(stitchIndex, 0, this.selectedStitch);
+
+        const difference = stitchSum - stitchSize;
+        if (difference > 0) {
+          // Composite stitches were removed and thus the row count is off, adjust
+          row.splice(stitchIndex + 1, 0, ...new Array(difference).fill(new AtomicStitch(Color.MC, AtomicStitchType.Knit)));
+        }
+      } else {
+        this.nzMessageService.error("Stitch can't be added outside of chart!");
+      }
     }
     // TODO other cases
   }
@@ -248,8 +313,8 @@ export class ChartEditorComponent {
     if (this.previousHeight < newValue) {
       // Add new rows to the bottom of the pattern
       this.chartForm.controls.pattern.value.push(
-        ...Array.from({ length: stitchCountChange }).map(newRow => 
-          Array.from({ length: this.chartForm!.controls.width.value })
+        ...new Array(stitchCountChange).map(newRow => 
+          new Array(this.chartForm!.controls.width.value)
             .map(newStitch => new AtomicStitch(Color.MC, AtomicStitchType.Knit))
         )
       );
@@ -286,7 +351,7 @@ export class ChartEditorComponent {
       // Add new stitches to the right side of pattern
       this.chartForm.controls.pattern.value.forEach(row => {
         row.push(
-          ...Array.from({ length: stitchCountChange }).map(stitch => new AtomicStitch(Color.MC, AtomicStitchType.Knit))
+          ...new Array(stitchCountChange).map(stitch => new AtomicStitch(Color.MC, AtomicStitchType.Knit))
         );
       })
       this.previousWidth = newValue;
@@ -312,5 +377,69 @@ export class ChartEditorComponent {
     if (!this.previousWidth) return;
     this.chartForm?.controls.width.setValue(this.previousWidth);
     this.pendingNewWidth = undefined;
+  }
+
+  openNewCableNeedleModal() {
+    this.cableStitchForm.reset({
+      sequence: [AtomicStitchType.Knit, AtomicStitchType.Knit]
+    });
+    this.regenerateCablePreview();
+    this.isNewCableStitchModalVisible = true;
+  }
+
+  closeNewCableStitchModal() {
+    this.isNewCableStitchModalVisible = false;
+  }
+
+  addNewCableStitch() {
+    if (!this.inventoryContainsStitch(this.cableStitchFormPreview)) {
+      this.cableStitchInventory.push(this.cableStitchFormPreview);
+      this.isNewCableStitchModalVisible = false;
+    } else {
+      this.nzMessageService.error("Stitch can't be added, as the same one already exists in the stitch inventory.");
+    }
+  }
+
+  inventoryContainsStitch(stitch: CableStitch): boolean {
+    return this.cableStitchInventory.some(cableStitch => 
+      cableStitch.holdCableNeedle === stitch.holdCableNeedle
+        && cableStitch.toCableNeedle === stitch.toCableNeedle
+        && cableStitch.sequence.length === stitch.sequence.length
+        && cableStitch.sequence.every((atomicStitch, i) => stitch.sequence.at(i)?.type === atomicStitch.type)
+    )
+  }
+
+  onStitchNumberChange() {
+    const newSize = this.cableStitchForm.controls.stitchNumber.value;
+    const previousSize = this.cableStitchForm.controls.sequence.value.length
+    const difference = newSize - previousSize;
+    if (difference > 0) {
+      // Add new stitches to sequence
+      this.cableStitchForm.controls.sequence.value.push(
+        ...(new Array(difference).fill(AtomicStitchType.Knit)));
+    } else {
+      // Remove stitches from sequence
+      this.cableStitchForm.controls.sequence.value.splice(previousSize);
+    }
+
+    // If toCableNeedle value would be invalid, decrease it
+    if (this.cableStitchForm.controls.toCableNeedle.value >= newSize) {
+      this.cableStitchForm.controls.toCableNeedle.setValue(newSize - 1);
+    }
+
+    this.regenerateCablePreview();
+  }
+
+  switchSequenceElementType(index: number) {
+    const sequence = this.cableStitchForm.controls.sequence.value;
+    const value = sequence.at(index);
+    if (!value) return;
+
+    sequence[index] = value === AtomicStitchType.Knit ? AtomicStitchType.Purl : AtomicStitchType.Knit;
+    this.regenerateCablePreview();
+  }
+
+  regenerateCablePreview() {
+    this.cableStitchFormPreview = this.formService.formToCableStitch(this.cableStitchForm, this.selectedColor);
   }
 }

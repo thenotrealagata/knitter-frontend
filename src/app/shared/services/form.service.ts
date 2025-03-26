@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { Chart, Stitch, Color } from '../../model/Chart';
-import { AuthenticationForm, ChartForm, ColorPaletteForm } from './form.interfaces';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Chart, Stitch, Color, CableNeedleDirection, AtomicStitchType, CableStitch } from '../../model/Chart';
+import { AuthenticationForm, CableStitchForm, ChartForm, ColorPaletteForm } from './form.interfaces';
 import { AuthenticationRequest } from '../../model/User';
 
 @Injectable({
@@ -34,19 +34,40 @@ export class FormService {
         nonNullable: true,
       }),
       pattern: new FormControl<Stitch[][]>(
-        chart && chart.pattern ? chart.pattern : [], { validators: [Validators.required, this.getChartValidator()], nonNullable: true }
+        chart && chart.pattern ? chart.pattern : [], { validators: [Validators.required], nonNullable: true }
       ),
       image: new FormControl<string>("", { validators: Validators.required, nonNullable: true })
     });
   }
 
-  getChartValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      // TODO write validation logic
-      control = control as FormControl<Stitch[][]>;
+  cableStitchForm(): FormGroup<CableStitchForm> {
+    return new FormGroup({
+      stitchNumber: new FormControl<number>(2, {
+        validators: Validators.required,
+        nonNullable: true
+      }),
+      toCableNeedle: new FormControl<number>(1, {
+        validators: Validators.required,
+        nonNullable: true
+      }),
+      holdCableNeedle: new FormControl<CableNeedleDirection>(CableNeedleDirection.HOLD_IN_FRONT_OF_WORK, {
+        validators: Validators.required,
+        nonNullable: true
+      }),
+      sequence: new FormControl<(AtomicStitchType.Knit | AtomicStitchType.Purl)[]>([ AtomicStitchType.Knit, AtomicStitchType.Knit ], {
+        validators: Validators.required,
+        nonNullable: true
+      })
+    });
+  }
 
-      return null;
-    }
+  formToCableStitch(form: FormGroup<CableStitchForm>, color: Color): CableStitch {
+    return new CableStitch(
+      color,
+      form.controls.sequence.value,
+      form.controls.toCableNeedle.value,
+      form.controls.holdCableNeedle.value
+    )
   }
 
   colorPaletteForm(colors?: {[key in Color]?: string}): FormGroup<ColorPaletteForm> {

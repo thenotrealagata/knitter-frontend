@@ -1,4 +1,4 @@
-import { Color, Stitch } from "../../model/Chart";
+import { AtomicStitchType, CableNeedleDirection, Color, Stitch } from "../../model/Chart";
 import { FormControl, FormGroup } from "@angular/forms";
 
 export enum ChartFormError {
@@ -15,10 +15,11 @@ export interface ChartForm {
   image: FormControl<string>;
 }
 
-export interface ChartRowForm {
-  row: FormControl<number>;
-  column: FormControl<number>;
-  stitch: Stitch;
+export interface CableStitchForm {
+  stitchNumber: FormControl<number>;
+  toCableNeedle: FormControl<number>;
+  holdCableNeedle: FormControl<CableNeedleDirection>;
+  sequence: FormControl<(AtomicStitchType.Knit | AtomicStitchType.Purl)[]>;
 }
 
 export interface ColorPaletteForm {

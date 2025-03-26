@@ -3,31 +3,34 @@
 @if (isAtomicStitch | curry : stitch()) {
     <ng-container *ngTemplateOutlet="atomicStitch; context: { stitch: stitch() }"></ng-container>
 } @else if (isCompositeStitch | curry : stitch()) {
-    <!-- TODO: rewrite when other composite types get introduced -->
     @let cableStitch = stitch() | as : CableStitch;
     @let backgroundColor = colors()?.get(cableStitch.color)?.value ?? defaultColor;
+    <!-- There is an offset in stitch width because of the lack of borders (0.5px) in between stitches -->
+    @let offset = cableStitch.sequence.length + 1;
+    @let horizontalUnit = unit + offset / cableStitch.sequence.length;
     <svg
         class="stitch"
         [style.background-color]="backgroundColor"
         nz-tooltip
-        [nzTooltipTitle]="$any(getCableDescription | curry : cableStitch)"
+        [nzTooltipTitle]="$any(chartService.getCableDescription | curry : cableStitch)"
         [nzTooltipTrigger]="showDescription() ? 'hover' : null"
-        [attr.width]="unit * cableStitch.sequence.length"
+        [attr.width]="horizontalUnit * cableStitch.sequence.length"
         [attr.height]="unit">
         @for (stitch of cableStitch.sequence; let i = $index; track i) {
             <!-- Generate dividing lines in between stitch units -->
+            <!-- TODO remove after testing -->
             @if (i !== 0) {
                 <line [attr.stroke]="stroke()" [attr.x1]="i*unit" [attr.y1]="0" [attr.x2]="i*unit" [attr.y2]="unit"></line>
             }
         }
-
+        
         @let leftCableWidth = cableStitch.sequence.length - cableStitch.toCableNeedle;
-        @let leftCable = ("0," + unit) + " " + (leftCableWidth * unit + ",0") + " " + (cableStitch.sequence.length * unit + ",0") + " " + (leftCableWidth * unit + "," + unit);
+        @let leftCable = ("0," + unit) + " " + ((cableStitch.sequence.length - leftCableWidth) * horizontalUnit + ",0") + " " + (cableStitch.sequence.length * horizontalUnit + ",0") + " " + (leftCableWidth * unit + offset + "," + unit);
         <!-- Cable should be filled if its directions include at least 1 purl stitch. -->
         @let fillLeftCable = (leftCableContainsPurl | curry : cableStitch) ? stroke() : backgroundColor;
 
         @let rightCableWidth = cableStitch.toCableNeedle;
-        @let rightCable = "0,0 " + ((rightCableWidth * unit) + "," + unit) + " " + (unit * cableStitch.sequence.length + "," + unit) + " " + ((rightCableWidth * unit) + "," + 0);
+        @let rightCable = "0,0 " + ((cableStitch.sequence.length - rightCableWidth) * horizontalUnit + "," + unit) + " " + (cableStitch.sequence.length * horizontalUnit + "," + unit) + " " + (rightCableWidth * horizontalUnit + ",0");
         @let fillRightCable = (rightCableContainsPurl | curry : cableStitch) ? stroke() : backgroundColor;
 
         <!-- Depending on cable stitch's cross direction, either render left or right cable on top of the other -->
@@ -37,8 +40,8 @@
             <polygon [attr.points]="leftCable" [attr.fill]="fillLeftCable" [attr.stroke]="stroke()"></polygon>
         } @else {
             <!-- Left cable should appear underneath right cable -->
-            <polygon [attr.points]="leftCable" [attr.fill]="fillRightCable" [attr.stroke]="stroke()"></polygon>
-            <polygon [attr.points]="rightCable" [attr.fill]="fillLeftCable" [attr.stroke]="stroke()"></polygon>
+            <polygon [attr.points]="leftCable" [attr.fill]="fillLeftCable" [attr.stroke]="stroke()"></polygon>
+            <polygon [attr.points]="rightCable" [attr.fill]="fillRightCable" [attr.stroke]="stroke()"></polygon>
         }
 
     </svg>    

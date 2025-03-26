@@ -1,10 +1,16 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AtomicStitch, CompositeStitch, Stitch } from '../../model/Chart';
+import { AtomicStitch, CableStitch, CompositeStitch, Stitch } from '../../model/Chart';
+import { ChartService } from '../services/chart.service';
 
 @Pipe({
   name: 'patternDescription'
 })
 export class PatternDescriptionPipe implements PipeTransform {
+  chartService: ChartService;
+
+  constructor(chartService: ChartService) {
+    this.chartService = chartService;
+  }
 
   // TODO assumes atomic stitches, this will break with the introduction of composites
   transform(value: Stitch | Stitch[], trigger?: number) {
@@ -43,17 +49,7 @@ export class PatternDescriptionPipe implements PipeTransform {
       return (stitch as AtomicStitch).type + " " + (amount ? amount : "");
     } else if ('sequence' in stitch) {
       // Composite stitch
-      const compositeStitch = stitch as CompositeStitch;
-      let sameStitchCounter = 0;
-
-      return compositeStitch.sequence.reduce((description, atomicStitch, i) => {
-        if (i < compositeStitch.sequence.length - 1 && atomicStitch.type === compositeStitch.sequence[i + 1].type) {
-          sameStitchCounter += 1;
-        } else if (sameStitchCounter > 0) {
-
-        }
-        return description;
-      }, "");
+      return this.chartService.getCableDescription(stitch as CableStitch);
     }
 
     return "";
