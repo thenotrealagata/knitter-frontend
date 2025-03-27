@@ -1,27 +1,40 @@
 <nz-layout style="height: 100%">
-  <nz-sider class="left-sider" nzTheme="light">
-    <nz-divider nzPlain nzText="Stitches" nzOrientation="left"></nz-divider>
-    <div class="stitch-inventory" nz-flex nzGap="middle" nzWrap="wrap">
-      @for (atomicStitch of atomicStitchInventory; track atomicStitch.type) {
-          <app-stitch [stitch]="atomicStitch" [colors]="colorPaletteForm" [showDescription]="true" (click)="stitchSelected(atomicStitch)"></app-stitch>
+  <nz-sider nzTheme="light">
+    <div style="padding: 10px;">
+      <nz-divider nzPlain nzText="Stitches" nzOrientation="left"></nz-divider>
+      <div class="stitch-inventory" nz-flex nzGap="middle" nzWrap="wrap">
+        @for (atomicStitch of atomicStitchInventory; track atomicStitch.type) {
+            <app-stitch [stitch]="atomicStitch" [colors]="colorPaletteForm" [showDescription]="true" (click)="stitchSelected(atomicStitch)"></app-stitch>
+        }
+      </div>
+      <nz-divider nzPlain nzText="Cable stitches" nzOrientation="left"></nz-divider>
+      <div class="stitch-inventory" nz-flex nzGap="middle" nzWrap="wrap">
+        @for (cableStitch of cableStitchInventory; let i = $index; track i) {
+          <app-stitch [stitch]="cableStitch" [colors]="colorPaletteForm" [showDescription]="true" (click)="stitchSelected(cableStitch)"></app-stitch>
+        }
+        <button nz-button nzSize="small" (click)="openNewCableNeedleModal()">
+          <nz-icon nzType="plus" nzTheme="outline" />
+        </button>
+      </div>
+      <nz-divider nzPlain nzText="Wrapped stitches" nzOrientation="left"></nz-divider>
+
+      @if (isPanelEditor) {
+        <nz-divider nzPlain nzText="Charts" nzOrientation="left"></nz-divider>
+        @for (chart of chartInventory; track chart.id) {
+          <app-charts-listing-element [chart]="chart" [cardMode]="'horizontal'"></app-charts-listing-element>
+        }
+        <button nz-button nzSize="small" (click)="openAddChartsModal()">
+          Add charts
+        </button>
       }
+      
     </div>
-    <nz-divider nzPlain nzText="Cable stitches" nzOrientation="left"></nz-divider>
-    <div class="stitch-inventory" nz-flex nzGap="middle" nzWrap="wrap">
-      @for (cableStitch of cableStitchInventory; let i = $index; track i) {
-        <app-stitch [stitch]="cableStitch" [colors]="colorPaletteForm" [showDescription]="true" (click)="stitchSelected(cableStitch)"></app-stitch>
-      }
-      <button nz-button nzSize="small" (click)="openNewCableNeedleModal()">
-        <nz-icon nzType="plus" nzTheme="outline" />
-      </button>
-    </div>
-    <nz-divider nzPlain nzText="Wrapped stitches" nzOrientation="left"></nz-divider>
   </nz-sider>
   <nz-layout class="inner-layout">
     <nz-content>
       @if (chartForm && colorPaletteForm) {
         <app-chart-block [chartForm]="chartForm" [colors]="colorPaletteForm" (stitchEvent)="stitchEvent($event)"></app-chart-block>
-        <app-color-palette class="color-palette" [colors]="colorPaletteForm" [allowSelectMode]="true" [editorMode]="colorPaletteEditorMode" (colorSelected)="colorSelected($event)"></app-color-palette>
+        <app-color-palette class="color-palette" [colors]="colorPaletteForm" [allowSelectMode]="true" [editorMode]="true" (colorSelected)="colorSelected($event)" (colorDeleted)="colorDeleted($event)"></app-color-palette>
       }
       @if (selectedStitch) {
         <div class="selected-element">
@@ -39,9 +52,9 @@
       }
     </nz-content>
   </nz-layout>
-  <nz-sider nzWidth="400px" nzTheme="light">
-    @if (chartForm) {
-      <form nz-form [formGroup]="chartForm">
+  <nz-sider nzCollapsible [(nzCollapsed)]="rightSiderCollapsed" [nzWidth]="350" nzTheme="light">
+    @if (chartForm && !rightSiderCollapsed) {
+      <form style="width: max-content; margin: 10px" nz-form [formGroup]="chartForm">
         <nz-form-item>
           <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Title</nz-form-label>
           <nz-form-control [nzSm]="16" [nzXs]="24">
@@ -176,7 +189,7 @@
       <nz-form-item>
         <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Hold cable needle</nz-form-label>
         <nz-form-control [nzSm]="16" [nzXs]="24">
-          <nz-select formControlName="holdCableNeedle" (change)="regenerateCablePreview()">
+          <nz-select formControlName="holdCableNeedle" (ngModelChange)="regenerateCablePreview()">
             <nz-option [nzValue]="CableNeedleDirection.HOLD_IN_FRONT_OF_WORK" nzLabel="In front of work"></nz-option>
             <nz-option [nzValue]="CableNeedleDirection.HOLD_BEHIND_WORK" nzLabel="Behind work"></nz-option>
           </nz-select>
@@ -184,7 +197,7 @@
       </nz-form-item>
       <nz-form-item>
         <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Sequence</nz-form-label>
-        <nz-form-control [nzSm]="16" [nzXs]="24" nzValidatingTip="Click to switch between knit and purl stitches.">
+        <nz-form-control [nzSm]="16" [nzXs]="24" nzValidateStatus="validating" nzValidatingTip="Click to switch between knit and purl stitches.">
           @for (stitch of cableStitchForm.controls.sequence.value; let i = $index; track i) {
             <svg
               (click)="switchSequenceElementType(i)"
@@ -200,5 +213,39 @@
         </nz-form-control>
       </nz-form-item>
     </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isAddChartsModalVisible" nzTitle="Add charts" nzOkText="Add charts" [nzWidth]="800" (nzOnCancel)="closeAddChartsModal()" (nzOnOk)="addCharts()">
+  <ng-container *nzModalContent>
+    <div nz-row [nzGutter]="[{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }, 8]">
+      @for (chart of userFavorites; track chart.id) {
+        <div nz-col [nzSpan]="8">
+          <app-charts-listing-element
+            [chart]="chart"
+            [showFavorite]="false"
+            [showViewMore]="false"
+            [showDescription]="false"
+            [customActions]="[chartSelectedTemplate]"
+            >
+          </app-charts-listing-element>
+        </div>
+        <ng-template #chartSelectedTemplate>
+          @if (chart.id) {
+            @if (chartsSelected.includes(chart.id)) {
+              <button nz-button (click)="setChartSelected(chart.id, false)" nzType="text">
+                <nz-icon nzType="check-square" nzTheme="outline" />
+                Selected
+              </button>
+            } @else {
+              <button nz-button (click)="setChartSelected(chart.id, true)" nzType="text">
+                <nz-icon nzType="minus-square" nzTheme="outline" />
+                Not selected
+              </button>
+            }
+          }
+        </ng-template>
+      }
+    </div>
   </ng-container>
 </nz-modal>

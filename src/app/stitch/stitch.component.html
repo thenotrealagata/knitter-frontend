@@ -6,7 +6,7 @@
     @let cableStitch = stitch() | as : CableStitch;
     @let backgroundColor = colors()?.get(cableStitch.color)?.value ?? defaultColor;
     <!-- There is an offset in stitch width because of the lack of borders (0.5px) in between stitches -->
-    @let offset = cableStitch.sequence.length + 1;
+    @let offset = cableStitch.sequence.length + 1; <!-- TODO only correct if size >= 4 -->
     @let horizontalUnit = unit + offset / cableStitch.sequence.length;
     <svg
         class="stitch"
@@ -16,13 +16,12 @@
         [nzTooltipTrigger]="showDescription() ? 'hover' : null"
         [attr.width]="horizontalUnit * cableStitch.sequence.length"
         [attr.height]="unit">
-        @for (stitch of cableStitch.sequence; let i = $index; track i) {
-            <!-- Generate dividing lines in between stitch units -->
-            <!-- TODO remove after testing -->
+        <!--@for (stitch of cableStitch.sequence; let i = $index; track i) {
+            Generate dividing lines in between stitch units
             @if (i !== 0) {
                 <line [attr.stroke]="stroke()" [attr.x1]="i*unit" [attr.y1]="0" [attr.x2]="i*unit" [attr.y2]="unit"></line>
             }
-        }
+        }-->
         
         @let leftCableWidth = cableStitch.sequence.length - cableStitch.toCableNeedle;
         @let leftCable = ("0," + unit) + " " + ((cableStitch.sequence.length - leftCableWidth) * horizontalUnit + ",0") + " " + (cableStitch.sequence.length * horizontalUnit + ",0") + " " + (leftCableWidth * unit + offset + "," + unit);

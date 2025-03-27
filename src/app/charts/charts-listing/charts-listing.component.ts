@@ -8,10 +8,11 @@ import { Chart } from '../../model/Chart';
 import { UserService } from '../../shared/services/user.service';
 import { User } from '../../model/User';
 import { ChartsListingElementComponent } from "./charts-listing-element/charts-listing-element.component";
+import { CurryPipe } from '../../shared/services/curry.pipe';
 
 @Component({
   selector: 'app-charts-listing',
-  imports: [NzCardModule, NzIconModule, NzTagModule, NzGridModule, ChartsListingElementComponent],
+  imports: [NzCardModule, NzIconModule, NzTagModule, NzGridModule, ChartsListingElementComponent, CurryPipe],
   templateUrl: './charts-listing.component.html',
   styleUrl: './charts-listing.component.less'
 })

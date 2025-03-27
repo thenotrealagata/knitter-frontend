@@ -15,7 +15,7 @@ export const routes: Routes = [
     { path: 'charts/view/:id', component: ChartViewerComponent },
     { path: 'users/:username', component: UserViewerComponent },
     { path: 'panels/list', component: PanelsListingComponent },
-    { path: 'panels/create', component: ChartEditorComponent }, // TODO separate panel create component?
+    { path: 'panels/create', component: ChartEditorComponent },
     { path: 'login', component: LoginComponent },
     { path: '404', component: NotFoundComponent},
     { path: '**', redirectTo: '/404' },

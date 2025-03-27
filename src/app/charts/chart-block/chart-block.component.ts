@@ -1,4 +1,4 @@
-import { Component, input, OnChanges, output, SimpleChanges } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ChartForm, ColorPaletteForm } from '../../shared/services/form.interfaces';
 import { StitchComponent } from '../../stitch/stitch.component';

@@ -82,3 +82,7 @@ export type Chart = {
     colors: Partial<{ [key in Color]: string }>;
     filePath: string;
 }
+
+export type Panel = Chart & {
+    includedCharts: number[];
+}

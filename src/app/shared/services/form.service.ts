@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Chart, Stitch, Color, CableNeedleDirection, AtomicStitchType, CableStitch } from '../../model/Chart';
+import { Chart, Stitch, Color, CableNeedleDirection, AtomicStitchType, CableStitch, Panel } from '../../model/Chart';
 import { AuthenticationForm, CableStitchForm, ChartForm, ColorPaletteForm } from './form.interfaces';
 import { AuthenticationRequest } from '../../model/User';
 
@@ -106,6 +106,10 @@ export class FormService {
       parentId: parentId,
       filePath: chartForm.controls.image.value!
     };
+  }
+
+  formToPanel(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>, includedCharts: number[], parentId?: number): Panel {
+    return { ...this.formToChart(chartForm, colorPaletteForm, parentId), includedCharts: includedCharts };
   }
 
   authenticationForm(): FormGroup<AuthenticationForm> {
