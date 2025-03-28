@@ -29,8 +29,8 @@ export class ChartViewerComponent {
 
   hoveredStitch?: Stitch;
 
-  canDelete: boolean = false;
-  isFavorite: boolean;
+  canDelete = false;
+  isFavorite = false;
   patternToDescription?: Stitch[][];
 
   userService: UserService;
@@ -58,6 +58,8 @@ export class ChartViewerComponent {
         this.colorPaletteForm = formService.colorPaletteForm(chart.colors);
         this.patternToDescription = [...chart.pattern].reverse();
         this.isLoading = false;
+        this.isFavorite = userService.isFavorite(chartId);
+        this.canDelete = userService.getUser()?.id === this.chart?.userId;
 
         this.loadChartImage();
       },
@@ -67,9 +69,6 @@ export class ChartViewerComponent {
         }
       }
     });
-
-    this.isFavorite = userService.isFavorite(chartId);
-    this.canDelete = userService.getUser()?.id === this.chart?.userId;
   }
 
   loadChartImage() {
@@ -111,10 +110,11 @@ export class ChartViewerComponent {
     if (!this.chart?.id) return;
     this.httpClient.deleteChart(this.chart.id).subscribe({
       next: () => {
-
+        this.nzMessageService.success("Chart deleted successfully.");
+        this.router.navigate(["/charts/list"]);
       },
       error: (err) => {
-
+        this.nzMessageService.error("Chart couldn't be deleted.");
       }
     });
   }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AtomicStitchType, CableNeedleDirection, CableStitch } from '../../model/Chart';
+import { AtomicStitch, AtomicStitchType, CableNeedleDirection, CableStitch, CompositeStitch, Stitch } from '../../model/Chart';
 
 @Injectable({
   providedIn: 'root'
@@ -21,5 +21,17 @@ export class ChartService {
       + includesPurl + "C";
 
     return `${stitchNumbers} ${crossDirection}`;
+  }
+
+  isAtomicStitch(stitch: Stitch): stitch is AtomicStitch {
+    return 'type' in stitch;
+  }
+
+  isCompositeStitch(stitch: Stitch): stitch is CompositeStitch {
+    return 'sequence' in stitch;
+  }
+
+  isCableStitch(stitch: Stitch): stitch is CableStitch {
+    return 'toCableNeedle' in stitch && 'holdCableNeedle' in stitch;
   }
 }

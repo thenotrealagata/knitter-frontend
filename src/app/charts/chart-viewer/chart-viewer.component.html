@@ -35,28 +35,26 @@
     </div>
     <div class="hovered-stitch">
         @if (hoveredStitch) {
-            {{ hoveredStitch | patternDescription }}
+            {{ hoveredStitch | patternDescription : false }}
         }
     </div>
     <div nz-row>
-        <div nz-col [nzSpan]="16" >
+        <div nz-col [nzSpan]="imageSrc ? 12 : 24" >
             <app-chart-block [chart]="chart" [colors]="colorPaletteForm" (stitchEvent)="stitchEvent($event)"></app-chart-block>
         </div>
-        <div nz-col [nzSpan]="8">
-            @if (imageSrc) {
+        @if (imageSrc) {
+            <div nz-col [nzSpan]="12">
                 <img style="max-width: 100%;" [src]="imageSrc">
-            } @else {
-                <!-- TODO placeholder element? -->
-            }
-        </div>
+            </div>
+        }
     </div>
-    <div style="margin: auto;">
+    <div class="color-palette">
         <app-color-palette style="max-width: max-content;" [colors]="colorPaletteForm" [allowSelectMode]="false" [editorMode]="true"></app-color-palette>
     </div>
     <div>
-        @for(row of patternToDescription; let i = $index, isEvenRow = $even; track i ) {
+        @for(row of patternToDescription; let i = $index, isEvenRow = $even; track i) {
             @let isRS = chart.flat ? isEvenRow : true;
-            Row {{ i + 1 }} ({{ isRS ? "RS" : "WS" }}): {{ row | patternDescription }} <br>
+            Row {{ i + 1 }} ({{ isRS ? "RS" : "WS" }}): {{ row | patternDescription : isRS }} <br>
         }
     </div>
 }

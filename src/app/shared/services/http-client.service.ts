@@ -28,7 +28,6 @@ export class HttpClientService {
   }
 
   createChart(chart: Chart): Observable<Chart> {
-    console.log('chart create', chart);
     return this.http.post<Chart>(`${this.baseUrl}/charts`, chart);
   }
 

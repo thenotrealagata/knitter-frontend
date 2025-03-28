@@ -15,7 +15,8 @@ export enum AtomicStitchType {
     Purl = "Purl",
     K2tog = "K2tog",
     P2tog = "P2tog",
-    Yo = "Yo"
+    Yo = "Yo",
+    NoStitch = "NoStitch"
 }
 
 export enum CompositeStitchType {
@@ -23,18 +24,11 @@ export enum CompositeStitchType {
     Wrapped = "Wrapped"
 }
 
-export class NoStitch implements Stitch {
-    color: "NO_STITCH";
-    constructor() {
-        this.color = "NO_STITCH";
-    }
-}
-
 export class AtomicStitch implements Stitch {
-    color: Color;
+    color: Color | "NO_STITCH";
     type: AtomicStitchType;
 
-    constructor(color: Color, type: AtomicStitchType) {
+    constructor(color: Color | "NO_STITCH", type: AtomicStitchType) {
         this.color = color;
         this.type = type;
     }

@@ -2,13 +2,13 @@
 @let chartInstance = chart();
 @if (chartFormInstance && chartFormInstance.controls) {
     <ng-container *ngTemplateOutlet="chartBlock; context: {
-        height: chartFormInstance.controls.height.value,
+        height: chartFormInstance.controls.pattern.value.length,
         pattern: chartFormInstance.controls.pattern.value,
         isFlat: chartFormInstance.controls.isFlat.value,
     }"></ng-container>
 } @else if (chartInstance) {
     <ng-container *ngTemplateOutlet="chartBlock; context: {
-        height: chartInstance.height,
+        height: chartInstance.pattern.length,
         pattern: chartInstance.pattern,
         isFlat: chartInstance.flat
     }"></ng-container>

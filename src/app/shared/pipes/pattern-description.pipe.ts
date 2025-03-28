@@ -12,23 +12,25 @@ export class PatternDescriptionPipe implements PipeTransform {
     this.chartService = chartService;
   }
 
-  // TODO assumes atomic stitches, this will break with the introduction of composites
-  transform(value: Stitch | Stitch[], trigger?: number) {
+  transform(value: Stitch | Stitch[], isRightSide?: boolean, trigger?: number) {
     if(Array.isArray(value)) {
+      const array = isRightSide ? [...value].reverse() : value;
+
       let previousStitch: AtomicStitch;
       let sameStitchCounter = 1;
-      const asAtomicStitch = value as AtomicStitch[];
+      const asAtomicStitch = array as AtomicStitch[];
       return asAtomicStitch.reduce((description, stitch, i) => {
         if (!previousStitch) {
           description += "With " + stitch.color + " ";
+        } else if (previousStitch.color !== stitch.color) {
+          description += this.describeStitch(previousStitch, sameStitchCounter) + " ";
+          sameStitchCounter = 1;
+          description += "Switch to " + stitch.color + " ";
+        } else if (previousStitch.type === stitch.type) {
+          sameStitchCounter++;
         } else {
-          if (previousStitch.color !== stitch.color) {
-            description += "Switch to " + stitch.color + " ";
-          } else if (previousStitch.type === stitch.type) {
-            sameStitchCounter++;
-          } else {
-            description += this.describeStitch(previousStitch, sameStitchCounter);
-          }
+          description += this.describeStitch(previousStitch, sameStitchCounter) + " ";
+          sameStitchCounter = 1;
         }
 
         if (i === asAtomicStitch.length - 1) {

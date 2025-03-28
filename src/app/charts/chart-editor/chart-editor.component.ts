@@ -29,6 +29,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { ChartsListingElementComponent } from "../charts-listing/charts-listing-element/charts-listing-element.component";
 import { UserService } from '../../shared/services/user.service';
+import { ChartService } from '../../shared/services/chart.service';
 
 const ngZorroModules = [NzLayoutModule,
   NzFlexModule,
@@ -84,7 +85,11 @@ export class ChartEditorComponent {
 
   atomicStitchInventory = Object.keys(AtomicStitchType)
     .filter(key => isNaN(Number(key)))
-    .map(stitchType => new AtomicStitch(this.selectedColor, stitchType as AtomicStitchType));
+    .map(stitchType =>
+      new AtomicStitch(
+        stitchType === AtomicStitchType.NoStitch ? "NO_STITCH" : this.selectedColor,
+        stitchType as AtomicStitchType)
+    );
   cableStitchInventory: CableStitch[] = [
     new CableStitch(
       Color.MC,
@@ -117,6 +122,7 @@ export class ChartEditorComponent {
   formService: FormService;
   router: Router;
   nzMessageService: NzMessageService;
+  chartService: ChartService;
 
   isAddChartsModalVisible = false;
   charts: Chart[] = [];
@@ -134,17 +140,16 @@ export class ChartEditorComponent {
     httpClient: HttpClientService,
     router: Router,
     nzMessageService: NzMessageService,
-    userService: UserService) {
+    userService: UserService,
+    chartService: ChartService) {
     this.httpClient = httpClient;
     this.formService = formService;
     this.router = router;
     this.nzMessageService = nzMessageService;
+    this.chartService = chartService;
     
-    // TODO remove other colors after testing is done
     this.colorPaletteForm = formService.colorPaletteForm({
       [Color.MC]: "#fefefe",
-      [Color.CC1]: "#792960",
-      [Color.CC2]: "#CE7DA5"
     });
     this.cableStitchForm = formService.cableStitchForm();
     this.cableStitchFormPreview = formService.formToCableStitch(this.cableStitchForm, this.selectedColor);
@@ -161,7 +166,6 @@ export class ChartEditorComponent {
       // Created chart is a variation on an existing chart
       httpClient.getChartById(this.parentId).subscribe({
         next: (chart) => {
-          console.log('get', chart);
           this.chartForm = formService.chartForm(chart);
           this.previousHeight = this.chartForm.controls.height.value;
           this.previousWidth = this.chartForm.controls.width.value;
@@ -247,20 +251,23 @@ export class ChartEditorComponent {
   }
 
   drawStitch(stitch: Stitch) {
+    if (!this.selectedStitch) return;
     const row = this.chartForm?.controls.pattern.value.find(row => row.includes(stitch));
     const stitchIndex = row?.indexOf(stitch);
-
-    if (stitch instanceof AtomicStitch && this.selectedStitch instanceof AtomicStitch) {
-      stitch.color = this.selectedStitch.color;
+    
+    if (this.chartService.isAtomicStitch(stitch)
+      && this.chartService.isAtomicStitch(this.selectedStitch)) {
+      const selectedIsNoStitch = this.selectedStitch.type === AtomicStitchType.NoStitch;
+      stitch.color = selectedIsNoStitch ? "NO_STITCH" : this.selectedColor;
       stitch.type = this.selectedStitch.type;
-    } else if (stitch instanceof CompositeStitch && this.selectedStitch instanceof AtomicStitch) {
+    } else if (this.chartService.isCompositeStitch(stitch) && this.chartService.isAtomicStitch(this.selectedStitch)) {
       if (stitchIndex === undefined || !row) return;
 
       const newSequence = [...new Array(stitch.sequence.length)].map(_ => new AtomicStitch(stitch.color, AtomicStitchType.Knit));
       newSequence[0] = this.selectedStitch;
       row?.splice(stitchIndex, 1, ...newSequence);
 
-    } else if (this.selectedStitch instanceof CableStitch) {
+    } else if (this.chartService.isCableStitch(this.selectedStitch)) {
       const stitchSize = this.selectedStitch.sequence.length;
       if (stitchIndex === undefined || !row) return;
 
@@ -298,7 +305,6 @@ export class ChartEditorComponent {
         this.nzMessageService.error("Stitch can't be added outside of chart!");
       }
     }
-    // TODO other cases
   }
 
   onFileUpload = (file: NzUploadFile) => {
@@ -404,7 +410,6 @@ export class ChartEditorComponent {
           ...[...new Array(stitchCountChange)].map(_ => new AtomicStitch(Color.MC, AtomicStitchType.Knit))
         );
       })
-      console.log('chart form width change', this.chartForm.controls.pattern.value);
       this.previousWidth = newValue;
     } else {
       // Remove stitches; ask for confirmation
@@ -416,12 +421,35 @@ export class ChartEditorComponent {
   confirmNewWidth() {
     if (!this.chartForm || this.pendingNewWidth === undefined) return;
 
-    this.chartForm.controls.pattern.value.forEach(row => {
-      row.splice(this.pendingNewWidth!);
+    this.chartForm.controls.pattern.value.forEach((row, i) => {
+      let stitchCounter = 0;
+      const currentWidthAtIndex = row.findIndex(stitch => {
+        // Removing from index might not be exactly the given width (as stitch groups count as 1 in the array)
+        stitchCounter += this.getStitchNumber(stitch);
+        return stitchCounter > this.pendingNewWidth!;
+      });
+
+      row.splice(currentWidthAtIndex);
+      const stitchDifference = this.pendingNewWidth! - row.reduce((sum, stitch) => sum += this.getStitchNumber(stitch), 0);
+      // When splitting composite stitches, we must compensate for the entire group being removed
+      if (stitchDifference > 0) {
+        row.push(...[...new Array(stitchDifference)].map(_ => new AtomicStitch(Color.MC, AtomicStitchType.Knit)));
+      }
     });
 
     this.previousWidth = this.pendingNewWidth;
     this.pendingNewWidth = undefined;
+  }
+
+  getStitchNumber(stitch: Stitch): number {
+    // Get number of squares stitch occupies on pattern
+    if (this.chartService.isAtomicStitch(stitch)) {
+      return 1;
+    } else if (this.chartService.isCompositeStitch(stitch)) {
+      return stitch.sequence.length;
+    }
+
+    return 0;
   }
 
   cancelNewWidth() {
@@ -517,12 +545,10 @@ export class ChartEditorComponent {
   }
 
   addCharts() {
+    this.chartInventory = [];
     this.chartsSelected.forEach(id => {
-      let chart;
-      if (!this.chartInventory.some(chart => chart.id === id)
-        && (chart = this.userFavorites.find(chart => chart.id === id)) !== undefined) {
-        this.chartInventory.push(chart);
-      }
+      const chart = this.userFavorites.find(favorite => favorite.id === id);
+      if (chart) this.chartInventory.push(chart);
     })
     this.isAddChartsModalVisible = false;
   }

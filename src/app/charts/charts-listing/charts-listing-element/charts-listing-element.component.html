@@ -16,23 +16,22 @@
     <ng-template #favoriteTemplate>
         <nz-icon (click)="toggleFavorite.emit()" nzType="heart" [nzTheme]="isFavorited() ? 'fill' : 'outline'" />
     </ng-template>
+    <ng-template #coverTemplate>
+      @if (imageSrc) {
+        <img [src]="imageSrc" />
+      } @else {
+        <div class="image-placeholder">
+          <nz-icon nzType="file-image" nzTheme="outline" />
+        </div>
+      }
+    </ng-template>
 } @else {
-  <nz-card style="width: 100%;">
+  <nz-card style="width: 100%">
     <div nz-space nzAlign="center">
       <div *nzSpaceItem>
-        <ng-container *ngTemplateOutlet="coverTemplate"></ng-container>
+        
       </div>
-      <p *nzSpaceItem></p>
+      <p *nzSpaceItem>{{ chart().title }}</p>
     </div>
   </nz-card>
 }
-
-<ng-template #coverTemplate>
-  @if (imageSrc) {
-    <img [src]="imageSrc" />
-  } @else {
-    <div class="image-placeholder">
-      <nz-icon nzType="file-image" nzTheme="outline" />
-    </div>
-  }
-</ng-template>

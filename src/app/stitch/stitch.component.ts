@@ -29,6 +29,7 @@ export class StitchComponent {
   CableNeedleDirection = CableNeedleDirection;
 
   defaultColor = "#fff";
+  noStitchColor = "#a6a6a6";
 
   chartService: ChartService;
 
@@ -43,13 +44,4 @@ export class StitchComponent {
   rightCableContainsPurl(cableStitch: CableStitch) {
     return cableStitch.sequence.slice(-1 * cableStitch.toCableNeedle).some(stitch => stitch.type === AtomicStitchType.Purl);
   }
-
-  isAtomicStitch(stitch: Stitch): boolean {
-    return 'type' in stitch;
-  }
-
-  isCompositeStitch(stitch: Stitch): boolean {
-    return 'sequence' in stitch;
-  }
-
 }

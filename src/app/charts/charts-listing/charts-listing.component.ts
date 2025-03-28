@@ -31,7 +31,6 @@ export class ChartsListingComponent {
     this.httpClient = httpClient;
     this.userService = sessionService;
 
-    // TODO probably 5 layers of programming war crimes were done here
     if(!this.user && this.username) {
       httpClient.getUser(this.username).subscribe({
         next: (user) => {

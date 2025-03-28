@@ -16,8 +16,7 @@
           <nz-icon nzType="plus" nzTheme="outline" />
         </button>
       </div>
-      <nz-divider nzPlain nzText="Wrapped stitches" nzOrientation="left"></nz-divider>
-
+      <div style="max-width: 100%">
       @if (isPanelEditor) {
         <nz-divider nzPlain nzText="Charts" nzOrientation="left"></nz-divider>
         @for (chart of chartInventory; track chart.id) {
@@ -27,6 +26,7 @@
           Add charts
         </button>
       }
+      </div>
       
     </div>
   </nz-sider>
@@ -44,7 +44,7 @@
             </div>
             <div nz-col>
               {{
-                selectedStitch | patternDescription : selectedStitchTrigger
+                selectedStitch | patternDescription : false : selectedStitchTrigger
               }}
             </div>
           </nz-card>
@@ -81,7 +81,7 @@
                 style="width: 50px; text-align: center;"
                 nz-popconfirm
                 [nzPopconfirmTrigger]="null"
-                [nzPopconfirmVisible]="confirmNewWidthPopconfirmVisible"
+                [(nzPopconfirmVisible)]="confirmNewWidthPopconfirmVisible"
                 nzPopconfirmTitle="Are you sure you want to decrease the width of this chart?"
                 nzPopconfirmPlacement="bottom"
                 (nzOnConfirm)="confirmNewWidth()"
@@ -105,7 +105,7 @@
                 style="width:50px; text-align: center; border-left-width: 0px;"
                 nz-popconfirm
                 [nzPopconfirmTrigger]="null"
-                [nzPopconfirmVisible]="confirmNewHeightPopconfirmVisible"
+                [(nzPopconfirmVisible)]="confirmNewHeightPopconfirmVisible"
                 nzPopconfirmTitle="Are you sure you want to decrease the height of this chart?"
                 nzPopconfirmPlacement="bottom"
                 (nzOnConfirm)="confirmNewHeight()"
@@ -118,14 +118,6 @@
           <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Knitted flat</nz-form-label>
           <nz-form-control [nzSm]="16" [nzXs]="24">
             <nz-switch formControlName="isFlat" nzSize="small"></nz-switch>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>
-            Tags
-          </nz-form-label>
-          <nz-form-control [nzSm]="16" [nzXs]="24">
-
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>

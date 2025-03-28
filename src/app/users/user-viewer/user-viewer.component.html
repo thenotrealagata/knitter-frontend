@@ -5,7 +5,7 @@
     @if (charts && charts.length > 0) {
         <div nz-row [nzGutter]="[{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }, 8]">
             @for (chart of charts; track chart.id) {
-                <div nz-col [nzSm]="8" [nzLg]="6">
+                <div nz-col [nzSm]="8" [nzMd]="8" [nzLg]="6">
                     <app-charts-listing-element [chart]="chart" [showFavorite]="false"></app-charts-listing-element>
                 </div>
             }
@@ -18,7 +18,7 @@
     @if (user.favorites && user.favorites.length > 0) {
         <div nz-row [nzGutter]="[{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }, 8]">
             @for (chart of user.favorites; track chart.id) {
-                <div nz-col [nzSm]="8" [nzLg]="6">
+                <div nz-col [nzSm]="8" [nzMd]="8" [nzLg]="6">
                     <app-charts-listing-element [chart]="chart" [showFavorite]="false"></app-charts-listing-element>
                 </div>
             }

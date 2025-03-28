@@ -94,7 +94,6 @@ export class FormService {
   }
 
   formToChart(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>, parentId?: number): Chart {
-    // TODO this will break if image is not provided
     return {
       title: chartForm.controls.title.value,
       description: chartForm.controls.description.value,

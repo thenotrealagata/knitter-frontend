@@ -52,7 +52,6 @@ export class LoginComponent {
           this.router.navigate(['/charts/list']);
         },
         error: (err) => {
-          console.log('error', err);
           this.nzMessageService.error('Login unsuccessful.');
         }
       })
@@ -65,7 +64,6 @@ export class LoginComponent {
           this.authForm.reset();
         },
         error: (err) => {
-          console.log('error', err);
           if (err.status === 409) {
             this.nzMessageService.error('The given username exists, please choose another one.');
           } else {

@@ -1,9 +1,5 @@
 import { AtomicStitchType, CableNeedleDirection, Color, Stitch } from "../../model/Chart";
-import { FormControl, FormGroup } from "@angular/forms";
-
-export enum ChartFormError {
-
-}
+import { FormControl } from "@angular/forms";
 
 export interface ChartForm {
   title: FormControl<string>;
