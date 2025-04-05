@@ -3,7 +3,7 @@ import { Stitch, AtomicStitch, CompositeStitch, AtomicStitchType, CableStitch, C
 import { NgTemplateOutlet } from '@angular/common';
 import { AsPipe } from '../shared/pipes/as.pipe';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { CurryPipe } from '../shared/services/curry.pipe';
+import { CurryPipe } from '../shared/pipes/curry.pipe';
 import { ColorPaletteForm } from '../shared/services/form.interfaces';
 import { FormGroup } from '@angular/forms';
 import { ChartService } from '../shared/services/chart.service';

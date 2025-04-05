@@ -53,6 +53,7 @@ export class LoginComponent {
         },
         error: (err) => {
           this.nzMessageService.error('Login unsuccessful.');
+          this.authForm.reset();
         }
       })
     } else {

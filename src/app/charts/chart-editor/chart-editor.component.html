@@ -4,13 +4,13 @@
       <nz-divider nzPlain nzText="Stitches" nzOrientation="left"></nz-divider>
       <div class="stitch-inventory" nz-flex nzGap="middle" nzWrap="wrap">
         @for (atomicStitch of atomicStitchInventory; track atomicStitch.type) {
-            <app-stitch [stitch]="atomicStitch" [colors]="colorPaletteForm" [showDescription]="true" (click)="stitchSelected(atomicStitch)"></app-stitch>
+            <app-stitch [stitch]="atomicStitch" [colors]="colorPaletteForm" [showDescription]="true" (click)="selectElement(atomicStitch)"></app-stitch>
         }
       </div>
       <nz-divider nzPlain nzText="Cable stitches" nzOrientation="left"></nz-divider>
       <div class="stitch-inventory" nz-flex nzGap="middle" nzWrap="wrap">
         @for (cableStitch of cableStitchInventory; let i = $index; track i) {
-          <app-stitch [stitch]="cableStitch" [colors]="colorPaletteForm" [showDescription]="true" (click)="stitchSelected(cableStitch)"></app-stitch>
+          <app-stitch [stitch]="cableStitch" [colors]="colorPaletteForm" [showDescription]="true" (click)="selectElement(cableStitch)"></app-stitch>
         }
         <button nz-button nzSize="small" (click)="openNewCableNeedleModal()">
           <nz-icon nzType="plus" nzTheme="outline" />
@@ -20,7 +20,7 @@
       @if (isPanelEditor) {
         <nz-divider nzPlain nzText="Charts" nzOrientation="left"></nz-divider>
         @for (chart of chartInventory; track chart.id) {
-          <app-charts-listing-element [chart]="chart" [cardMode]="'horizontal'"></app-charts-listing-element>
+          <app-chart-block [chart]="chart" (click)="selectElement(chart)" [colors]="colorPaletteForm" [showRowLabels]="false" [stitchSize]="10"></app-chart-block>
         }
         <button nz-button nzSize="small" (click)="openAddChartsModal()">
           Add charts
@@ -36,17 +36,24 @@
         <app-chart-block [chartForm]="chartForm" [colors]="colorPaletteForm" (stitchEvent)="stitchEvent($event)"></app-chart-block>
         <app-color-palette class="color-palette" [colors]="colorPaletteForm" [allowSelectMode]="true" [editorMode]="true" (colorSelected)="colorSelected($event)" (colorDeleted)="colorDeleted($event)"></app-color-palette>
       }
-      @if (selectedStitch) {
+      @if (selectedElement) {
         <div class="selected-element">
           <nz-card nz-row>
-            <div nz-col>
-              <app-stitch [stitch]="selectedStitch" [colors]="colorPaletteForm" [size]="30"></app-stitch>
-            </div>
-            <div nz-col>
-              {{
-                selectedStitch | patternDescription : false : selectedStitchTrigger
-              }}
-            </div>
+            @if (chartService.isStitch(selectedElement)) {
+              <p class="block-title">Selected stitch</p>
+              <div nz-col>
+                <app-stitch [stitch]="selectedElement" [colors]="colorPaletteForm" [size]="30"></app-stitch>
+              </div>
+              <div nz-col>
+                {{
+                  selectedElement | patternDescription : false : selectedStitchTrigger
+                }}
+              </div>
+            } @else {
+              <p class="block-title">Selected chart</p>
+              <app-chart-block [chart]="selectedElement" [colors]="colorPaletteForm" [showRowLabels]="false" [stitchSize]="10"></app-chart-block>
+            }
+            
           </nz-card>
         </div>
       }

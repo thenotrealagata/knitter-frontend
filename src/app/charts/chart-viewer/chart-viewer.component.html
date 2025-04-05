@@ -18,19 +18,21 @@
                     Delete chart
                 </button>
             }
-            <button (click)="toggleFavorite()" nz-button nzType="default">
-                @if(isFavorite) {
-                    <nz-icon nzType="heart" nzTheme="fill" />
-                    In favorites
-                } @else {
-                    <nz-icon nzType="heart" nzTheme="outline" />
-                    Favorite
-                }
-            </button>
-            <button (click)="createVariation()" nz-button nzType="default">
-                <nz-icon nzType="edit" nzTheme="outline" />
-                Create variation
-            </button>
+            @if (user) {            
+                <button (click)="toggleFavorite()" nz-button nzType="default">
+                    @if(isFavorite) {
+                        <nz-icon nzType="heart" nzTheme="fill" />
+                        In favorites
+                    } @else {
+                        <nz-icon nzType="heart" nzTheme="outline" />
+                        Favorite
+                    }
+                </button>
+                <button (click)="createVariation()" nz-button nzType="default">
+                    <nz-icon nzType="edit" nzTheme="outline" />
+                    Create variation
+                </button>
+            }
         </div>
     </div>
     <div class="hovered-stitch">

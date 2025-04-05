@@ -16,6 +16,9 @@ export class ChartBlockComponent {
   chart = input<Chart>();
   colors = input.required<FormGroup<ColorPaletteForm>>();
 
+  showRowLabels = input<boolean>(true);
+  stitchSize = input<number>(20);
+
   stitchEvent = output<{
     stitch: Stitch;
     event: 'click' | 'mouseenter' | 'mouseout'

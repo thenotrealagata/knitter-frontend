@@ -40,6 +40,24 @@ export class FormService {
     });
   }
 
+  formToChart(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>, parentId?: number): Chart {
+    return {
+      title: chartForm.controls.title.value,
+      description: chartForm.controls.description.value,
+      flat: chartForm.controls.isFlat.value,
+      pattern: chartForm.controls.pattern.value,
+      width: chartForm.controls.width.value,
+      height: chartForm.controls.height.value,
+      colors: colorPaletteForm.value,
+      parentId: parentId,
+      filePath: chartForm.controls.image.value!
+    };
+  }
+
+  formToPanel(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>, includedCharts: number[], parentId?: number): Panel {
+    return { ...this.formToChart(chartForm, colorPaletteForm, parentId), includedCharts: includedCharts };
+  }
+
   cableStitchForm(): FormGroup<CableStitchForm> {
     return new FormGroup({
       stitchNumber: new FormControl<number>(2, {
@@ -91,24 +109,6 @@ export class FormService {
         })
       });
     }
-  }
-
-  formToChart(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>, parentId?: number): Chart {
-    return {
-      title: chartForm.controls.title.value,
-      description: chartForm.controls.description.value,
-      flat: chartForm.controls.isFlat.value,
-      pattern: chartForm.controls.pattern.value,
-      width: chartForm.controls.width.value,
-      height: chartForm.controls.height.value,
-      colors: colorPaletteForm.value,
-      parentId: parentId,
-      filePath: chartForm.controls.image.value!
-    };
-  }
-
-  formToPanel(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>, includedCharts: number[], parentId?: number): Panel {
-    return { ...this.formToChart(chartForm, colorPaletteForm, parentId), includedCharts: includedCharts };
   }
 
   authenticationForm(): FormGroup<AuthenticationForm> {

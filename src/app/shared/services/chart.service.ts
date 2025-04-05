@@ -23,15 +23,19 @@ export class ChartService {
     return `${stitchNumbers} ${crossDirection}`;
   }
 
+  isStitch(obj: unknown): obj is Stitch {
+    return typeof obj === "object" && obj !== null && 'color' in obj;
+  }
+
   isAtomicStitch(stitch: Stitch): stitch is AtomicStitch {
-    return 'type' in stitch;
+    return 'type' in stitch && 'color' in stitch;
   }
 
   isCompositeStitch(stitch: Stitch): stitch is CompositeStitch {
-    return 'sequence' in stitch;
+    return 'sequence' in stitch && 'compositeType' in stitch && 'color' in stitch;
   }
 
   isCableStitch(stitch: Stitch): stitch is CableStitch {
-    return 'toCableNeedle' in stitch && 'holdCableNeedle' in stitch;
+    return this.isCompositeStitch(stitch) && 'toCableNeedle' in stitch && 'holdCableNeedle' in stitch;
   }
 }

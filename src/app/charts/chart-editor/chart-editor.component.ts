@@ -58,7 +58,7 @@ const ngZorroModules = [NzLayoutModule,
   styleUrl: './chart-editor.component.less'
 })
 export class ChartEditorComponent {
-  selectedStitch: Stitch | undefined;
+  selectedElement: Stitch | Chart | undefined;
   selectedColor: Color = Color.MC;
   selectedStitchTrigger = 0;
 
@@ -155,7 +155,7 @@ export class ChartEditorComponent {
     this.cableStitchFormPreview = formService.formToCableStitch(this.cableStitchForm, this.selectedColor);
 
     const user = userService.getUser();
-    if (!user) {
+    if (!user) {  
       router.navigate(["/login"]);
       return;
     }
@@ -166,7 +166,7 @@ export class ChartEditorComponent {
       // Created chart is a variation on an existing chart
       httpClient.getChartById(this.parentId).subscribe({
         next: (chart) => {
-          this.chartForm = formService.chartForm(chart);
+          this.chartForm = formService.chartForm({ pattern: chart.pattern, width: chart.width, height: chart.height, flat: chart.flat });
           this.previousHeight = this.chartForm.controls.height.value;
           this.previousWidth = this.chartForm.controls.width.value;
           this.isLoading = false;
@@ -179,18 +179,10 @@ export class ChartEditorComponent {
       this.isLoading = false;
       // Initialize chart
       this.chartForm = formService.chartForm({
-        title: '',
-        description: '',
         width: 10,
         height: 10,
         flat: true,
-        pattern: this.initializePattern(10, 10),
-        parentId: undefined,
-        colors: {
-          [Color.MC]: "#fefefe",
-          [Color.CC1]: "#792960",
-          [Color.CC2]: "#CE7DA5"
-        }
+        pattern: this.initializePattern(10, 10)
       });
       this.previousHeight = this.chartForm.controls.height.value;
       this.previousWidth = this.chartForm.controls.width.value;
@@ -203,7 +195,7 @@ export class ChartEditorComponent {
   }
 
   initializePattern(width: number, height: number): Stitch[][] {
-    // Initialize with stockinette pattern
+    // Initialize with stockinette pattern (in the round) or garter stitch (knitted flat)
     const pattern = [];
     for (let i = 0; i < height; i++) {
       const column = [];
@@ -218,8 +210,8 @@ export class ChartEditorComponent {
 
   colorSelected(color: Color) {
     this.selectedColor = color;
-    if (!this.selectedStitch) {
-      this.selectedStitch = this.atomicStitchInventory.find(stitch => stitch.type === AtomicStitchType.Knit);
+    if (!this.selectedElement) {
+      this.selectedElement = this.atomicStitchInventory.find(stitch => stitch.type === AtomicStitchType.Knit);
     }
     [...this.atomicStitchInventory, ...this.cableStitchInventory].forEach(stitch => stitch.color = this.selectedColor);
     this.selectedStitchTrigger++;
@@ -235,8 +227,8 @@ export class ChartEditorComponent {
     })
   }
 
-  stitchSelected(stitch: Stitch) {
-    this.selectedStitch = stitch;
+  selectElement(element: Stitch | Chart) {
+    this.selectedElement = element;
   }
 
   stitchEvent(event: { stitch: Stitch; event: "click" | "mouseenter" | "mouseout"; }) {
@@ -250,25 +242,33 @@ export class ChartEditorComponent {
     }
   }
 
-  drawStitch(stitch: Stitch) {
-    if (!this.selectedStitch) return;
-    const row = this.chartForm?.controls.pattern.value.find(row => row.includes(stitch));
-    const stitchIndex = row?.indexOf(stitch);
+  drawStitch(startPoint: Stitch, stitch?: Stitch) {
+    if (!stitch) {
+      if (!this.selectedElement) return;
+      else if (!this.chartService.isStitch(this.selectedElement)) {
+        this.drawChart(startPoint);
+        return;
+      }
+    }
+
+    const drawStitch = stitch ?? this.selectedElement as Stitch;
+    const row = this.chartForm?.controls.pattern.value.find(row => row.includes(startPoint));
+    const stitchIndex = row?.indexOf(startPoint);
     
-    if (this.chartService.isAtomicStitch(stitch)
-      && this.chartService.isAtomicStitch(this.selectedStitch)) {
-      const selectedIsNoStitch = this.selectedStitch.type === AtomicStitchType.NoStitch;
-      stitch.color = selectedIsNoStitch ? "NO_STITCH" : this.selectedColor;
-      stitch.type = this.selectedStitch.type;
-    } else if (this.chartService.isCompositeStitch(stitch) && this.chartService.isAtomicStitch(this.selectedStitch)) {
+    if (this.chartService.isAtomicStitch(startPoint)
+      && this.chartService.isAtomicStitch(drawStitch)) {
+      const selectedIsNoStitch = drawStitch.type === AtomicStitchType.NoStitch;
+      startPoint.color = selectedIsNoStitch ? "NO_STITCH" : drawStitch.color;
+      startPoint.type = drawStitch.type;
+    } else if (this.chartService.isCompositeStitch(startPoint) && this.chartService.isAtomicStitch(drawStitch)) {
       if (stitchIndex === undefined || !row) return;
 
-      const newSequence = [...new Array(stitch.sequence.length)].map(_ => new AtomicStitch(stitch.color, AtomicStitchType.Knit));
-      newSequence[0] = this.selectedStitch;
+      const newSequence = [...new Array(startPoint.sequence.length)].map(_ => new AtomicStitch(startPoint.color, AtomicStitchType.Knit));
+      newSequence[0] = drawStitch;
       row?.splice(stitchIndex, 1, ...newSequence);
 
-    } else if (this.chartService.isCableStitch(this.selectedStitch)) {
-      const stitchSize = this.selectedStitch.sequence.length;
+    } else if (this.chartService.isCableStitch(drawStitch)) {
+      const stitchSize = drawStitch.sequence.length;
       if (stitchIndex === undefined || !row) return;
 
       // Copy stitch over existing stitches; if it flows into a composite stitch, remove it and replace remaining spots with knit stitches
@@ -290,10 +290,10 @@ export class ChartEditorComponent {
           stitchIndex,
           0,
           new CableStitch(
-            this.selectedColor,
-            this.selectedStitch.sequence.map(sequenceElement => sequenceElement.type),
-            this.selectedStitch.toCableNeedle,
-            this.selectedStitch.holdCableNeedle)
+            drawStitch.color,
+            drawStitch.sequence.map(sequenceElement => sequenceElement.type),
+            drawStitch.toCableNeedle,
+            drawStitch.holdCableNeedle)
         );
 
         const difference = stitchSum - stitchSize;
@@ -305,6 +305,35 @@ export class ChartEditorComponent {
         this.nzMessageService.error("Stitch can't be added outside of chart!");
       }
     }
+  }
+
+  drawChart(startPoint: Stitch) {
+    const chart = this.selectedElement as Chart;
+    const pattern = chart.pattern;
+
+    const rowIndex = this.chartForm?.controls.pattern.value.findIndex(row => row.includes(startPoint))!;
+    const row = this.chartForm?.controls.pattern.value[rowIndex];
+    const stitchIndex = row?.indexOf(startPoint);
+    if (stitchIndex === undefined) return;
+
+    if (this.chartForm &&
+      (stitchIndex + chart.width > this.chartForm.controls.width.value ||
+        stitchIndex + chart.height > this.chartForm.controls.height.value)) {
+      // Chart does not fit into drawing area
+      this.nzMessageService.error('Chart can\'t be copied over the given stitch, as it does not fit unto the given surface');
+      return;
+    }
+
+    // Chart can be added, copy over elements
+    const formPattern = this.chartForm?.controls.pattern.value!;
+    pattern.forEach((row, patternRowIndex) => {
+      row.forEach((stitch, patternStitchIndex) => {
+        const formStitch = formPattern[rowIndex + patternRowIndex][stitchIndex + patternStitchIndex];
+        this.drawStitch(formStitch, stitch);
+      });
+    })
+
+    this.panelsAdded.push(chart.id!);
   }
 
   onFileUpload = (file: NzUploadFile) => {
@@ -340,7 +369,7 @@ export class ChartEditorComponent {
     });
 
     if (hasError) {
-      this.nzMessageService.error("Can't save chart in this state, please provide all the required fields!");
+      this.nzMessageService.error('Can\'t save chart in this state, please provide all the required fields!');
       return;
     }
 

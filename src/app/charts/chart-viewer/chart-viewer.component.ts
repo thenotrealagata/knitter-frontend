@@ -14,6 +14,7 @@ import { PatternDescriptionPipe } from '../../shared/pipes/pattern-description.p
 import { UserService } from '../../shared/services/user.service';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { User } from '../../model/User';
 
 @Component({
   selector: 'app-chart-viewer',
@@ -38,6 +39,8 @@ export class ChartViewerComponent {
   httpClient: HttpClientService;
   nzMessageService: NzMessageService;
 
+  user: User | null;
+
   constructor(
     httpClient: HttpClientService,
     activatedRoute: ActivatedRoute,
@@ -49,6 +52,7 @@ export class ChartViewerComponent {
     this.router = router;
     this.httpClient = httpClient;
     this.userService = userService;
+    this.user = userService.getUser();
     this.nzMessageService = nzMessageService;
 
     const chartId = Number(activatedRoute.snapshot.paramMap.get("id"));
@@ -98,7 +102,8 @@ export class ChartViewerComponent {
     if (!this.chart?.id) return;
     await this.userService.toggleFavorite(this.chart?.id, !this.isFavorite);
 
-    this.isFavorite = this.userService.getUser()?.favorites.some(chart => chart.id === this.chart?.id) ?? false;
+    this.user = this.userService.getUser();
+    this.isFavorite = this.user?.favorites.some(chart => chart.id === this.chart?.id) ?? false;
   }
 
   createVariation() {

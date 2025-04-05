@@ -19,15 +19,18 @@
         @for(row of pattern; let i = $index, isEvenRow = $even; track i) {
             @let rowCount = height - i;
             <div class="chart-row">
-                <div class="row-label align-right">
-                    @if (isFlat && isEvenRow) {
-                        <span>{{ rowCount }}</span>
-                    }
-                </div>
+                @if (showRowLabels()) {
+                    <div class="row-label align-right">
+                        @if (isFlat && isEvenRow) {
+                            <span>{{ rowCount }}</span>
+                        }
+                    </div>
+                }
                 @for(stitch of row; let j = $index; track j) {
                     <app-stitch
                         [stitch]="stitch"
                         [colors]="colors()"
+                        [size]="stitchSize()"
                         (mouseenter)="stitchEvent.emit({
                                 stitch: stitch,
                                 event: 'mouseenter'
@@ -42,11 +45,13 @@
                         })">
                     </app-stitch>
                 }
-                <div class="row-label align-left">
-                    @if (!isFlat || !isEvenRow) {
-                        <span class="row-label">{{ rowCount }}</span>
-                    }
-                </div>
+                @if (showRowLabels()) {
+                    <div class="row-label align-left">
+                        @if (!isFlat || !isEvenRow) {
+                            <span class="row-label">{{ rowCount }}</span>
+                        }
+                    </div>
+                }
             </div>
         }
     </div>

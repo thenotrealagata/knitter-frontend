@@ -8,7 +8,7 @@ import { Chart } from '../../model/Chart';
 import { UserService } from '../../shared/services/user.service';
 import { User } from '../../model/User';
 import { ChartsListingElementComponent } from "./charts-listing-element/charts-listing-element.component";
-import { CurryPipe } from '../../shared/services/curry.pipe';
+import { CurryPipe } from '../../shared/pipes/curry.pipe';
 
 @Component({
   selector: 'app-charts-listing',
@@ -54,7 +54,7 @@ export class ChartsListingComponent {
   }
 
   isFavorited = (chartId: number, user: User) => {
-    return user.favorites.some(favorite => favorite.id === chartId) ?? false;
+    return user && user.favorites.some(favorite => favorite.id === chartId);
   }
 
   async toggleFavorite(chartId: number, addFavorite: boolean) {
