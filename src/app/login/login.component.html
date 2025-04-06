@@ -27,12 +27,12 @@
             <button nz-button (click)="authenticate()">
                 Log in
             </button>
-            <p>Don't have an account yet? <a (click)="toggleLoginMode()">Register here.</a></p>
+            <p>Don't have an account yet? <a routerLink="/register">Register here.</a></p>
         } @else {
             <button nz-button (click)="authenticate()">
                 Register
             </button>
-            <p>Already registered? <a (click)="toggleLoginMode()">Log in here.</a></p>
+            <p>Already registered? <a routerLink="/login">Log in here.</a></p>
         }
         
     </form>

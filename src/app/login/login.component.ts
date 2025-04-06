@@ -5,14 +5,14 @@ import { AuthenticationForm } from '../shared/services/form.interfaces';
 import { FormService } from '../shared/services/form.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpClientService } from '../shared/services/http-client.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { UserService } from '../shared/services/user.service';
 
 @Component({
   selector: 'app-login',
-  imports: [ NzFormModule, ReactiveFormsModule, NzButtonModule, NzInputModule ],
+  imports: [ NzFormModule, ReactiveFormsModule, NzButtonModule, NzInputModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.less'
 })
@@ -30,13 +30,16 @@ export class LoginComponent {
     httpClient: HttpClientService,
     nzMessageService: NzMessageService,
     sessionService: UserService,
-    router: Router) {
+    router: Router,
+    activatedRoute: ActivatedRoute
+  ) {
     this.httpClient = httpClient;
     this.formService = formService;
     this.nzMessageService = nzMessageService;
     this.sessionService = sessionService;
     this.router = router;
 
+    this.login = activatedRoute.snapshot.routeConfig?.path === 'login';
     this.authForm = formService.authenticationForm();
   }
 
@@ -73,10 +76,5 @@ export class LoginComponent {
         }
       })
     }
-  }
-
-  toggleLoginMode() {
-    this.login = !this.login;
-    this.authForm.reset();
   }
 }

@@ -38,10 +38,10 @@ export class StitchComponent {
   }
 
   leftCableContainsPurl(cableStitch: CableStitch) {
-    return cableStitch.sequence.slice(0, cableStitch.sequence.length - cableStitch.toCableNeedle).some(stitch => stitch.type === AtomicStitchType.Purl);
+    return cableStitch.sequence.slice(0, cableStitch.sequence.length - cableStitch.toCableNeedle).some(stitch => stitch === AtomicStitchType.Purl);
   }
 
   rightCableContainsPurl(cableStitch: CableStitch) {
-    return cableStitch.sequence.slice(-1 * cableStitch.toCableNeedle).some(stitch => stitch.type === AtomicStitchType.Purl);
+    return cableStitch.sequence.slice(-1 * cableStitch.toCableNeedle).some(stitch => stitch === AtomicStitchType.Purl);
   }
 }

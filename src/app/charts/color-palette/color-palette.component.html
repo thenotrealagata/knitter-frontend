@@ -1,7 +1,7 @@
 <nz-card class="width-max-content">
     <form nz-form [formGroup]="colors()">
         <nz-space nzAlign="center">
-        @for (controlKey of Object.keys(colors().controls); track controlKey) {
+        @for (controlKey of sortByColorOrder(Object.keys(colors().controls)); track controlKey) {
             @let control = colors().get(controlKey) | as : StringFormControl;
             
             @if (editorMode()) {
@@ -10,7 +10,7 @@
                 </nz-form-control>
                 <ng-template #colorBlockTitleTemplate>
                     {{ controlKey }}
-                    @if (controlKey !== 'MC') {
+                    @if (controlKey !== 'MC' && canDelete()) {
                         <button (click)="deleteColor($any(controlKey))" nz-button nzType="link">
                             Delete
                         </button>

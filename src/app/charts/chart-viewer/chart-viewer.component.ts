@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClientService } from '../../shared/services/http-client.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChartBlockComponent } from "../chart-block/chart-block.component";
-import { Chart, Stitch } from '../../model/Chart';
+import { AtomicStitch, CableStitch, Chart, Color, Panel, Stitch } from '../../model/Chart';
 import { ColorPaletteComponent } from "../color-palette/color-palette.component";
 import { FormGroup } from '@angular/forms';
 import { ColorPaletteForm } from '../../shared/services/form.interfaces';
@@ -15,16 +15,19 @@ import { UserService } from '../../shared/services/user.service';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { User } from '../../model/User';
+import { ChartService } from '../../shared/services/chart.service';
+import { StitchComponent } from '../../stitch/stitch.component';
 
 @Component({
   selector: 'app-chart-viewer',
-  imports: [ChartBlockComponent, ColorPaletteComponent, NzGridModule, NzIconModule, NzButtonModule, PatternDescriptionPipe, NzPopconfirmModule],
+  imports: [ChartBlockComponent, ColorPaletteComponent, NzGridModule, NzIconModule, NzButtonModule, PatternDescriptionPipe, NzPopconfirmModule, StitchComponent],
   templateUrl: './chart-viewer.component.html',
   styleUrl: './chart-viewer.component.less'
 })
 export class ChartViewerComponent {
+  isPanel: boolean;
   isLoading = true;
-  chart?: Chart;
+  chart?: Chart | Panel;
   imageSrc?: string;
   colorPaletteForm?: FormGroup<ColorPaletteForm>;
 
@@ -33,11 +36,14 @@ export class ChartViewerComponent {
   canDelete = false;
   isFavorite = false;
   patternToDescription?: Stitch[][];
+  stitchesUsed: Stitch[] = [];
 
   userService: UserService;
   router: Router;
   httpClient: HttpClientService;
   nzMessageService: NzMessageService;
+  chartService: ChartService;
+  formService: FormService;
 
   user: User | null;
 
@@ -47,32 +53,47 @@ export class ChartViewerComponent {
     formService: FormService,
     router: Router,
     userService: UserService,
-    nzMessageService: NzMessageService)
+    nzMessageService: NzMessageService,
+    chartService: ChartService
+  )
   {
     this.router = router;
     this.httpClient = httpClient;
     this.userService = userService;
     this.user = userService.getUser();
     this.nzMessageService = nzMessageService;
+    this.chartService = chartService;
+    this.formService = formService;
 
-    const chartId = Number(activatedRoute.snapshot.paramMap.get("id"));
-    httpClient.getChartById(chartId).subscribe({
-      next: (chart) => {
+    this.isPanel = activatedRoute.snapshot.routeConfig?.path?.includes("panels") ?? false;
+
+    const resourceId = Number(activatedRoute.snapshot.paramMap.get("id"));
+    const observable = this.isPanel ? httpClient.getPanelById(resourceId) : httpClient.getChartById(resourceId);
+
+    observable.subscribe({
+      next: (chart) => { 
         this.chart = chart;
-        this.colorPaletteForm = formService.colorPaletteForm(chart.colors);
-        this.patternToDescription = [...chart.pattern].reverse();
-        this.isLoading = false;
-        this.isFavorite = userService.isFavorite(chartId);
-        this.canDelete = userService.getUser()?.id === this.chart?.userId;
-
-        this.loadChartImage();
-      },
+        this.initializeViewer();
+       },
       error: (err) => {
         if (err.status === 404) {
           router.navigate(['/404'])
         }
       }
     });
+  }
+
+  initializeViewer() {
+    if (!this.chart) return;
+
+    this.colorPaletteForm = this.formService.colorPaletteForm(this.chart.colors);
+    this.patternToDescription = [...this.chart.pattern].reverse();
+    this.isLoading = false;
+    this.isFavorite = this.userService.isFavorite(this.chart.id!);
+    this.canDelete = this.userService.getUser()?.id === this.chart?.userId;
+    this.stitchesUsed = this.getStitchesUsed(this.chart);
+
+    this.loadChartImage();
   }
 
   loadChartImage() {
@@ -122,5 +143,33 @@ export class ChartViewerComponent {
         this.nzMessageService.error("Chart couldn't be deleted.");
       }
     });
+  }
+
+  getStitchesUsed(chart: Chart): Stitch[] {
+    const stitches = [] as Stitch[];
+    chart.pattern.forEach(row => {
+      row.forEach((stitch) => {
+        if (!stitches.some(includedStitch => this.isStitchEqual(includedStitch, stitch))) {
+          // Stitch is not included in set yet, copy it with MC
+          if (this.chartService.isAtomicStitch(stitch)) {
+            stitches.push(new AtomicStitch(stitch.color === "NO_STITCH" ? "NO_STITCH" : Color.MC, stitch.type));
+          } else if (this.chartService.isCableStitch(stitch)) {
+            stitches.push(new CableStitch(Color.MC, stitch.sequence, stitch.toCableNeedle, stitch.holdCableNeedle));
+          }
+        }
+      })
+    });
+
+    return stitches;
+  }
+
+  isStitchEqual(stitch1: Stitch, stitch2: Stitch) {
+    // todo does this work for no stitch?
+    return (this.chartService.isAtomicStitch(stitch1) && this.chartService.isAtomicStitch(stitch2) && stitch1.type === stitch2.type)
+    || (this.chartService.isCableStitch(stitch1) && this.chartService.isCableStitch(stitch2)
+      && stitch1.holdCableNeedle === stitch2.holdCableNeedle
+      && stitch1.toCableNeedle === stitch2.toCableNeedle
+      && stitch1.sequence.length === stitch2.sequence.length
+      && stitch1.sequence.every((stitch, i) => stitch2.sequence[i] === stitch))
   }
 }

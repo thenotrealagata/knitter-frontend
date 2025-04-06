@@ -54,8 +54,8 @@ export class FormService {
     };
   }
 
-  formToPanel(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>, includedCharts: number[], parentId?: number): Panel {
-    return { ...this.formToChart(chartForm, colorPaletteForm, parentId), includedCharts: includedCharts };
+  formToPanel(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>, includedCharts: Chart[], parentId?: number): Panel {
+    return { ...this.formToChart(chartForm, colorPaletteForm, parentId), charts: includedCharts };
   }
 
   cableStitchForm(): FormGroup<CableStitchForm> {

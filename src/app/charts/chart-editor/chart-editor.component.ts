@@ -30,6 +30,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { ChartsListingElementComponent } from "../charts-listing/charts-listing-element/charts-listing-element.component";
 import { UserService } from '../../shared/services/user.service';
 import { ChartService } from '../../shared/services/chart.service';
+import { CanDeactivate } from '../../can-deactivate/can-deactivate-interface';
 
 const ngZorroModules = [NzLayoutModule,
   NzFlexModule,
@@ -57,19 +58,19 @@ const ngZorroModules = [NzLayoutModule,
   templateUrl: './chart-editor.component.html',
   styleUrl: './chart-editor.component.less'
 })
-export class ChartEditorComponent {
+export class ChartEditorComponent implements CanDeactivate {
   selectedElement: Stitch | Chart | undefined;
   selectedColor: Color = Color.MC;
   selectedStitchTrigger = 0;
 
-  parentId: number | undefined;
+  parentId: number | undefined = undefined;
   chartForm: FormGroup<ChartForm> | undefined;
   colorPaletteForm: FormGroup<ColorPaletteForm>;
 
   // When creating panel, allow adding previously saved charts to editor
   isPanelEditor = false;
   userFavorites: Chart[] = [];
-  panelsAdded: number[] = [];
+  chartsAdded: Chart[] = [];
 
   pendingNewWidth: number | undefined;
   pendingNewHeight: number | undefined;
@@ -80,6 +81,7 @@ export class ChartEditorComponent {
 
   isLoading = false; // Creating a variation
   isSaving = false;
+  saved = false;
 
   rightSiderCollapsed = false;
 
@@ -194,6 +196,10 @@ export class ChartEditorComponent {
     }
   }
 
+  canDeactivate(): boolean {
+    return this.saved;
+  }
+
   initializePattern(width: number, height: number): Stitch[][] {
     // Initialize with stockinette pattern (in the round) or garter stitch (knitted flat)
     const pattern = [];
@@ -264,7 +270,7 @@ export class ChartEditorComponent {
       if (stitchIndex === undefined || !row) return;
 
       const newSequence = [...new Array(startPoint.sequence.length)].map(_ => new AtomicStitch(startPoint.color, AtomicStitchType.Knit));
-      newSequence[0] = drawStitch;
+      newSequence[0] = new AtomicStitch(drawStitch.color, drawStitch.type);
       row?.splice(stitchIndex, 1, ...newSequence);
 
     } else if (this.chartService.isCableStitch(drawStitch)) {
@@ -291,7 +297,7 @@ export class ChartEditorComponent {
           0,
           new CableStitch(
             drawStitch.color,
-            drawStitch.sequence.map(sequenceElement => sequenceElement.type),
+            drawStitch.sequence,
             drawStitch.toCableNeedle,
             drawStitch.holdCableNeedle)
         );
@@ -302,7 +308,7 @@ export class ChartEditorComponent {
           row.splice(stitchIndex + 1, 0, ...[...new Array(difference)].map(_ => new AtomicStitch(Color.MC, AtomicStitchType.Knit)));
         }
       } else {
-        this.nzMessageService.error("Stitch can't be added outside of chart!");
+        this.nzMessageService.error("Stitch can't be added outside of drawing area!");
       }
     }
   }
@@ -318,7 +324,7 @@ export class ChartEditorComponent {
 
     if (this.chartForm &&
       (stitchIndex + chart.width > this.chartForm.controls.width.value ||
-        stitchIndex + chart.height > this.chartForm.controls.height.value)) {
+        rowIndex + chart.height > this.chartForm.controls.height.value)) {
       // Chart does not fit into drawing area
       this.nzMessageService.error('Chart can\'t be copied over the given stitch, as it does not fit unto the given surface');
       return;
@@ -333,7 +339,7 @@ export class ChartEditorComponent {
       });
     })
 
-    this.panelsAdded.push(chart.id!);
+    this.chartsAdded.push(chart);
   }
 
   onFileUpload = (file: NzUploadFile) => {
@@ -356,7 +362,7 @@ export class ChartEditorComponent {
     return "";
   }
 
-  saveChart() {
+  save() {
     if (!(this.chartForm && this.colorPaletteForm)) return;
 
     let hasError = false;
@@ -369,24 +375,46 @@ export class ChartEditorComponent {
     });
 
     if (hasError) {
-      this.nzMessageService.error('Can\'t save chart in this state, please provide all the required fields!');
+      this.nzMessageService.error('Can\'t save in this state, please provide all the required fields!');
       return;
     }
 
     this.isSaving = true;
-    this.httpClient.createChart(this.formService.formToChart(this.chartForm, this.colorPaletteForm, this.parentId)).subscribe(
-      {
-        next: (chart: Chart) => {
-          this.isSaving = false;
-          if (chart.id) {
-            this.router.navigate([`/charts/view/${chart.id}`]);
+    if (this.isPanelEditor) {
+      this.httpClient.createPanel(this.formService.formToPanel(this.chartForm, this.colorPaletteForm, this.chartsAdded, this.parentId)).subscribe(
+        {
+          next: (chart: Chart) => {
+            if (chart.id) {
+              this.saved = true;
+              this.router.navigate([`/panels/view/${chart.id}`]);
+            }
+          },
+          error: (err) => {
+            this.nzMessageService.error("Error saving panel.");
+          },
+          complete: () => {
+            this.isSaving = false;
           }
-        },
-        error: (err: any) => {
-          this.isSaving = false;
         }
-      }
-    )
+      )
+    } else {
+      this.httpClient.createChart(this.formService.formToChart(this.chartForm, this.colorPaletteForm, this.parentId)).subscribe(
+        {
+          next: (chart: Chart) => {
+            if (chart.id) {
+              this.saved = true;
+              this.router.navigate([`/charts/view/${chart.id}`]);
+            }
+          },
+          error: (err) => {
+            this.nzMessageService.error("Error saving chart.");
+          },
+          complete: () => {
+            this.isSaving = false;
+          }
+        }
+      )
+    } 
   }
 
   onHeightChange() {
@@ -513,7 +541,7 @@ export class ChartEditorComponent {
       cableStitch.holdCableNeedle === stitch.holdCableNeedle
         && cableStitch.toCableNeedle === stitch.toCableNeedle
         && cableStitch.sequence.length === stitch.sequence.length
-        && cableStitch.sequence.every((atomicStitch, i) => stitch.sequence.at(i)?.type === atomicStitch.type)
+        && cableStitch.sequence.every((atomicStitch, i) => stitch.sequence.at(i) === atomicStitch)
     )
   }
 

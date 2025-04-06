@@ -23,6 +23,7 @@ const nzModules = [NzFlexModule, NzFormModule, NzColorPickerModule, NzIconDirect
 export class ColorPaletteComponent implements OnInit {
   colors = model.required<FormGroup<ColorPaletteForm>>();
   editorMode = model<boolean>(false);
+  canDelete = input<boolean>(false); // Relevant for editorMode, allow deleting blocks
   allowSelectMode = input.required<boolean>();
 
   colorSelected = output<Color>();
@@ -38,6 +39,11 @@ export class ColorPaletteComponent implements OnInit {
 
   ngOnInit(): void {
     this.canAddColor = Object.keys(this.colors().controls).length < this.colorOrder.length;
+  }
+
+  sortByColorOrder(colors: string[]) {
+    colors.sort((a, b) => this.colorOrder.indexOf(a as Color) - this.colorOrder.indexOf(b as Color));
+    return colors;
   }
 
   toggleEditorMode() {

@@ -31,7 +31,7 @@
                         [stitch]="stitch"
                         [colors]="colors()"
                         [size]="stitchSize()"
-                        (mouseenter)="stitchEvent.emit({
+                        (mouseover)="stitchEvent.emit({
                                 stitch: stitch,
                                 event: 'mouseenter'
                         })"

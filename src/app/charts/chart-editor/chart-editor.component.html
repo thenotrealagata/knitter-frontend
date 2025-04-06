@@ -20,7 +20,13 @@
       @if (isPanelEditor) {
         <nz-divider nzPlain nzText="Charts" nzOrientation="left"></nz-divider>
         @for (chart of chartInventory; track chart.id) {
-          <app-chart-block [chart]="chart" (click)="selectElement(chart)" [colors]="colorPaletteForm" [showRowLabels]="false" [stitchSize]="10"></app-chart-block>
+          <div class="chart-preview" (click)="selectElement(chart)">
+            <div class="pattern-preview">
+              <app-chart-block [chart]="chart" [colors]="colorPaletteForm" [showRowLabels]="false" [stitchSize]="10"></app-chart-block>
+            </div>
+            <p>{{ chart.title }}</p>
+          </div>
+          
         }
         <button nz-button nzSize="small" (click)="openAddChartsModal()">
           Add charts
@@ -34,7 +40,7 @@
     <nz-content>
       @if (chartForm && colorPaletteForm) {
         <app-chart-block [chartForm]="chartForm" [colors]="colorPaletteForm" (stitchEvent)="stitchEvent($event)"></app-chart-block>
-        <app-color-palette class="color-palette" [colors]="colorPaletteForm" [allowSelectMode]="true" [editorMode]="true" (colorSelected)="colorSelected($event)" (colorDeleted)="colorDeleted($event)"></app-color-palette>
+        <app-color-palette class="color-palette" [colors]="colorPaletteForm" [allowSelectMode]="true" [editorMode]="true" [canDelete]="true" (colorSelected)="colorSelected($event)" (colorDeleted)="colorDeleted($event)"></app-color-palette>
       }
       @if (selectedElement) {
         <div class="selected-element">
@@ -144,7 +150,7 @@
           </nz-form-control>
         </nz-form-item>
 
-        <button nz-button [nzLoading]="isSaving" nzType="primary" (click)="saveChart()">Save</button>
+        <button nz-button [nzLoading]="isSaving" nzType="primary" (click)="save()">Save</button>
 
       </form>
     }

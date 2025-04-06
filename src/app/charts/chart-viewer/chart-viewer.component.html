@@ -51,13 +51,27 @@
         }
     </div>
     <div class="color-palette">
-        <app-color-palette style="max-width: max-content;" [colors]="colorPaletteForm" [allowSelectMode]="false" [editorMode]="true"></app-color-palette>
+        <app-color-palette style="max-width: max-content;" [colors]="colorPaletteForm" [allowSelectMode]="false" [editorMode]="true" [canDelete]="false"></app-color-palette>
     </div>
-    <div>
-        @for(row of patternToDescription; let i = $index, isEvenRow = $even; track i) {
-            @let isRS = chart.flat ? isEvenRow : true;
-            Row {{ i + 1 }} ({{ isRS ? "RS" : "WS" }}): {{ row | patternDescription : isRS }} <br>
-        }
+    <div nz-row [nzGutter]="32">
+        <div nz-col>
+            <h3>Stitches used</h3>
+            @for (stitch of stitchesUsed; let i = $index; track i) {
+                <div class="stitch-inventory-element">
+                    <app-stitch [stitch]="stitch"></app-stitch>
+                    {{ stitch | patternDescription }}
+                </div>
+                <br>
+            }
+        </div>
+        <div nz-col>
+            <h3>Pattern</h3>
+            @for(row of patternToDescription; let i = $index, isEvenRow = $even; track i) {
+                @let isRS = chart.flat ? isEvenRow : true;
+                Row {{ i + 1 }} ({{ isRS ? "RS" : "WS" }}): {{ row | patternDescription : isRS }} <br>
+            }
+        </div>
     </div>
+    
 }
 </div>

@@ -16,6 +16,11 @@ export enum AtomicStitchType {
     K2tog = "K2tog",
     P2tog = "P2tog",
     Yo = "Yo",
+    SSK = "SSK",
+    SSPK = "SSPK",
+    Slip = "Slip",
+    KFB = "KFB",
+    Bobble = "Bobble",
     NoStitch = "NoStitch"
 }
 
@@ -37,9 +42,9 @@ export class AtomicStitch implements Stitch {
 export class CompositeStitch implements Stitch {
     compositeType: CompositeStitchType;
     color: Color;
-    sequence: AtomicStitch[];
+    sequence: AtomicStitchType[];
 
-    constructor(compositeType: CompositeStitchType, color: Color, sequence: AtomicStitch[]) {
+    constructor(compositeType: CompositeStitchType, color: Color, sequence: AtomicStitchType[]) {
         this.compositeType = compositeType;
         this.color = color;
         this.sequence = sequence;
@@ -56,7 +61,7 @@ export class CableStitch extends CompositeStitch {
     holdCableNeedle: CableNeedleDirection;
 
     constructor(color: Color, sequence: AtomicStitchType[], toCableNeedle: number, holdCableNeedle: CableNeedleDirection) {
-        super(CompositeStitchType.Cable, color, sequence.map(element => new AtomicStitch(color, element)));
+        super(CompositeStitchType.Cable, color, sequence);
         this.toCableNeedle = toCableNeedle;
         this.holdCableNeedle = holdCableNeedle;
     }
@@ -78,5 +83,5 @@ export type Chart = {
 }
 
 export type Panel = Chart & {
-    includedCharts: number[];
+    charts: Chart[];
 }

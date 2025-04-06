@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Chart } from '../../model/Chart';
+import { Chart, Panel } from '../../model/Chart';
 import { AuthenticationRequest, User } from '../../model/User';
 
 @Injectable({
@@ -33,6 +33,25 @@ export class HttpClientService {
 
   deleteChart(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/charts/${id}`);
+  }
+
+  // Panels
+  getPanels(userName?: string): Observable<Panel[]> {
+    let url = `${this.baseUrl}/panels?`;
+    if (userName) url += `userName=${userName}`;
+    return this.http.get<Panel[]>(url);
+  }
+
+  getPanelById(id: number): Observable<Panel> {
+    return this.http.get<Panel>(`${this.baseUrl}/panels/${id}`);
+  }
+
+  createPanel(panel: Panel): Observable<Panel> {
+    return this.http.post<Panel>(`${this.baseUrl}/panels`, panel);
+  }
+
+  deletePanel(id: number): Observable<Panel> {
+    return this.http.delete<Panel>(`${this.baseUrl}/panels/${id}`);
   }
 
   // Authentication/users

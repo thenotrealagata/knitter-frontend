@@ -67,6 +67,26 @@
                 <line [attr.x1]="unit * 0.5" [attr.y1]="unit * 0.5" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.75" [attr.stroke]="stroke()"/>
                 <line [attr.x1]="unit / 5 * 2" [attr.y1]="unit * 0.75" [attr.x2]="unit / 5 * 3" [attr.y2]="unit * 0.75" [attr.stroke]="stroke()"></line>
             }
+            @case (AtomicStitchType.SSK) {
+                <line [attr.x1]="unit * 0.25" [attr.y1]="unit * 0.75" [attr.x2]="unit * 0.5" [attr.y2]="unit * 0.5" [attr.stroke]="stroke()"/>
+                <line [attr.x1]="unit * 0.25" [attr.y1]="unit * 0.25" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.75" [attr.stroke]="stroke()"/>
+            }
+            @case (AtomicStitchType.SSPK) {
+                <line [attr.x1]="unit * 0.25" [attr.y1]="unit * 0.75" [attr.x2]="unit * 0.5" [attr.y2]="unit * 0.5" [attr.stroke]="stroke()"/>
+                <line [attr.x1]="unit * 0.25" [attr.y1]="unit * 0.25" [attr.x2]="unit * 0.75" [attr.y2]="unit * 0.75" [attr.stroke]="stroke()"/>
+                <line [attr.x1]="unit / 5 * 2" [attr.y1]="unit * 0.75" [attr.x2]="unit / 5 * 3" [attr.y2]="unit * 0.75" [attr.stroke]="stroke()"></line>
+            }
+            @case (AtomicStitchType.Slip) {
+                <line [attr.x1]="unit * 0.25" [attr.y1]="unit * 0.25" [attr.x2]="unit * 0.5" [attr.y2]="unit * 0.75" [attr.stroke]="stroke()"/>
+                <line [attr.x1]="unit * 0.75" [attr.y1]="unit * 0.25" [attr.x2]="unit * 0.5" [attr.y2]="unit * 0.75" [attr.stroke]="stroke()"/>
+            }
+            @case (AtomicStitchType.KFB) {
+                <line [attr.x1]="unit * 0.25" [attr.y1]="unit * 0.25" [attr.x2]="unit * 0.5" [attr.y2]="unit * 0.5" [attr.stroke]="stroke()"/>
+                <line [attr.x1]="unit * 0.5" [attr.y1]="unit * 0.25" [attr.x2]="unit * 0.5" [attr.y2]="unit * 0.75" [attr.stroke]="stroke()"/>
+            }
+            @case (AtomicStitchType.Bobble) {
+                <text [attr.x]="unit * 0.25" [attr.y]="unit * 0.75" [attr.font-size]="unit * 0.75" [attr.fill]="stroke()">B</text>
+            }
         }
     </svg>
 </ng-template>

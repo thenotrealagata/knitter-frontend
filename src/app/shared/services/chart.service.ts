@@ -15,7 +15,7 @@ export class ChartService {
     // Right cross (RC): left cable over right cable
     // Left cross (LC): right cable over left cable
     // RPC/LPC: right purl cable & left purl cable: sequence includes purl stitch
-    const includesPurl = cableStitch.sequence.some(stitch => stitch.type === AtomicStitchType.Purl) ? "P" : "";
+    const includesPurl = cableStitch.sequence.some(stitch => stitch === AtomicStitchType.Purl) ? "P" : "";
     const crossDirection = 
       (cableStitch.holdCableNeedle === CableNeedleDirection.HOLD_BEHIND_WORK ? "R" : "L")
       + includesPurl + "C";
