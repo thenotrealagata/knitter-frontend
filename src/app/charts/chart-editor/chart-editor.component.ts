@@ -30,7 +30,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { ChartsListingElementComponent } from "../charts-listing/charts-listing-element/charts-listing-element.component";
 import { UserService } from '../../shared/services/user.service';
 import { ChartService } from '../../shared/services/chart.service';
-import { CanDeactivate } from '../../can-deactivate/can-deactivate-interface';
+import { CanDeactivate } from '../../shared/guards/can-deactivate/can-deactivate-interface';
 
 const ngZorroModules = [NzLayoutModule,
   NzFlexModule,

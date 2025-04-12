@@ -6,8 +6,8 @@ import { UserViewerComponent } from './users/user-viewer/user-viewer.component';
 import { PanelsListingComponent } from './panels/panels-listing/panels-listing.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { LoginComponent } from './login/login.component';
-import { canDeactivateGuard } from './can-deactivate/can-deactivate.guard';
-import { authGuard } from './auth-guard/auth.guard';
+import { canDeactivateGuard } from './shared/guards/can-deactivate/can-deactivate.guard';
+import { authGuard } from './shared/guards/auth-guard/auth.guard';
 
 // Keep in mind: Angular uses first-match strategy
 export const routes: Routes = [
