@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AtomicStitch, AtomicStitchType, CableNeedleDirection, CableStitch, CompositeStitch, Stitch } from '../../model/Chart';
+import { AtomicStitch, AtomicStitchType, CableNeedleDirection, CableStitch, CompositeStitch, Stitch } from '../model/Chart';
 
 @Injectable({
   providedIn: 'root'

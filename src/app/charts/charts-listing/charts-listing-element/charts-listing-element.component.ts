@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, input, OnChanges, OnInit, output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
-import { Chart } from '../../../model/Chart';
+import { Chart } from '../../../shared/model/Chart';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { ParagraphPipe } from '../../../shared/pipes/paragraph.pipe';

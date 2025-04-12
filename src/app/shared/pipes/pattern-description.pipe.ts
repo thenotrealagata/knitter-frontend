@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AtomicStitch, CableStitch, CompositeStitch, Stitch } from '../../model/Chart';
+import { AtomicStitch, CableStitch, CompositeStitch, Stitch } from '../model/Chart';
 import { ChartService } from '../services/chart.service';
 
 @Pipe({

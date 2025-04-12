@@ -4,7 +4,7 @@ import { ColorPaletteForm } from '../../shared/services/form.interfaces';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzColorPickerModule } from 'ng-zorro-antd/color-picker';
-import { Color } from '../../model/Chart';
+import { Color } from '../../shared/model/Chart';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { AsPipe } from '../../shared/pipes/as.pipe';
 import { NzCardModule } from 'ng-zorro-antd/card';

@@ -4,9 +4,9 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { HttpClientService } from '../../shared/services/http-client.service';
-import { Chart } from '../../model/Chart';
+import { Chart } from '../../shared/model/Chart';
 import { UserService } from '../../shared/services/user.service';
-import { User } from '../../model/User';
+import { User } from '../../shared/model/User';
 import { ChartsListingElementComponent } from "./charts-listing-element/charts-listing-element.component";
 import { CurryPipe } from '../../shared/pipes/curry.pipe';
 

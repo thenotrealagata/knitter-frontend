@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Chart, Stitch, Color, CableNeedleDirection, AtomicStitchType, CableStitch, Panel } from '../../model/Chart';
+import { Chart, Stitch, Color, CableNeedleDirection, AtomicStitchType, CableStitch, Panel } from '../model/Chart';
 import { AuthenticationForm, CableStitchForm, ChartForm, ColorPaletteForm } from './form.interfaces';
-import { AuthenticationRequest } from '../../model/User';
+import { AuthenticationRequest } from '../model/User';
 
 @Injectable({
   providedIn: 'root'

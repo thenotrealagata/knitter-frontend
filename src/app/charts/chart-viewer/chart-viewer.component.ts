@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClientService } from '../../shared/services/http-client.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChartBlockComponent } from "../chart-block/chart-block.component";
-import { AtomicStitch, CableStitch, Chart, Color, Panel, Stitch } from '../../model/Chart';
+import { AtomicStitch, CableStitch, Chart, Color, Panel, Stitch } from '../../shared/model/Chart';
 import { ColorPaletteComponent } from "../color-palette/color-palette.component";
 import { FormGroup } from '@angular/forms';
 import { ColorPaletteForm } from '../../shared/services/form.interfaces';
@@ -14,7 +14,7 @@ import { PatternDescriptionPipe } from '../../shared/pipes/pattern-description.p
 import { UserService } from '../../shared/services/user.service';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { User } from '../../model/User';
+import { User } from '../../shared/model/User';
 import { ChartService } from '../../shared/services/chart.service';
 import { StitchComponent } from '../../stitch/stitch.component';
 

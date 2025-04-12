@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClientService } from '../../shared/services/http-client.service';
-import { User } from '../../model/User';
+import { User } from '../../shared/model/User';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { ChartsListingElementComponent } from "../../charts/charts-listing/charts-listing-element/charts-listing-element.component";
-import { Chart } from '../../model/Chart';
+import { Chart } from '../../shared/model/Chart';
 
 @Component({
   selector: 'app-user-viewer',

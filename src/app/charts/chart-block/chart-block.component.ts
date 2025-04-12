@@ -2,7 +2,7 @@ import { Component, input, output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ChartForm, ColorPaletteForm } from '../../shared/services/form.interfaces';
 import { StitchComponent } from '../../stitch/stitch.component';
-import { Chart, Stitch } from '../../model/Chart';
+import { Chart, Stitch } from '../../shared/model/Chart';
 import { NgTemplateOutlet } from '@angular/common';
 
 @Component({

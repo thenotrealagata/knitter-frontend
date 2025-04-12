@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { Stitch, AtomicStitch, CompositeStitch, AtomicStitchType, CableStitch, CableNeedleDirection } from '../model/Chart';
+import { Stitch, AtomicStitch, CompositeStitch, AtomicStitchType, CableStitch, CableNeedleDirection } from '../shared/model/Chart';
 import { NgTemplateOutlet } from '@angular/common';
 import { AsPipe } from '../shared/pipes/as.pipe';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';

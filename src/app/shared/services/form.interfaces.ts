@@ -1,4 +1,4 @@
-import { AtomicStitchType, CableNeedleDirection, Color, Stitch } from "../../model/Chart";
+import { AtomicStitchType, CableNeedleDirection, Color, Stitch } from "../model/Chart";
 import { FormControl } from "@angular/forms";
 
 export interface ChartForm {
