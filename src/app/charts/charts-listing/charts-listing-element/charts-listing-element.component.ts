@@ -27,7 +27,6 @@ export class ChartsListingElementComponent implements OnInit, AfterViewInit, OnC
 
   cardMode = input<'horizontal' | 'vertical'>('vertical');
   showDescription = input<boolean>(true);
-  showTags = input<boolean>(true);
   showSize = input<boolean>(true);
   
   showFavorite = input<boolean>(false);

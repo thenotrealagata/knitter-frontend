@@ -16,7 +16,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { User } from '../../shared/model/User';
 import { ChartService } from '../../shared/services/chart.service';
-import { StitchComponent } from '../../stitch/stitch.component';
+import { StitchComponent } from '../stitch/stitch.component';
 
 @Component({
   selector: 'app-chart-viewer',
@@ -108,9 +108,9 @@ export class ChartViewerComponent {
     })
   }
 
-  stitchEvent(event: { stitch: Stitch; event: "click" | "mouseenter" | "mouseout"; }) {
+  stitchEvent(event: { stitch: Stitch; event: "click" | "mouseover" | "mouseout"; }) {
     switch (event.event) {
-      case "mouseenter":
+      case "mouseover":
         this.hoveredStitch = event.stitch;
         break;
       case "mouseout":

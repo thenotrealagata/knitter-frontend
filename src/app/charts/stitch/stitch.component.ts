@@ -1,12 +1,12 @@
 import { Component, input } from '@angular/core';
-import { Stitch, AtomicStitch, CompositeStitch, AtomicStitchType, CableStitch, CableNeedleDirection } from '../shared/model/Chart';
+import { Stitch, AtomicStitch, CompositeStitch, AtomicStitchType, CableStitch, CableNeedleDirection } from '../../shared/model/Chart';
 import { NgTemplateOutlet } from '@angular/common';
-import { AsPipe } from '../shared/pipes/as.pipe';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
-import { CurryPipe } from '../shared/pipes/curry.pipe';
-import { ColorPaletteForm } from '../shared/services/form.interfaces';
 import { FormGroup } from '@angular/forms';
-import { ChartService } from '../shared/services/chart.service';
+import { ChartService } from '../../shared/services/chart.service';
+import { ColorPaletteForm } from '../../shared/services/form.interfaces';
+import { CurryPipe } from '../../shared/pipes/curry.pipe';
+import { AsPipe } from '../../shared/pipes/as.pipe';
 
 @Component({
   selector: 'app-stitch',
@@ -17,7 +17,6 @@ import { ChartService } from '../shared/services/chart.service';
 export class StitchComponent {
   stitch = input.required<Stitch>();
   colors = input<FormGroup<ColorPaletteForm>>();
-  isHoverable = input<boolean>();
   showDescription = input<boolean>(false);
   size = input<number>(20); // Stitch component size in pixels
   stroke = input<string>("black");

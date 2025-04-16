@@ -3,7 +3,6 @@ import { ChartsListingComponent } from './charts/charts-listing/charts-listing.c
 import { ChartEditorComponent } from './charts/chart-editor/chart-editor.component';
 import { ChartViewerComponent } from './charts/chart-viewer/chart-viewer.component';
 import { UserViewerComponent } from './users/user-viewer/user-viewer.component';
-import { PanelsListingComponent } from './panels/panels-listing/panels-listing.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { LoginComponent } from './login/login.component';
 import { canDeactivateGuard } from './shared/guards/can-deactivate/can-deactivate.guard';
@@ -16,7 +15,7 @@ export const routes: Routes = [
     { path: 'charts/create/:id', component: ChartEditorComponent },
     { path: 'charts/view/:id', component: ChartViewerComponent },
     { path: 'users/:username', component: UserViewerComponent },
-    { path: 'panels/list', component: PanelsListingComponent },
+    { path: 'panels/list', component: ChartsListingComponent },
     { path: 'panels/create', component: ChartEditorComponent, canDeactivate: [canDeactivateGuard], canActivate: [authGuard] },
     { path: 'panels/view/:id', component: ChartViewerComponent },
     { path: 'login', component: LoginComponent },

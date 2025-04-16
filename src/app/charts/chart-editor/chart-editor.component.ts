@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { AtomicStitch, AtomicStitchType, CableNeedleDirection, CableStitch, Chart, Color, CompositeStitch, Stitch } from '../../shared/model/Chart';
-import { StitchComponent } from '../../stitch/stitch.component';
+import { StitchComponent } from '../stitch/stitch.component';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { FormService } from '../../shared/services/form.service';
 import { CableStitchForm, ChartForm, ColorPaletteForm } from '../../shared/services/form.interfaces';
@@ -237,12 +237,12 @@ export class ChartEditorComponent implements CanDeactivate {
     this.selectedElement = element;
   }
 
-  stitchEvent(event: { stitch: Stitch; event: "click" | "mouseenter" | "mouseout"; }) {
+  stitchEvent(event: { stitch: Stitch; event: "click" | "mouseover" | "mouseout"; }) {
     switch (event.event) {
       case "click":
         this.drawStitch(event.stitch);
         break;
-      case "mouseenter":
+      case "mouseover":
         // TODO stitch hover with selected stitch
         break;
     }
