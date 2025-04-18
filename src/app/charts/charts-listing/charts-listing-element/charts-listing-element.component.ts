@@ -22,6 +22,7 @@ export class ChartsListingElementComponent implements OnInit, AfterViewInit, OnC
 
   chart = input.required<Chart>();
   isFavorited = input<boolean>();
+  isPanel = input<boolean>(false);
 
   toggleFavorite = output();
 

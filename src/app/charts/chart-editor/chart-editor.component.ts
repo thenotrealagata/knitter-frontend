@@ -169,6 +169,7 @@ export class ChartEditorComponent implements CanDeactivate {
       httpClient.getChartById(this.parentId).subscribe({
         next: (chart) => {
           this.chartForm = formService.chartForm({ pattern: chart.pattern, width: chart.width, height: chart.height, flat: chart.flat });
+          this.colorPaletteForm = formService.colorPaletteForm(chart.colors);
           this.previousHeight = this.chartForm.controls.height.value;
           this.previousWidth = this.chartForm.controls.width.value;
           this.isLoading = false;
@@ -219,7 +220,9 @@ export class ChartEditorComponent implements CanDeactivate {
     if (!this.selectedElement) {
       this.selectedElement = this.atomicStitchInventory.find(stitch => stitch.type === AtomicStitchType.Knit);
     }
-    [...this.atomicStitchInventory, ...this.cableStitchInventory].forEach(stitch => stitch.color = this.selectedColor);
+    [...this.atomicStitchInventory, ...this.cableStitchInventory].forEach(stitch => {
+      if (stitch.color !== 'NO_STITCH') { stitch.color = this.selectedColor; }
+    });
     this.selectedStitchTrigger++;
   }
 

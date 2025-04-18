@@ -12,7 +12,7 @@
       }
     </nz-card>
 
-    <ng-template #viewTemplate><a [routerLink]="'/charts/view/' + chart().id">View more</a></ng-template>
+    <ng-template #viewTemplate><a [routerLink]="(isPanel() ? '/panels/view/' : '/charts/view/') + chart().id">View more</a></ng-template>
     <ng-template #favoriteTemplate>
         <nz-icon (click)="toggleFavorite.emit()" nzType="heart" [nzTheme]="isFavorited() ? 'fill' : 'outline'" />
     </ng-template>

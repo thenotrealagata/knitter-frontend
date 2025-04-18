@@ -66,6 +66,5 @@ export class UserService {
     }).catch((err) => {
       
     });
-
   }
 }

@@ -149,7 +149,7 @@ export class ChartViewerComponent {
     const stitches = [] as Stitch[];
     chart.pattern.forEach(row => {
       row.forEach((stitch) => {
-        if (!stitches.some(includedStitch => this.isStitchEqual(includedStitch, stitch))) {
+        if (!stitches.some(includedStitch => this.chartService.areStitchesEqual(includedStitch, stitch))) {
           // Stitch is not included in set yet, copy it with MC
           if (this.chartService.isAtomicStitch(stitch)) {
             stitches.push(new AtomicStitch(stitch.color === "NO_STITCH" ? "NO_STITCH" : Color.MC, stitch.type));
@@ -161,15 +161,5 @@ export class ChartViewerComponent {
     });
 
     return stitches;
-  }
-
-  isStitchEqual(stitch1: Stitch, stitch2: Stitch) {
-    // todo does this work for no stitch?
-    return (this.chartService.isAtomicStitch(stitch1) && this.chartService.isAtomicStitch(stitch2) && stitch1.type === stitch2.type)
-    || (this.chartService.isCableStitch(stitch1) && this.chartService.isCableStitch(stitch2)
-      && stitch1.holdCableNeedle === stitch2.holdCableNeedle
-      && stitch1.toCableNeedle === stitch2.toCableNeedle
-      && stitch1.sequence.length === stitch2.sequence.length
-      && stitch1.sequence.every((stitch, i) => stitch2.sequence[i] === stitch))
   }
 }

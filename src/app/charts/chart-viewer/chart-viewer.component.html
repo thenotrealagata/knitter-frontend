@@ -18,7 +18,7 @@
                     Delete chart
                 </button>
             }
-            @if (user) {            
+            @if (user && !isPanel) {            
                 <button (click)="toggleFavorite()" nz-button nzType="default">
                     @if(isFavorite) {
                         <nz-icon nzType="heart" nzTheme="fill" />

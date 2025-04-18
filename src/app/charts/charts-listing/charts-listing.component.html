@@ -1,9 +1,17 @@
 <div style="width: 60%; margin: auto">
   <div nz-row [nzGutter]="[{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }, 8]">
-    @for (chart of charts; track chart.id) {
+    @for (element of elements; track element.id) {
       <div nz-col [nzSm]="8" [nzMd]="8" [nzLg]="6">
-        @let isChartFavorited = user && (isFavorited | curry : chart.id : user);
-        <app-charts-listing-element [chart]="chart" [showFavorite]="user !== null" [isFavorited]="$any(isChartFavorited)" (toggleFavorite)="toggleFavorite(chart.id!, !isChartFavorited)" [showDescription]="true" [showViewMore]="true"></app-charts-listing-element>
+        @let isChartFavorited = user && (isFavorited | curry : element.id : user);
+        <app-charts-listing-element
+          [chart]="element"
+          [isPanel]="isPanelListing"
+          [showFavorite]="user !== null"
+          [isFavorited]="$any(isChartFavorited)"
+          (toggleFavorite)="toggleFavorite(element.id!, !isChartFavorited)"
+          [showDescription]="true"
+          [showViewMore]="true">
+        </app-charts-listing-element>
       </div>
     }
   </div>

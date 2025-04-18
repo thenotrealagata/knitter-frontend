@@ -9,6 +9,7 @@ import { UserService } from '../../shared/services/user.service';
 import { User } from '../../shared/model/User';
 import { ChartsListingElementComponent } from "./charts-listing-element/charts-listing-element.component";
 import { CurryPipe } from '../../shared/pipes/curry.pipe';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-charts-listing',
@@ -19,12 +20,13 @@ import { CurryPipe } from '../../shared/pipes/curry.pipe';
 export class ChartsListingComponent {
   user: User | null;
   username: string | null;
-  charts: Chart[] = [];
+  elements: Chart[] = [];
+  isPanelListing: boolean;
 
   httpClient: HttpClientService;
   userService: UserService;
   
-  constructor(httpClient: HttpClientService, sessionService: UserService) {
+  constructor(httpClient: HttpClientService, sessionService: UserService, activatedRoute: ActivatedRoute) {
     this.user = sessionService.getUser();
     this.username = sessionService.getUsername();
 
@@ -43,9 +45,11 @@ export class ChartsListingComponent {
       });
     }
 
-    httpClient.getCharts().subscribe({
-      next: (charts) => {
-        this.charts = charts;
+    this.isPanelListing = activatedRoute.snapshot.routeConfig?.path?.includes("panels") ?? false;
+    const observable = this.isPanelListing ? httpClient.getPanels() : httpClient.getCharts();
+    observable.subscribe({
+      next: (elements) => {
+        this.elements = elements;
       },
       error: (err) => {
 

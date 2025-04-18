@@ -16,8 +16,9 @@
 
 <ng-template #chartBlock let-pattern="pattern" let-height="height" let-isFlat="isFlat">
     <div class="chart">
-        @for(row of pattern; let i = $index, isEvenRow = $even; track i) {
+        @for(row of pattern; let i = $index; track i) {
             @let rowCount = height - i;
+            @let isEvenRow = rowCount % 2 === 0;
             <div class="chart-row">
                 @if (showRowLabels()) {
                     <div class="row-label align-right">

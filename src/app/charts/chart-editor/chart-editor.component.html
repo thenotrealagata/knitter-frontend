@@ -90,7 +90,7 @@
                 placeholder="Width"
                 [nzControls]="false"
                 [nzMin]="1"
-                [nzMax]="20"
+                [nzMax]="isPanelEditor ? 40 : 20"
                 style="width: 50px; text-align: center;"
                 nz-popconfirm
                 [nzPopconfirmTrigger]="null"
@@ -114,7 +114,7 @@
                 placeholder="Height"
                 [nzControls]="false"
                 [nzMin]="1"
-                [nzMax]="20"
+                [nzMax]="isPanelEditor ? 30 : 20"
                 style="width:50px; text-align: center; border-left-width: 0px;"
                 nz-popconfirm
                 [nzPopconfirmTrigger]="null"

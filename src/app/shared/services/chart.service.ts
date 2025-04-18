@@ -23,6 +23,15 @@ export class ChartService {
     return `${stitchNumbers} ${crossDirection}`;
   }
 
+  areStitchesEqual(stitch1: Stitch, stitch2: Stitch) {
+    return (this.isAtomicStitch(stitch1) && this.isAtomicStitch(stitch2) && stitch1.type === stitch2.type)
+    || (this.isCableStitch(stitch1) && this.isCableStitch(stitch2)
+      && stitch1.holdCableNeedle === stitch2.holdCableNeedle
+      && stitch1.toCableNeedle === stitch2.toCableNeedle
+      && stitch1.sequence.length === stitch2.sequence.length
+      && stitch1.sequence.every((stitch, i) => stitch2.sequence[i] === stitch))
+  }
+
   isStitch(obj: unknown): obj is Stitch {
     return typeof obj === "object" && obj !== null && 'color' in obj;
   }
