@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { CanDeactivateFn } from '@angular/router';
 
-import { canDeactivateGuard } from '../shared/guards/can-deactivate/can-deactivate.guard';
+import { canDeactivateGuard } from '../../shared/guards/can-deactivate/can-deactivate.guard';
 
 /*describe('canDeactivateGuard', () => {
   // todo

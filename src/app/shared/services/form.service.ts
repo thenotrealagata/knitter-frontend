@@ -29,14 +29,14 @@ export class FormService {
         validators: Validators.required,
         nonNullable: true
       }),
-      isFlat: new FormControl<boolean>(chart && chart.flat ? chart.flat : true, {
+      isFlat: new FormControl<boolean>(chart && chart.flat !== undefined ? chart.flat : true, {
         validators: Validators.required,
         nonNullable: true,
       }),
       pattern: new FormControl<Stitch[][]>(
         chart && chart.pattern ? chart.pattern : [], { validators: [Validators.required], nonNullable: true }
       ),
-      image: new FormControl<string>("", { validators: Validators.required, nonNullable: true })
+      image: new FormControl<string>(chart && chart.filePath ? chart.filePath : "", { validators: Validators.required, nonNullable: true })
     });
   }
 

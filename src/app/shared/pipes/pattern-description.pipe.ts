@@ -12,7 +12,7 @@ export class PatternDescriptionPipe implements PipeTransform {
     this.chartService = chartService;
   }
 
-  transform(value: Stitch | Stitch[], isRightSide?: boolean, trigger?: number) {
+  transform(value: Stitch | Stitch[], isRightSide: boolean = false, trigger?: number) {
     if(Array.isArray(value)) {
       const array = isRightSide ? [...value].reverse() : value;
 
@@ -34,7 +34,7 @@ export class PatternDescriptionPipe implements PipeTransform {
         }
 
         if (i === asAtomicStitch.length - 1) {
-          description += this.describeStitch(previousStitch, sameStitchCounter);
+          description += this.describeStitch(asAtomicStitch[i], sameStitchCounter);
         }
 
         previousStitch = stitch;
@@ -48,7 +48,7 @@ export class PatternDescriptionPipe implements PipeTransform {
   describeStitch(stitch: Stitch, amount?: number): string {
     if ('type' in stitch) {
       // Atomic stitch
-      return (stitch as AtomicStitch).type + " " + (amount ? amount : "");
+      return (stitch as AtomicStitch).type + (amount ? (" " + amount) : "");
     } else if ('sequence' in stitch) {
       // Composite stitch
       return this.chartService.getCableDescription(stitch as CableStitch);

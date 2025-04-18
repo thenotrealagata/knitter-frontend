@@ -7,8 +7,8 @@ import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule } from '@angular/forms';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
-import { AuthInterceptor } from './shared/services/http-interceptor';
+import { provideHttpClient, withInterceptors, withInterceptorsFromDi } from '@angular/common/http';
+import { authInterceptor } from './shared/services/http-interceptor';
 
 registerLocaleData(en);
 
@@ -18,11 +18,6 @@ export const appConfig: ApplicationConfig = {
     provideNzI18n(en_GB),
     importProvidersFrom(FormsModule),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptorsFromDi()),
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    },
+    provideHttpClient(withInterceptors([ authInterceptor ]))
   ]
 };

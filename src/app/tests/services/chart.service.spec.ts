@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { ChartService } from '../shared/services/chart.service';
-import { AtomicStitch, AtomicStitchType, CableNeedleDirection, CableStitch, Color } from '../shared/model/Chart';
+import { ChartService } from '../../shared/services/chart.service';
+import { AtomicStitch, AtomicStitchType, CableNeedleDirection, CableStitch, Color } from '../../shared/model/Chart';
 
 describe('ChartService', () => {
     let service: ChartService;
