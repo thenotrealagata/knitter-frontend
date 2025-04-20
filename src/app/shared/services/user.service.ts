@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class UserService {
-  storageKey = 'session_key';
+  sessionKey = 'session_key';
   userKey = 'user';
   usernameKey = 'username';
 
@@ -21,11 +21,11 @@ export class UserService {
   }
 
   createSession(token: string) {
-    localStorage.setItem(this.storageKey, token);
+    localStorage.setItem(this.sessionKey, token);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.storageKey);
+    return localStorage.getItem(this.sessionKey);
   }
 
   setUser(user: User) {
@@ -46,7 +46,7 @@ export class UserService {
   }
 
   logout() {
-    localStorage.removeItem(this.storageKey);
+    localStorage.removeItem(this.sessionKey);
     localStorage.removeItem(this.usernameKey);
     localStorage.removeItem(this.userKey);
     this.router.navigate(["/charts/list"]);
@@ -57,9 +57,6 @@ export class UserService {
   }
 
   async toggleFavorite(chartId: number, addFavorite: boolean) {
-    const username = this.getUser()?.username;
-    if (!username) return;
-
     const observable = addFavorite ? this.httpClient.addFavorite(chartId) : this.httpClient.removeFavorite(chartId);
     await firstValueFrom(observable).then((user) => {
       this.setUser(user);

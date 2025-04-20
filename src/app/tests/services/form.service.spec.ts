@@ -100,19 +100,42 @@ describe('FormService', () => {
 
     // Color palette form
     it('colorPaletteForm from partial ColorPalette', () => {
-        expect(service).toBeTruthy();
+        const form = service.colorPaletteForm({
+            [Color.MC]: "#fff",
+            [Color.CC1]: "#fff"
+        })
+        expect(form.contains("MC")).toBeTrue();
+        expect(form.contains("CC1")).toBeTrue();
+        expect(form.contains("CC3")).toBeFalse();
+        expect(form.contains("CC4")).toBeFalse();
+        expect(form.contains("CC5")).toBeFalse();
     });
 
     it('colorPaletteForm with all colors', () => {
-        expect(service).toBeTruthy();
+        const form = service.colorPaletteForm({
+            [Color.MC]: "#fff",
+            [Color.CC1]: "#fff",
+            [Color.CC2]: "#fff",
+            [Color.CC3]: "#fff",
+            [Color.CC4]: "#fff"
+        })
+        expect(Object.keys(form.controls).length).toBe(5);
     });
 
     it('colorPaletteForm without arguments', () => {
-        expect(service).toBeTruthy();
+        const form = service.colorPaletteForm();
+        expect(form.contains("MC")).toBeTrue();
+        expect(Object.keys(form.controls).length).toBe(1);
     });
 
     // Auth request form
     it('formToAuthRequest copies form values', () => {
-        expect(service).toBeTruthy();
+        const form = service.authenticationForm();
+        form.controls.username.setValue("new_user");
+        form.controls.password.setValue("new_password");
+
+        const converted = service.formToAuthRequest(form);
+        expect(converted.username).toBe("new_user");
+        expect(converted.password).toBe("new_password");
     });
 });

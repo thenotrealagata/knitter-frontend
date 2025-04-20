@@ -18,8 +18,8 @@ export class HttpClientService {
 
   // Charts
   getCharts(userName?: string): Observable<Chart[]> {
-    let url = `${this.baseUrl}/charts?`;
-    if (userName) url += `userName=${userName}`;
+    let url = `${this.baseUrl}/charts`;
+    if (userName) url += `?userName=${userName}`;
     return this.http.get<Chart[]>(url);
   }
 
@@ -37,8 +37,8 @@ export class HttpClientService {
 
   // Panels
   getPanels(userName?: string): Observable<Panel[]> {
-    let url = `${this.baseUrl}/panels?`;
-    if (userName) url += `userName=${userName}`;
+    let url = `${this.baseUrl}/panels`;
+    if (userName) url += `?userName=${userName}`;
     return this.http.get<Panel[]>(url);
   }
 
