@@ -14,6 +14,23 @@
         <p>This user hasn't created any charts yet.</p>
     }
 
+    <nz-divider></nz-divider>
+
+    <h2>Created panels</h2>
+    @if (panels && panels.length > 0) {
+        <div nz-row [nzGutter]="[{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }, 8]">
+            @for (panel of panels; track panel.id) {
+                <div nz-col [nzSm]="8" [nzMd]="8" [nzLg]="6">
+                    <app-charts-listing-element [chart]="panel" [isPanel]="true" [showFavorite]="false"></app-charts-listing-element>
+                </div>
+            }
+        </div>
+    } @else {
+        <p>This user hasn't created any panels yet.</p>
+    }
+
+    <nz-divider></nz-divider>
+
     <h2>Favorites</h2>
     @if (user.favorites && user.favorites.length > 0) {
         <div nz-row [nzGutter]="[{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }, 8]">

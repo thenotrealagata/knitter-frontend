@@ -40,7 +40,7 @@ export class FormService {
     });
   }
 
-  formToChart(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>, parentId?: number): Chart {
+  formToChart(chartForm: FormGroup<ChartForm>, colorPaletteForm: FormGroup<ColorPaletteForm>, parentId?: number | undefined): Chart {
     return {
       title: chartForm.controls.title.value,
       description: chartForm.controls.description.value,
@@ -113,8 +113,8 @@ export class FormService {
 
   authenticationForm(): FormGroup<AuthenticationForm> {
     return new FormGroup({
-      username: new FormControl<string>("", { validators: Validators.required, nonNullable: true }),
-      password: new FormControl<string>("", { validators: Validators.required, nonNullable: true })
+      username: new FormControl<string>("", { validators: [ Validators.required, Validators.minLength(5) ], nonNullable: true }),
+      password: new FormControl<string>("", { validators: [ Validators.required, Validators.minLength(5) ], nonNullable: true })
     });
   }
 

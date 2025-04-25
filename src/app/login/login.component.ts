@@ -44,6 +44,17 @@ export class LoginComponent {
   }
 
   authenticate() {
+    let hasError = false;
+    Object.values(this.authForm.controls).forEach(control => {
+      control.markAsDirty();
+      control.updateValueAndValidity({ onlySelf: true });
+      hasError = hasError || control.invalid;
+    });
+    if(hasError) {
+      this.nzMessageService.error('Please provide all the required fields.');
+      return;
+    }
+
     const request = this.formService.formToAuthRequest(this.authForm);
     if (this.login) {
       // Send authentication request

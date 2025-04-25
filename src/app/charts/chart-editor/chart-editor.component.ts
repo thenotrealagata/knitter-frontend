@@ -162,7 +162,8 @@ export class ChartEditorComponent implements CanDeactivate {
       return;
     }
 
-    this.parentId = Number(activatedRoute.snapshot.paramMap.get("id"));
+    const routeParam = activatedRoute.snapshot.paramMap.get("id");
+    this.parentId = routeParam ? Number(routeParam) : undefined;
     if (this.parentId) {
       this.isLoading = true;
       // Created chart is a variation on an existing chart
@@ -246,7 +247,6 @@ export class ChartEditorComponent implements CanDeactivate {
         this.drawStitch(event.stitch);
         break;
       case "mouseover":
-        // TODO stitch hover with selected stitch
         break;
     }
   }

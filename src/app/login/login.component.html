@@ -10,7 +10,12 @@
         <nz-form-item>
             <nz-form-label nzRequired>Username</nz-form-label>
             <nz-form-control>
-                <nz-form-control [nzSm]="16" [nzXs]="24">
+                <nz-form-control
+                    [nzValidateStatus]="!login && authForm.controls.username.dirty && authForm.controls.username.invalid ? 'error': 'success'"
+                    nzErrorTip="Username must be at least 5 characters long."
+                    [nzSm]="16"
+                    [nzXs]="24"
+                    >
                     <input nz-input formControlName="username" placeholder="Username" type="text" />
                   </nz-form-control>
             </nz-form-control>
@@ -18,7 +23,11 @@
         <nz-form-item>
             <nz-form-label nzRequired>Password</nz-form-label>
             <nz-form-control>
-                <nz-form-control [nzSm]="16" [nzXs]="24">
+                <nz-form-control
+                    [nzValidateStatus]="!login && authForm.controls.password.dirty && authForm.controls.password.invalid ? 'error': 'success'"
+                    nzErrorTip="Password must be at least 5 characters long."
+                    [nzSm]="16"
+                    [nzXs]="24">
                     <input nz-input formControlName="password" placeholder="Password" type="password" />
                   </nz-form-control>
             </nz-form-control>

@@ -17,10 +17,11 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { User } from '../../shared/model/User';
 import { ChartService } from '../../shared/services/chart.service';
 import { StitchComponent } from '../stitch/stitch.component';
+import { ChartsListingElementComponent } from "../charts-listing/charts-listing-element/charts-listing-element.component";
 
 @Component({
   selector: 'app-chart-viewer',
-  imports: [ChartBlockComponent, ColorPaletteComponent, NzGridModule, NzIconModule, NzButtonModule, PatternDescriptionPipe, NzPopconfirmModule, StitchComponent],
+  imports: [ChartBlockComponent, ColorPaletteComponent, NzGridModule, NzIconModule, NzButtonModule, PatternDescriptionPipe, NzPopconfirmModule, StitchComponent, ChartsListingElementComponent],
   templateUrl: './chart-viewer.component.html',
   styleUrl: './chart-viewer.component.less'
 })
@@ -28,6 +29,7 @@ export class ChartViewerComponent {
   isPanel: boolean;
   isLoading = true;
   chart?: Chart | Panel;
+  variationData?: Chart;
   imageSrc?: string;
   colorPaletteForm?: FormGroup<ColorPaletteForm>;
 
@@ -90,8 +92,20 @@ export class ChartViewerComponent {
     this.patternToDescription = [...this.chart.pattern].reverse();
     this.isLoading = false;
     this.isFavorite = this.userService.isFavorite(this.chart.id!);
-    this.canDelete = this.userService.getUser()?.id === this.chart?.userId;
+    this.canDelete = this.userService.getUser() !== null && this.userService.getUser()?.id === this.chart?.userId;
     this.stitchesUsed = this.getStitchesUsed(this.chart);
+
+    if(this.chart.parentId) {
+      this.httpClient.getChartById(this.chart.parentId).subscribe(
+        {
+          next: (variationData) => { 
+            this.variationData = variationData;
+          },
+          error: (err) => {
+          }
+        }
+      )
+    }
 
     this.loadChartImage();
   }
@@ -132,7 +146,7 @@ export class ChartViewerComponent {
     this.router.navigate([`/charts/create/${this.chart.id}`]);
   }
 
-  deleteChart() {
+  deleteResource() {
     if (!this.chart?.id) return;
     this.httpClient.deleteChart(this.chart.id).subscribe({
       next: () => {

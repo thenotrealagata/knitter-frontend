@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { AtomicStitch, CableStitch, CompositeStitch, Stitch } from '../model/Chart';
+import { AtomicStitch, AtomicStitchType, CableStitch, CompositeStitch, Stitch } from '../model/Chart';
 import { ChartService } from '../services/chart.service';
 
 @Pipe({
@@ -18,7 +18,7 @@ export class PatternDescriptionPipe implements PipeTransform {
 
       let previousStitch: AtomicStitch;
       let sameStitchCounter = 1;
-      const asAtomicStitch = array as AtomicStitch[];
+      const asAtomicStitch = (array as AtomicStitch[]).filter(stitch => stitch.type !== AtomicStitchType.NoStitch);
       return asAtomicStitch.reduce((description, stitch, i) => {
         if (!previousStitch) {
           description += "With " + stitch.color + " ";

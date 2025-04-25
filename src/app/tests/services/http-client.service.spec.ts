@@ -3,7 +3,7 @@ import { provideHttpClient, withInterceptors } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
 import { authInterceptor } from "../../shared/services/http-interceptor";
 import { HttpClientService } from "../../shared/services/http-client.service";
-import { first, firstValueFrom } from "rxjs";
+import { firstValueFrom } from "rxjs";
 import { AtomicStitch, AtomicStitchType, Color, Panel } from "../../shared/model/Chart";
 
 describe('HttpClientService', () => {
