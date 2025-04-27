@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Chart, Stitch, Color, CableNeedleDirection, AtomicStitchType, CableStitch, Panel } from '../model/Chart';
 import { AuthenticationForm, CableStitchForm, ChartForm, ColorPaletteForm } from './form.interfaces';
 import { AuthenticationRequest } from '../model/User';
@@ -111,10 +111,11 @@ export class FormService {
     }
   }
 
-  authenticationForm(): FormGroup<AuthenticationForm> {
+  authenticationForm(validators?: ValidatorFn[]): FormGroup<AuthenticationForm> {
+    const formValidators = [ Validators.required, ...(validators ?? []) ];
     return new FormGroup({
-      username: new FormControl<string>("", { validators: [ Validators.required, Validators.minLength(5) ], nonNullable: true }),
-      password: new FormControl<string>("", { validators: [ Validators.required, Validators.minLength(5) ], nonNullable: true })
+      username: new FormControl<string>("", { validators: formValidators, nonNullable: true }),
+      password: new FormControl<string>("", { validators: formValidators, nonNullable: true })
     });
   }
 

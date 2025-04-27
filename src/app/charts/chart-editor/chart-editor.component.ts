@@ -79,6 +79,8 @@ export class ChartEditorComponent implements CanDeactivate {
   previousWidth: number | undefined;
   previousHeight: number | undefined;
 
+  uploadedFileName: string | undefined;
+
   isLoading = false; // Creating a variation
   isSaving = false;
   saved = false;
@@ -346,6 +348,7 @@ export class ChartEditorComponent implements CanDeactivate {
   }
 
   onFileUpload = (file: NzUploadFile) => {
+    const fileName = file.name;
     if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
       this.nzMessageService.error("Invalid file type: only PNG and JPEG files are allowed.");
     } else if (file.size && file.size > 3000000) {
@@ -355,6 +358,7 @@ export class ChartEditorComponent implements CanDeactivate {
       this.httpClient.uploadImage(file as any).subscribe({
         next: (imageName) => {
           this.chartForm?.controls.image.setValue(imageName.message);
+          this.uploadedFileName = fileName;
         },
         error: (error) => {
           this.nzMessageService.error("Error while uploading file.");

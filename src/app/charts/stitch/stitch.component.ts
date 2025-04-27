@@ -43,4 +43,8 @@ export class StitchComponent {
   rightCableContainsPurl(cableStitch: CableStitch) {
     return cableStitch.sequence.slice(-1 * cableStitch.toCableNeedle).some(stitch => stitch === AtomicStitchType.Purl);
   }
+
+  getCableOffset(width: number) {
+    return -0.4 + (width - 2) * 0.6;
+  }
 }

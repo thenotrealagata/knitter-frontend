@@ -6,7 +6,7 @@
         <app-charts-listing-element
           [chart]="element"
           [isPanel]="isPanelListing"
-          [showFavorite]="user !== null"
+          [showFavorite]="user !== null && !isPanelListing"
           [isFavorited]="$any(isChartFavorited)"
           (toggleFavorite)="toggleFavorite(element.id!, !isChartFavorited)"
           [showDescription]="true"

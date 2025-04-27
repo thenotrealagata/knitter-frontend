@@ -92,7 +92,10 @@ export class ChartViewerComponent {
     this.patternToDescription = [...this.chart.pattern].reverse();
     this.isLoading = false;
     this.isFavorite = this.userService.isFavorite(this.chart.id!);
-    this.canDelete = this.userService.getUser() !== null && this.userService.getUser()?.id === this.chart?.userId;
+    const userId = this.userService.getUser()?.id;
+    this.canDelete = this.userService.getUser() !== null
+      && (!this.isPanel && userId === this.chart?.userId
+      || this.isPanel && userId === (this.chart as any).user.id);
     this.stitchesUsed = this.getStitchesUsed(this.chart);
 
     if(this.chart.parentId) {
@@ -147,16 +150,29 @@ export class ChartViewerComponent {
   }
 
   deleteResource() {
-    if (!this.chart?.id) return;
-    this.httpClient.deleteChart(this.chart.id).subscribe({
-      next: () => {
-        this.nzMessageService.success("Chart deleted successfully.");
-        this.router.navigate(["/charts/list"]);
-      },
-      error: (err) => {
-        this.nzMessageService.error("Chart couldn't be deleted.");
-      }
-    });
+    if (this.chart?.id === undefined) return;
+
+    if (this.isPanel) {
+      this.httpClient.deletePanel(this.chart.id).subscribe({
+        next: () => {
+          this.nzMessageService.success("Panel deleted successfully.");
+          this.router.navigate(["/panels/list"]);
+        },
+        error: (err) => {
+          this.nzMessageService.error("Panel couldn't be deleted.");
+        }
+      });
+    } else {
+      this.httpClient.deleteChart(this.chart.id).subscribe({
+        next: () => {
+          this.nzMessageService.success("Chart deleted successfully.");
+          this.router.navigate(["/charts/list"]);
+        },
+        error: (err) => {
+          this.nzMessageService.error("Chart couldn't be deleted.");
+        }
+      });
+    }
   }
 
   getStitchesUsed(chart: Chart): Stitch[] {

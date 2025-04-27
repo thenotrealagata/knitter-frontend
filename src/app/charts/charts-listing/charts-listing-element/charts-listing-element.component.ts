@@ -68,15 +68,16 @@ export class ChartsListingElementComponent implements OnInit, AfterViewInit, OnC
   }
 
   regenerateActionList() {
-    this.cardActions = [];
+    const cardActions = [];
 
     if (this.showViewMore() && this.viewMoreTemplate) {
-      this.cardActions.push(this.viewMoreTemplate);
+      cardActions.push(this.viewMoreTemplate);
     }
     if (this.showFavorite() && this.favoriteTemplate) {
-      this.cardActions.push(this.favoriteTemplate);
+      cardActions.push(this.favoriteTemplate);
     }
     
-    this.cardActions.push(...this.customActions());
+    cardActions.push(...this.customActions());
+    this.cardActions = cardActions;
   }
 }

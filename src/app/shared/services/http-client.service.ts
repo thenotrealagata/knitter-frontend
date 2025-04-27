@@ -50,8 +50,8 @@ export class HttpClientService {
     return this.http.post<Panel>(`${this.baseUrl}/panels`, panel);
   }
 
-  deletePanel(id: number): Observable<Panel> {
-    return this.http.delete<Panel>(`${this.baseUrl}/panels/${id}`);
+  deletePanel(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/panels/${id}`);
   }
 
   // Authentication/users

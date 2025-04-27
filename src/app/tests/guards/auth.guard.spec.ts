@@ -12,7 +12,7 @@ describe('CanActivateGuard', () => {
       TestBed.runInInjectionContext(() => authGuard(...guardParameters));
 
   beforeEach(() => {
-    userService = jasmine.createSpyObj('UserService', ['getUser']);
+    userService = jasmine.createSpyObj('UserService', ['getToken']);
     router = jasmine.createSpyObj('Router', ['navigate']);
 
     TestBed.configureTestingModule({
@@ -28,17 +28,13 @@ describe('CanActivateGuard', () => {
   });
 
   it('should redirect and return false without logged in user', () => {
-    userService.getUser.and.returnValue(null);
+    userService.getToken.and.returnValue(null);
     expect(executeGuard({} as any, {} as any)).toBeFalse();
     expect(router.navigate).toHaveBeenCalledOnceWith([ '/login' ]);
   });
 
   it('should return true for logged in user', () => {
-    userService.getUser.and.returnValue({
-      id: 0,
-      username: '',
-      favorites: []
-    });
+    userService.getToken.and.returnValue("token");
     expect(executeGuard({} as any, {} as any)).toBeTrue();
   });
 

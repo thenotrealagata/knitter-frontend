@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { AuthenticationForm } from '../shared/services/form.interfaces';
 import { FormService } from '../shared/services/form.service';
@@ -40,7 +40,7 @@ export class LoginComponent {
     this.router = router;
 
     this.login = activatedRoute.snapshot.routeConfig?.path === 'login';
-    this.authForm = formService.authenticationForm();
+    this.authForm = formService.authenticationForm(this.login ? [] : [ Validators.minLength(5) ]);
   }
 
   authenticate() {

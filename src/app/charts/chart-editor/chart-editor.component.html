@@ -137,10 +137,11 @@
           <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>
             Image
           </nz-form-label>
-          <nz-form-control [nzSm]="16" [nzXs]="24">
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzValidateStatus]="uploadedFileName !== undefined ? 'validating' : ''" [nzValidatingTip]="uploadedFileName">
             <nz-upload
               [nzLimit]="1"
               [nzAction]="onFileUpload"
+              [nzShowUploadList]="false"
             >
             <button nz-button>
               <nz-icon nzType="upload" />

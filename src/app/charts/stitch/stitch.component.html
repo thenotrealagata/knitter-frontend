@@ -5,8 +5,9 @@
 } @else if (chartService.isCompositeStitch | curry : stitch()) {
     @let cableStitch = stitch() | as : CableStitch;
     @let backgroundColor = colors()?.get(cableStitch.color)?.value ?? defaultColor;
+    @let width = cableStitch.sequence.length;
     <!-- There is an offset in stitch width because of the lack of borders (0.5px) in between stitches -->
-    @let offset = cableStitch.sequence.length + 1; <!-- TODO only correct if size >= 4 -->
+    @let offset = cableStitch.sequence.length + getCableOffset(width); <!-- TODO only correct if size >= 4 -->
     @let horizontalUnit = unit + offset / cableStitch.sequence.length;
     <svg
         class="stitch"
