@@ -237,7 +237,7 @@
           </app-charts-listing-element>
         </div>
         <ng-template #chartSelectedTemplate>
-          @if (chart.id) {
+          @if (chart.id !== undefined) {
             @if (chartsSelected.includes(chart.id)) {
               <button nz-button (click)="setChartSelected(chart.id, false)" nzType="text">
                 <nz-icon nzType="check-square" nzTheme="outline" />
@@ -251,6 +251,9 @@
             }
           }
         </ng-template>
+      }
+      @if (userFavorites.length === 0) {
+        <span>You haven't added any charts to your favorites yet.</span>
       }
     </div>
   </ng-container>

@@ -166,7 +166,7 @@ export class ChartEditorComponent implements CanDeactivate {
 
     const routeParam = activatedRoute.snapshot.paramMap.get("id");
     this.parentId = routeParam ? Number(routeParam) : undefined;
-    if (this.parentId) {
+    if (this.parentId !== undefined) {
       this.isLoading = true;
       // Created chart is a variation on an existing chart
       httpClient.getChartById(this.parentId).subscribe({
@@ -391,10 +391,8 @@ export class ChartEditorComponent implements CanDeactivate {
       this.httpClient.createPanel(this.formService.formToPanel(this.chartForm, this.colorPaletteForm, this.chartsAdded, this.parentId)).subscribe(
         {
           next: (chart: Chart) => {
-            if (chart.id) {
-              this.saved = true;
-              this.router.navigate([`/panels/view/${chart.id}`]);
-            }
+            this.saved = true;
+            this.router.navigate([`/panels/view/${chart.id}`]);
           },
           error: (err) => {
             this.nzMessageService.error("Error saving panel.");
@@ -408,10 +406,8 @@ export class ChartEditorComponent implements CanDeactivate {
       this.httpClient.createChart(this.formService.formToChart(this.chartForm, this.colorPaletteForm, this.parentId)).subscribe(
         {
           next: (chart: Chart) => {
-            if (chart.id) {
-              this.saved = true;
-              this.router.navigate([`/charts/view/${chart.id}`]);
-            }
+            this.saved = true;
+            this.router.navigate([`/charts/view/${chart.id}`]);
           },
           error: (err) => {
             this.nzMessageService.error("Error saving chart.");

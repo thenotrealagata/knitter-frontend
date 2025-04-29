@@ -62,7 +62,7 @@ export class ChartsListingElementComponent implements OnInit, AfterViewInit, OnC
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['showFavorite'] || changes['showViewMore']) {
+    if (changes['showFavorite'] || changes['showViewMore'] || changes['customActions']) {
       this.regenerateActionList();
     }
   }

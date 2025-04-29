@@ -75,8 +75,7 @@ export class LoginComponent {
       this.httpClient.register(request).subscribe({
         next: () => {
           this.nzMessageService.success('Successful registration. Log in with your credentials.');
-          this.login = true;
-          this.authForm.reset();
+          this.router.navigate(['/login']);
         },
         error: (err) => {
           if (err.status === 409) {

@@ -98,7 +98,7 @@ export class ChartViewerComponent {
       || this.isPanel && userId === (this.chart as any).user.id);
     this.stitchesUsed = this.getStitchesUsed(this.chart);
 
-    if(this.chart.parentId) {
+    if(this.chart.parentId !== undefined) {
       this.httpClient.getChartById(this.chart.parentId).subscribe(
         {
           next: (variationData) => { 
@@ -137,7 +137,7 @@ export class ChartViewerComponent {
   }
 
   async toggleFavorite() {
-    if (!this.chart?.id) return;
+    if (this.chart?.id === undefined) return;
     await this.userService.toggleFavorite(this.chart?.id, !this.isFavorite);
 
     this.user = this.userService.getUser();
@@ -145,7 +145,7 @@ export class ChartViewerComponent {
   }
 
   createVariation() {
-    if (!this.chart?.id) return;
+    if (this.chart?.id === undefined) return;
     this.router.navigate([`/charts/create/${this.chart.id}`]);
   }
 
