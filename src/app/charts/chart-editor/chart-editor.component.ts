@@ -31,6 +31,8 @@ import { ChartsListingElementComponent } from "../charts-listing/charts-listing-
 import { UserService } from '../../shared/services/user.service';
 import { ChartService } from '../../shared/services/chart.service';
 import { CanDeactivate } from '../../shared/guards/can-deactivate/can-deactivate-interface';
+import { demoChart1, demoChart2 } from './demoCharts';
+import { TranslatePipe } from '@ngx-translate/core';
 
 const ngZorroModules = [NzLayoutModule,
   NzFlexModule,
@@ -54,7 +56,7 @@ const ngZorroModules = [NzLayoutModule,
 @Component({
   selector: 'app-chart-editor',
   providers: [HttpClientService],
-  imports: [StitchComponent, ColorPaletteComponent, PatternDescriptionPipe, ReactiveFormsModule, ...ngZorroModules, ChartBlockComponent, ChartsListingElementComponent],
+  imports: [StitchComponent, ColorPaletteComponent, PatternDescriptionPipe, ReactiveFormsModule, TranslatePipe, ...ngZorroModules, ChartBlockComponent, ChartsListingElementComponent],
   templateUrl: './chart-editor.component.html',
   styleUrl: './chart-editor.component.less'
 })
@@ -68,8 +70,11 @@ export class ChartEditorComponent implements CanDeactivate {
   colorPaletteForm: FormGroup<ColorPaletteForm>;
 
   // When creating panel, allow adding previously saved charts to editor
-  isPanelEditor = false;
-  userFavorites: Chart[] = [];
+  isPanelEditor = true;
+  userFavorites: Chart[] = [
+    demoChart1,
+    demoChart2
+  ];
   chartsAdded: Chart[] = [];
 
   pendingNewWidth: number | undefined;
@@ -140,7 +145,6 @@ export class ChartEditorComponent implements CanDeactivate {
 
   constructor(
     formService: FormService,
-    activatedRoute: ActivatedRoute,
     httpClient: HttpClientService,
     router: Router,
     nzMessageService: NzMessageService,
@@ -158,46 +162,16 @@ export class ChartEditorComponent implements CanDeactivate {
     this.cableStitchForm = formService.cableStitchForm();
     this.cableStitchFormPreview = formService.formToCableStitch(this.cableStitchForm, this.selectedColor);
 
-    const user = userService.getUser();
-    if (!user) {  
-      router.navigate(["/login"]);
-      return;
-    }
-
-    const routeParam = activatedRoute.snapshot.paramMap.get("id");
-    this.parentId = routeParam ? Number(routeParam) : undefined;
-    if (this.parentId !== undefined) {
-      this.isLoading = true;
-      // Created chart is a variation on an existing chart
-      httpClient.getChartById(this.parentId).subscribe({
-        next: (chart) => {
-          this.chartForm = formService.chartForm({ pattern: chart.pattern, width: chart.width, height: chart.height, flat: chart.flat });
-          this.colorPaletteForm = formService.colorPaletteForm(chart.colors);
-          this.previousHeight = this.chartForm.controls.height.value;
-          this.previousWidth = this.chartForm.controls.width.value;
-          this.isLoading = false;
-        },
-        error: (err) => {
-          this.chartForm = formService.chartForm();
-        }
-      });
-    } else {
-      this.isLoading = false;
-      // Initialize chart
-      this.chartForm = formService.chartForm({
-        width: 10,
-        height: 10,
-        flat: true,
-        pattern: this.initializePattern(10, 10)
-      });
-      this.previousHeight = this.chartForm.controls.height.value;
-      this.previousWidth = this.chartForm.controls.width.value;
-    }
-
-    this.isPanelEditor = activatedRoute.snapshot.routeConfig?.path?.includes("panels") ?? false;
-    if (this.isPanelEditor) {
-      this.userFavorites = user.favorites;
-    }
+    this.isLoading = false;
+    // Initialize chart
+    this.chartForm = formService.chartForm({
+      width: 10,
+      height: 10,
+      flat: true,
+      pattern: this.initializePattern(10, 10)
+    });
+    this.previousHeight = this.chartForm.controls.height.value;
+    this.previousWidth = this.chartForm.controls.width.value;
   }
 
   canDeactivate(): boolean {

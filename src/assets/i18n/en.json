@@ -1,0 +1,54 @@
+{
+    "ATOMIC_STITCH": {
+        "BOBBLE": "Bobble",
+        "K2TOG": "Knit two together",
+        "KFB": "Knit front and back loop",
+        "KNIT": "Knit",
+        "NOSTITCH": "No stitch",
+        "P2TOG": "Purl two together",
+        "PURL": "Purl",
+        "SLIP": "Slip",
+        "SSK": "Slip slip knit",
+        "SSPK": "Slip slip purl",
+        "YO": "Yarn over"
+    },
+    "CABLE_NEEDLE_DIRECTION": {
+        "BEHIND": "Behind work",
+        "IN_FRONT": "In front of work"
+    },
+    "CHART_EDITOR": {
+        "ADD_CHARTS_MODAL": {
+            "NOT_SELECTED": "Not selected",
+            "NO_FAVORITES": "You haven't added any charts to your favorites yet.",
+            "OK": "Add charts",
+            "SELECTED": "Selected",
+            "TITLE": "Add charts"
+        },
+        "CABLE_STITCH_MODAL": {
+            "HOLD_CABLE_NEEDLE": "Hold cable needle",
+            "PREVIEW": "Preview",
+            "SEQUENCE": "Sequence",
+            "SEQUENCE_TIP": "Click to switch between knit and purl stitches.",
+            "SIZE": "Size",
+            "SIZE_PLACEHOLDER": "Size",
+            "TITLE": "Create cable stitch",
+            "TO_CABLE_NEEDLE": "To cable needle",
+            "TO_CABLE_NEEDLE_PLACEHOLDER": "To CN"
+        },
+        "FORM": {
+            "DESCRIPTION": "Description",
+            "DESCRIPTION_PLACEHOLDER": "Description",
+            "HEIGHT_DECREASE_CONFIRM": "Are you sure you want to decrease the height of this chart?",
+            "HEIGHT_PLACEHOLDER": "Height",
+            "IMAGE": "Image",
+            "KNITTED_FLAT": "Knitted flat",
+            "PREVIEW": "Preview",
+            "SIZE": "Size",
+            "TITLE": "Title",
+            "TITLE_PLACEHOLDER": "Title",
+            "UPLOAD_BUTTON": "Click to upload",
+            "WIDTH_DECREASE_CONFIRM": "Are you sure you want to decrease the width of this chart?",
+            "WIDTH_PLACEHOLDER": "Width"
+        }
+    }
+}

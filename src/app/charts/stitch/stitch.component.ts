@@ -1,16 +1,17 @@
 import { Component, input } from '@angular/core';
 import { Stitch, AtomicStitch, CompositeStitch, AtomicStitchType, CableStitch, CableNeedleDirection } from '../../shared/model/Chart';
-import { NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet, UpperCasePipe } from '@angular/common';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { FormGroup } from '@angular/forms';
 import { ChartService } from '../../shared/services/chart.service';
 import { ColorPaletteForm } from '../../shared/services/form.interfaces';
 import { CurryPipe } from '../../shared/pipes/curry.pipe';
 import { AsPipe } from '../../shared/pipes/as.pipe';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-stitch',
-  imports: [AsPipe, NgTemplateOutlet, NzToolTipModule, CurryPipe],
+  imports: [AsPipe, NgTemplateOutlet, UpperCasePipe, NzToolTipModule, CurryPipe, TranslatePipe],
   templateUrl: './stitch.component.html',
   styleUrl: './stitch.component.less'
 })

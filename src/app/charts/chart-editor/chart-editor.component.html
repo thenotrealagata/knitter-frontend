@@ -69,25 +69,25 @@
     @if (chartForm && !rightSiderCollapsed) {
       <form style="width: max-content; margin: 10px" nz-form [formGroup]="chartForm">
         <nz-form-item>
-          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Title</nz-form-label>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>{{ 'CHART_EDITOR.FORM.TITLE' | translate }}</nz-form-label>
           <nz-form-control [nzSm]="16" [nzXs]="24">
-            <input nz-input formControlName="title" placeholder="Title" type="text" />
+            <input nz-input formControlName="title" placeholder="{{ 'CHART_EDITOR.FORM.TITLE_PLACEHOLDER' | translate }}" type="text" />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Description</nz-form-label>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>{{ 'CHART_EDITOR.FORM.DESCRIPTION' | translate }}</nz-form-label>
           <nz-form-control [nzSm]="16" [nzXs]="24">
-            <input nz-input formControlName="description" placeholder="Description" type="text" />
+            <input nz-input formControlName="description" [attr.placeholder]="'CHART_EDITOR.FORM.DESCRIPTION_PLACEHOLDER' | translate" type="text" />
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Size</nz-form-label>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>{{ 'CHART_EDITOR.FORM.SIZE' | translate }}</nz-form-label>
           <nz-form-control [nzSm]="16" [nzXs]="24">
             <nz-space-compact nzBlock>
               <nz-input-number
                 formControlName="width"
                 (change)="onWidthChange()"
-                placeholder="Width"
+                [attr.placeholder]="'CHART_EDITOR.FORM.WIDTH_PLACEHOLDER' | translate"
                 [nzControls]="false"
                 [nzMin]="1"
                 [nzMax]="isPanelEditor ? 40 : 20"
@@ -95,7 +95,7 @@
                 nz-popconfirm
                 [nzPopconfirmTrigger]="null"
                 [(nzPopconfirmVisible)]="confirmNewWidthPopconfirmVisible"
-                nzPopconfirmTitle="Are you sure you want to decrease the width of this chart?"
+                [nzPopconfirmTitle]="'CHART_EDITOR.FORM.WIDTH_DECREASE_CONFIRM' | translate"
                 nzPopconfirmPlacement="bottom"
                 (nzOnConfirm)="confirmNewWidth()"
                 (nzOnCancel)="cancelNewWidth()"
@@ -111,7 +111,7 @@
               <nz-input-number
                 formControlName="height"
                 (change)="onHeightChange()"
-                placeholder="Height"
+                [attr.placeholder]="'CHART_EDITOR.FORM.HEIGHT_PLACEHOLDER' | translate"
                 [nzControls]="false"
                 [nzMin]="1"
                 [nzMax]="isPanelEditor ? 30 : 20"
@@ -119,7 +119,7 @@
                 nz-popconfirm
                 [nzPopconfirmTrigger]="null"
                 [(nzPopconfirmVisible)]="confirmNewHeightPopconfirmVisible"
-                nzPopconfirmTitle="Are you sure you want to decrease the height of this chart?"
+                [nzPopconfirmTitle]="'CHART_EDITOR.FORM.HEIGHT_DECREASE_CONFIRM' | translate"
                 nzPopconfirmPlacement="bottom"
                 (nzOnConfirm)="confirmNewHeight()"
                 (nzOnCancel)="cancelNewHeight()"
@@ -128,14 +128,14 @@
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Knitted flat</nz-form-label>
+          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>{{ 'CHART_EDITOR.FORM.KNITTED_FLAT' | translate }}</nz-form-label>
           <nz-form-control [nzSm]="16" [nzXs]="24">
             <nz-switch formControlName="isFlat" nzSize="small"></nz-switch>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>
-            Image
+            {{ 'CHART_EDITOR.FORM.IMAGE' | translate }}
           </nz-form-label>
           <nz-form-control [nzSm]="16" [nzXs]="24" [nzValidateStatus]="uploadedFileName !== undefined ? 'validating' : ''" [nzValidatingTip]="uploadedFileName">
             <nz-upload
@@ -145,34 +145,34 @@
             >
             <button nz-button>
               <nz-icon nzType="upload" />
-              Click to Upload
+              {{ 'CHART_EDITOR.FORM.UPLOAD_BUTTON' | translate }}
             </button>
           </nz-upload>
           </nz-form-control>
         </nz-form-item>
 
-        <button nz-button [nzLoading]="isSaving" nzType="primary" (click)="save()">Save</button>
+        <button nz-button [nzLoading]="isSaving" nzType="primary" (click)="save()">{{ 'CHART_EDITOR.FORM.PREVIEW' | translate }}</button>
 
       </form>
     }
   </nz-sider>
 </nz-layout>
 
-<nz-modal [(nzVisible)]="isNewCableStitchModalVisible" nzTitle="Create cable stitch" (nzOnOk)="addNewCableStitch()" (nzOnCancel)="closeNewCableStitchModal()">
+<nz-modal [(nzVisible)]="isNewCableStitchModalVisible" [nzTitle]="'CHART_EDITOR.CABLE_STITCH_MODAL.TITLE' | translate" (nzOnOk)="addNewCableStitch()" (nzOnCancel)="closeNewCableStitchModal()">
   <ng-container *nzModalContent>
     <div class="cable-preview">
       <app-stitch [stitch]="cableStitchFormPreview"></app-stitch>
       <br>
-      <span>Preview</span>
+      <span>{{ 'CHART_EDITOR.CABLE_STITCH_MODAL.PREVIEW' | translate }}</span>
     </div>
     <form nz-form [formGroup]="cableStitchForm">
       <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Size</nz-form-label>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>{{ 'CHART_EDITOR.CABLE_STITCH_MODAL.SIZE' | translate }}</nz-form-label>
         <nz-form-control [nzSm]="16" [nzXs]="24">
           <nz-input-number
                 formControlName="stitchNumber"
                 (change)="onStitchNumberChange()"
-                placeholder="Size"
+                [attr.placeholder]="'CHART_EDITOR.CABLE_STITCH_MODAL.SIZE_PLACEHOLDER' | translate"
                 [nzControls]="false"
                 [nzMin]="2"
                 [nzMax]="6"
@@ -180,12 +180,12 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>To cable needle</nz-form-label>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>{{ 'CHART_EDITOR.CABLE_STITCH_MODAL.TO_CABLE_NEEDLE' | translate }}</nz-form-label>
         <nz-form-control [nzSm]="16" [nzXs]="24">
           <nz-input-number
                 formControlName="toCableNeedle"
                 (change)="regenerateCablePreview()"
-                placeholder="To CN"
+                [attr.placeholder]="'CHART_EDITOR.CABLE_STITCH_MODAL.TO_CABLE_NEEDLE_PLACEHOLDER' | translate"
                 [nzControls]="false"
                 [nzMin]="1"
                 [nzMax]="cableStitchForm.controls.stitchNumber.value - 1"
@@ -193,17 +193,17 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Hold cable needle</nz-form-label>
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>{{ 'CHART_EDITOR.CABLE_STITCH_MODAL.HOLD_CABLE_NEEDLE' | translate }}</nz-form-label>
         <nz-form-control [nzSm]="16" [nzXs]="24">
           <nz-select formControlName="holdCableNeedle" (ngModelChange)="regenerateCablePreview()">
-            <nz-option [nzValue]="CableNeedleDirection.HOLD_IN_FRONT_OF_WORK" nzLabel="In front of work"></nz-option>
-            <nz-option [nzValue]="CableNeedleDirection.HOLD_BEHIND_WORK" nzLabel="Behind work"></nz-option>
+            <nz-option [nzValue]="CableNeedleDirection.HOLD_IN_FRONT_OF_WORK" [nzLabel]="'CABLE_NEEDLE_DIRECTION.IN_FRONT' | translate"></nz-option>
+            <nz-option [nzValue]="CableNeedleDirection.HOLD_BEHIND_WORK" [nzLabel]="'CABLE_NEEDLE_DIRECTION.BEHIND' | translate"></nz-option>
           </nz-select>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>Sequence</nz-form-label>
-        <nz-form-control [nzSm]="16" [nzXs]="24" nzValidateStatus="validating" nzValidatingTip="Click to switch between knit and purl stitches.">
+        <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>{{ 'CHART_EDITOR.CABLE_STITCH_MODAL.SEQUENCE' | translate }}</nz-form-label>
+        <nz-form-control [nzSm]="16" [nzXs]="24" nzValidateStatus="validating" [nzValidatingTip]="'CHART_EDITOR.CABLE_STITCH_MODAL.SEQUENCE_TIP' | translate">
           @for (stitch of cableStitchForm.controls.sequence.value; let i = $index; track i) {
             <svg
               (click)="switchSequenceElementType(i)"
@@ -222,7 +222,7 @@
   </ng-container>
 </nz-modal>
 
-<nz-modal [(nzVisible)]="isAddChartsModalVisible" nzTitle="Add charts" nzOkText="Add charts" [nzWidth]="800" (nzOnCancel)="closeAddChartsModal()" (nzOnOk)="addCharts()">
+<nz-modal [(nzVisible)]="isAddChartsModalVisible" [nzTitle]="'CHART_EDITOR.ADD_CHARTS_MODAL.TITLE' | translate" [nzOkText]="'CHART_EDITOR.ADD_CHARTS_MODAL.OK' | translate" [nzWidth]="800" (nzOnCancel)="closeAddChartsModal()" (nzOnOk)="addCharts()">
   <ng-container *nzModalContent>
     <div nz-row [nzGutter]="[{ xs: 8, sm: 16, md: 24, lg: 32, xl: 32, xxl: 32 }, 8]">
       @for (chart of userFavorites; track chart.id) {
@@ -241,19 +241,19 @@
             @if (chartsSelected.includes(chart.id)) {
               <button nz-button (click)="setChartSelected(chart.id, false)" nzType="text">
                 <nz-icon nzType="check-square" nzTheme="outline" />
-                Selected
+                {{ 'CHART_EDITOR.ADD_CHARTS_MODAL.SELECTED' | translate }}
               </button>
             } @else {
               <button nz-button (click)="setChartSelected(chart.id, true)" nzType="text">
                 <nz-icon nzType="minus-square" nzTheme="outline" />
-                Not selected
+                {{ 'CHART_EDITOR.ADD_CHARTS_MODAL.NOT_SELECTED' | translate }}
               </button>
             }
           }
         </ng-template>
       }
       @if (userFavorites.length === 0) {
-        <span>You haven't added any charts to your favorites yet.</span>
+        <span>{{ 'CHART_EDITOR.ADD_CHARTS_MODAL.NO_FAVORITES' | translate }}</span>
       }
     </div>
   </ng-container>

@@ -46,7 +46,7 @@
     <svg class="stitch"
         [style.background-color]="!isNoStitch ? (colors()?.get(atomicStitch.color)?.value ?? defaultColor) : noStitchColor"
         nz-tooltip
-        [nzTooltipTitle]="stitch.type"
+        [nzTooltipTitle]="'ATOMIC_STITCH.' + stitch.type | uppercase | translate"
         [nzTooltipTrigger]="showDescription() ? 'hover' : null"
         [attr.width]="unit"
         [attr.height]="unit">
