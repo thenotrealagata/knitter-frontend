@@ -1,4 +1,7 @@
 <nz-layout style="height: 100%">
+  <button class="documentation-button" nz-button nzSize="large" nzShape="circle" nzType="primary" (click)="setDocumentationModalVisible(true)">
+    <nz-icon nzType="info-circle" nzTheme="outline" />
+  </button>
   <nz-sider nzTheme="light">
     <div style="padding: 10px;">
       <nz-divider nzPlain nzText="Stitches" nzOrientation="left"></nz-divider>
@@ -34,6 +37,12 @@
       }
       </div>
       
+    </div>
+    <div class="language-selector">
+      <nz-select [(ngModel)]="currentLanguage" (ngModelChange)="useLanguage($any($event))">
+        <nz-option nzValue="en" nzLabel="English"></nz-option>
+        <nz-option nzValue="hu" nzLabel="Magyar"></nz-option>
+      </nz-select>
     </div>
   </nz-sider>
   <nz-layout class="inner-layout">
@@ -128,7 +137,7 @@
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label [nzSm]="8" [nzXs]="24" nzRequired>{{ 'CHART_EDITOR.FORM.KNITTED_FLAT' | translate }}</nz-form-label>
+          <nz-form-label [nzSm]="8" [nzXs]="24" [nzLabelWrap]="true" nzRequired>{{ 'CHART_EDITOR.FORM.KNITTED_FLAT' | translate }}</nz-form-label>
           <nz-form-control [nzSm]="16" [nzXs]="24">
             <nz-switch formControlName="isFlat" nzSize="small"></nz-switch>
           </nz-form-control>
@@ -256,5 +265,15 @@
         <span>{{ 'CHART_EDITOR.ADD_CHARTS_MODAL.NO_FAVORITES' | translate }}</span>
       }
     </div>
+  </ng-container>
+</nz-modal>
+
+<nz-modal [(nzVisible)]="isDocumentationModalVisible" [nzWidth]="800" [nzTitle]="'DOCUMENTATION_MODAL.TITLE' | translate" [nzCancelText]="null" [nzOkText]="null" (nzOnCancel)="setDocumentationModalVisible(false)" (nzOnOk)="setDocumentationModalVisible(false)">
+  <ng-container *nzModalContent>
+    <p>
+      {{ 'DOCUMENTATION_MODAL.INTRO' | translate }}
+    </p>
+    <p>{{ 'DOCUMENTATION_MODAL.PARAGRAPH_1' | translate }}</p>
+    <p>{{ 'DOCUMENTATION_MODAL.PARAGRAPH_2' | translate }}</p>
   </ng-container>
 </nz-modal>

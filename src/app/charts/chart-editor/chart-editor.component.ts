@@ -5,7 +5,7 @@ import { StitchComponent } from '../stitch/stitch.component';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { FormService } from '../../shared/services/form.service';
 import { CableStitchForm, ChartForm, ColorPaletteForm } from '../../shared/services/form.interfaces';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ColorPaletteComponent } from "../color-palette/color-palette.component";
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { PatternDescriptionPipe } from '../../shared/pipes/pattern-description.pipe';
@@ -32,7 +32,7 @@ import { UserService } from '../../shared/services/user.service';
 import { ChartService } from '../../shared/services/chart.service';
 import { CanDeactivate } from '../../shared/guards/can-deactivate/can-deactivate-interface';
 import { demoChart1, demoChart2 } from './demoCharts';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 const ngZorroModules = [NzLayoutModule,
   NzFlexModule,
@@ -56,7 +56,7 @@ const ngZorroModules = [NzLayoutModule,
 @Component({
   selector: 'app-chart-editor',
   providers: [HttpClientService],
-  imports: [StitchComponent, ColorPaletteComponent, PatternDescriptionPipe, ReactiveFormsModule, TranslatePipe, ...ngZorroModules, ChartBlockComponent, ChartsListingElementComponent],
+  imports: [StitchComponent, ColorPaletteComponent, PatternDescriptionPipe, ReactiveFormsModule, FormsModule, TranslatePipe, ...ngZorroModules, ChartBlockComponent, ChartsListingElementComponent],
   templateUrl: './chart-editor.component.html',
   styleUrl: './chart-editor.component.less'
 })
@@ -143,18 +143,26 @@ export class ChartEditorComponent implements CanDeactivate {
   CableNeedleDirection = CableNeedleDirection;
   AtomicStitchType = AtomicStitchType;
 
+  translate: TranslateService;
+  currentLanguage: 'en' | 'hu';
+
+  isDocumentationModalVisible: boolean = false;
+
   constructor(
     formService: FormService,
     httpClient: HttpClientService,
     router: Router,
     nzMessageService: NzMessageService,
     userService: UserService,
-    chartService: ChartService) {
+    chartService: ChartService,
+    translate: TranslateService) {
     this.httpClient = httpClient;
     this.formService = formService;
     this.router = router;
     this.nzMessageService = nzMessageService;
     this.chartService = chartService;
+    this.translate = translate;
+    this.currentLanguage = (translate.currentLang || 'en') as 'en' | 'hu';
     
     this.colorPaletteForm = formService.colorPaletteForm({
       [Color.MC]: "#fefefe",
@@ -585,5 +593,13 @@ export class ChartEditorComponent implements CanDeactivate {
       if (chart) this.chartInventory.push(chart);
     })
     this.isAddChartsModalVisible = false;
+  }
+
+  useLanguage(language: 'en' | 'hu') {
+    this.translate.use(language);
+  }
+
+  setDocumentationModalVisible(state: boolean) {
+    this.isDocumentationModalVisible = state;
   }
 }

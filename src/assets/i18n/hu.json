@@ -1,54 +1,73 @@
 {
+    "DOCUMENTATION_MODAL": {
+        "TITLE": "Információ",
+        "INTRO": "Ez a demo projekt része egy full-stack webalkalmazásnak, amely kötésdiagramok létrehozását és kompozícióját teszi lehetővé. Ezen diagramok használhatóak arra, hogy a kötött anyagban különböző textúrákat hozzunk létre, minden négyzet egy szem lekötését mutatja meg. Az általam írt program sima/fordított, csipke, színes és csavart minták létrehozását teszi lehetővé.",
+        "PARAGRAPH_1": "A panelszerkesztő és megtekintő komponens tekinthető meg ebben a projektben. A panelek olyan nagyobb egységek, amelyek kisebb elemekből, chartokból épülnek fel. Ennek megfelelően a panelszerkesztő tartalmaz minden chartszerkesztőben elérhető eszközt, és a chart hozzáadás opciót. A felhasználó kiválaszthatja a rajzeszközöket a bal oldalsávról, vagy színt válthat a rajzterület alján található színpalettával.",
+        "PARAGRAPH_2": "Az applikáció frontendjét Angularban írtam és az Ng-Zorro keretrendszert használtam hozzá. A backendhez a Java Spring Boot keretrendszert használtam."
+    },
     "ATOMIC_STITCH": {
-        "BOBBLE": "Bobble",
-        "K2TOG": "Knit two together",
-        "KFB": "Knit front and back loop",
-        "KNIT": "Knit",
-        "NOSTITCH": "No stitch",
-        "P2TOG": "Purl two together",
-        "PURL": "Purl",
-        "SLIP": "Slip",
-        "SSK": "Slip slip knit",
-        "SSPK": "Slip slip purl",
-        "YO": "Yarn over"
+        "BOBBLE": "Bogyó",
+        "K2TOG": "2 szemet simán összekötünk",
+        "KFB": "A szem első és hátsó lábába kötünk",
+        "KNIT": "Sima",
+        "NOSTITCH": "Nincs szem",
+        "P2TOG": "2 szemet fordítottan összekötünk",
+        "PURL": "Fordított",
+        "SLIP": "Leemelünk 1 szemet",
+        "SSK": "2 szemet leemelünk és összekötünk",
+        "SSPK": "2 szemet leemelünk és fordítottan összekötünk",
+        "YO": "Ráhajtás"
+    },
+    "ATOMIC_STITCH_ABBREVIATIONS": {
+        "BOBBLE": "Bogyó",
+        "K2TOG": "2 szemet S összekötünk",
+        "KFB": "A szem első és hátsó lábába kötünk",
+        "KNIT": "S",
+        "NOSTITCH": "Nincs szem",
+        "P2TOG": "2 szemet F összekötünk",
+        "PURL": "F",
+        "SLIP": "Leemelünk 1 szemet",
+        "SSK": "2 szemet leemelünk és S összekötünk",
+        "SSPK": "2 szemet leemelünk és F összekötünk",
+        "YO": "Ráhajtás"
     },
     "CABLE_NEEDLE_DIRECTION": {
-        "BEHIND": "Behind work",
-        "IN_FRONT": "In front of work"
+        "BEHIND": "Munka előtt",
+        "IN_FRONT": "Munka mögött"
     },
     "CHART_EDITOR": {
         "ADD_CHARTS_MODAL": {
-            "NOT_SELECTED": "Not selected",
-            "NO_FAVORITES": "You haven't added any charts to your favorites yet.",
-            "OK": "Add charts",
-            "SELECTED": "Selected",
-            "TITLE": "Add charts"
+            "NOT_SELECTED": "Nincs kiválasztva",
+            "NO_FAVORITES": "Ön még nem adott egy chartot sem a kedvenceihez.",
+            "OK": "Chartok hozzáadása",
+            "SELECTED": "Kiválasztva",
+            "TITLE": "Chartok hozzáadása"
         },
         "CABLE_STITCH_MODAL": {
-            "HOLD_CABLE_NEEDLE": "Hold cable needle",
-            "PREVIEW": "Preview",
-            "SEQUENCE": "Sequence",
-            "SEQUENCE_TIP": "Click to switch between knit and purl stitches.",
-            "SIZE": "Size",
-            "SIZE_PLACEHOLDER": "Size",
-            "TITLE": "Create cable stitch",
-            "TO_CABLE_NEEDLE": "To cable needle",
-            "TO_CABLE_NEEDLE_PLACEHOLDER": "To CN"
+            "HOLD_CABLE_NEEDLE": "Csavarótű tartása",
+            "PREVIEW": "Előnézet",
+            "SEQUENCE": "Szekvencia",
+            "SEQUENCE_TIP": "Kattintson a négyzetekre a sima és fordított szemek közötti váltáshoz.",
+            "SIZE": "Szélesség",
+            "SIZE_PLACEHOLDER": "Szélesség",
+            "TITLE": "Csavart szem létrehozása",
+            "TO_CABLE_NEEDLE": "Csavarótűre",
+            "TO_CABLE_NEEDLE_PLACEHOLDER": "Csavarótűre"
         },
         "FORM": {
-            "DESCRIPTION": "Description",
-            "DESCRIPTION_PLACEHOLDER": "Description",
-            "HEIGHT_DECREASE_CONFIRM": "Are you sure you want to decrease the height of this chart?",
-            "HEIGHT_PLACEHOLDER": "Height",
-            "IMAGE": "Image",
-            "KNITTED_FLAT": "Knitted flat",
-            "PREVIEW": "Preview",
-            "SIZE": "Size",
-            "TITLE": "Title",
-            "TITLE_PLACEHOLDER": "Title",
-            "UPLOAD_BUTTON": "Click to upload",
-            "WIDTH_DECREASE_CONFIRM": "Are you sure you want to decrease the width of this chart?",
-            "WIDTH_PLACEHOLDER": "Width"
+            "DESCRIPTION": "Leírás",
+            "DESCRIPTION_PLACEHOLDER": "Leírás",
+            "HEIGHT_DECREASE_CONFIRM": "Biztos benne, hogy csökkenteni akarja a szerkesztőfelület magasságát?",
+            "HEIGHT_PLACEHOLDER": "Magasság",
+            "IMAGE": "Kép",
+            "KNITTED_FLAT": "Oda-vissza kötve",
+            "PREVIEW": "Előnézet",
+            "SIZE": "Méret",
+            "TITLE": "Cím",
+            "TITLE_PLACEHOLDER": "Cím",
+            "UPLOAD_BUTTON": "Kattintson a feltöltéshez",
+            "WIDTH_DECREASE_CONFIRM": "Biztos benne, hogy csökkenteni akarja a szerkesztőfelület szélességét?",
+            "WIDTH_PLACEHOLDER": "Szélesség"
         }
     }
 }
