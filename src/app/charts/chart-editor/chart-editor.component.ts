@@ -34,6 +34,7 @@ import { CanDeactivate } from '../../shared/guards/can-deactivate/can-deactivate
 import { demoChart1, demoChart2 } from './demoCharts';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ChartViewerComponent } from "../chart-viewer/chart-viewer.component";
+import { ParagraphPipe } from '../../shared/pipes/paragraph.pipe';
 
 const ngZorroModules = [NzLayoutModule,
   NzFlexModule,
@@ -57,7 +58,7 @@ const ngZorroModules = [NzLayoutModule,
 @Component({
   selector: 'app-chart-editor',
   providers: [HttpClientService],
-  imports: [StitchComponent, ColorPaletteComponent, PatternDescriptionPipe, ReactiveFormsModule, FormsModule, TranslatePipe, ...ngZorroModules, ChartBlockComponent, ChartsListingElementComponent, ChartViewerComponent],
+  imports: [StitchComponent, ColorPaletteComponent, PatternDescriptionPipe, ReactiveFormsModule, FormsModule, TranslatePipe, ...ngZorroModules, ChartBlockComponent, ChartsListingElementComponent, ChartViewerComponent, ParagraphPipe],
   templateUrl: './chart-editor.component.html',
   styleUrl: './chart-editor.component.less'
 })

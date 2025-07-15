@@ -25,6 +25,7 @@ export class ColorPaletteComponent implements OnInit {
   editorMode = model<boolean>(false);
   canDelete = input<boolean>(false); // Relevant for editorMode, allow deleting blocks
   allowSelectMode = input.required<boolean>();
+  printMode = input<boolean>(false); // Put color squares underneath eachother
 
   colorSelected = output<Color>();
   colorDeleted = output<Color>();

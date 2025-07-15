@@ -146,7 +146,7 @@
           <nz-form-label [nzSm]="8" [nzXs]="24">
             {{ 'CHART_EDITOR.FORM.IMAGE' | translate }}
           </nz-form-label>
-          <nz-form-control [nzSm]="16" [nzXs]="24" [nzValidateStatus]="uploadedFileName !== undefined ? 'validating' : ''" [nzValidatingTip]="uploadedFileName">
+          <nz-form-control [nzSm]="16" [nzXs]="24" [nzValidateStatus]="uploadedFileName !== undefined ? 'validating' : ''" [nzValidatingTip]="$any(uploadedFileName ?? '' | paragraph : 20)">
             <nz-upload
               [nzLimit]="1"
               [nzAction]="onFileUpload"
@@ -278,7 +278,7 @@
   </ng-container>
 </nz-modal>
 
-<nz-modal [(nzVisible)]="isPreviewModalVisible" (nzOnCancel)="closePreviewModal()" [nzTitle]="'CHART_EDITOR.PREVIEW_MODAL.TITLE' | translate" [nzFooter]="null" [nzOkText]="null" [nzCancelText]="null" [nzWidth]="'75%'">
+<nz-modal class="preview-modal" [(nzVisible)]="isPreviewModalVisible" (nzOnCancel)="closePreviewModal()" [nzTitle]="'CHART_EDITOR.PREVIEW_MODAL.TITLE' | translate" [nzFooter]="null" [nzOkText]="null" [nzCancelText]="null" [nzWidth]="'80%'">
   <ng-container *nzModalContent>
     @if(previewPanel) {
       <app-chart-viewer [chart]="previewPanel" [imageUrl]="imageUrl"></app-chart-viewer>

@@ -1,4 +1,4 @@
-import { Component, input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, input, OnChanges, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { HttpClientService } from '../../shared/services/http-client.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChartBlockComponent } from "../chart-block/chart-block.component";
@@ -20,6 +20,8 @@ import { StitchComponent } from '../stitch/stitch.component';
 import { ChartsListingElementComponent } from "../charts-listing/charts-listing-element/charts-listing-element.component";
 import { TranslatePipe } from '@ngx-translate/core';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import * as jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-chart-viewer',
@@ -203,4 +205,35 @@ export class ChartViewerComponent implements OnChanges {
 
     return stitches;
   }
+
+  @ViewChild('chartViewer') chartViewer?: ElementRef<any>;
+
+  printLoading = false;
+
+  exportPDF() {
+    this.printLoading = true;
+    const pdf = new jsPDF.jsPDF('p', 'mm', 'a4'); // A4 size page of PDF
+
+    setTimeout(() => {
+      html2canvas(this.chartViewer?.nativeElement).then(canvas => {
+        const imgWidth = 198;
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        const contentDataURL = canvas.toDataURL('image/png');
+        pdf.addImage(contentDataURL, 'PNG', 10, 10, imgWidth, imgHeight);
+        this.printLoading = false;
+
+        pdf.setProperties({
+          title: this.chart().title + ' Panel export'
+        });
+
+        const blobUrl = URL.createObjectURL(pdf.output('blob'));
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = blobUrl;
+        document.body.appendChild(iframe);
+        iframe.contentWindow?.print();
+      });
+    }, 0);
+  }
 }
+

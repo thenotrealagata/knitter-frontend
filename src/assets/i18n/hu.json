@@ -87,6 +87,7 @@
         }
     },
     "CHART_VIEWER": {
+        "PRINT": "Nyomtatás",
         "RESULT": "Előnézet"
     }
 }

@@ -1,50 +1,66 @@
-<nz-card class="width-max-content">
-    <form nz-form [formGroup]="colors()">
-        <nz-space nzAlign="center">
+@if (printMode()) {
+    <div class="printMode">
         @for (controlKey of sortByColorOrder(Object.keys(colors().controls)); track controlKey) {
             @let control = colors().get(controlKey) | as : StringFormControl;
-            
-            @if (editorMode()) {
-                <nz-form-control *nzSpaceItem>
-                    <nz-color-picker [formControl]="control" [nzTitle]="colorBlockTitleTemplate" [nzDisabledAlpha]="true"></nz-color-picker>
-                </nz-form-control>
-                <ng-template #colorBlockTitleTemplate>
-                    {{ controlKey }}
-                    @if (controlKey !== 'MC' && canDelete()) {
-                        <button (click)="deleteColor($any(controlKey))" nz-button nzType="link">
-                            Delete
-                        </button>
-                    }
-                </ng-template>
-            } @else if (control && control.value) {
-                <nz-form-control *nzSpaceItem>
-                    <nz-color-block style="margin: 1.6px" (click)="colorBlockSelected(controlKey)" [nzColor]="control.value"></nz-color-block>
-                </nz-form-control>
-            }
+
+            <div class="stitch-inventory-element">
+                <div class="color-block">
+                    <nz-color-block style="margin: 1.6px" (click)="colorBlockSelected(controlKey)" [nzColor]="control.value!"></nz-color-block>
+                </div>
+                {{ controlKey }}
+            </div>
+            <br>
         }
-        @if(allowSelectMode()) {
-            @if(editorMode()) {
-                <button 
-                    nz-button
-                    nzSize="small"
-                    nzType="text"
-                    [disabled]="!canAddColor"
-                    (click)="addNewColor()"
-                    nz-tooltip
-                    [nzTooltipTrigger]="canAddColor ? null : 'hover'"
-                    nzTooltipTitle="Can't add more than 5 colors to a chart."
-                    *nzSpaceItem>
-                    <nz-icon nzType="plus" nzTheme="outline"/>
-                </button>
-                <button nz-button nzSize="small" nzType="text" (click)="toggleEditorMode()" *nzSpaceItem>
-                    <nz-icon nzType="close" nzTheme="outline" />
-                </button>
-            } @else {
-                <button nz-button nzSize="small" nzType="text" (click)="toggleEditorMode()" *nzSpaceItem>
-                    <nz-icon nzType="edit" nzTheme="outline" />
-                </button>
+    </div>
+} @else {
+    <nz-card class="width-max-content">
+        <form nz-form [formGroup]="colors()">
+            <nz-space nzAlign="center">
+            @for (controlKey of sortByColorOrder(Object.keys(colors().controls)); track controlKey) {
+                @let control = colors().get(controlKey) | as : StringFormControl;
+                
+                @if (editorMode()) {
+                    <nz-form-control *nzSpaceItem>
+                        <nz-color-picker [formControl]="control" [nzTitle]="colorBlockTitleTemplate" [nzDisabledAlpha]="true"></nz-color-picker>
+                    </nz-form-control>
+                    <ng-template #colorBlockTitleTemplate>
+                        {{ controlKey }}
+                        @if (controlKey !== 'MC' && canDelete()) {
+                            <button (click)="deleteColor($any(controlKey))" nz-button nzType="link">
+                                Delete
+                            </button>
+                        }
+                    </ng-template>
+                } @else if (control && control.value) {
+                    <nz-form-control *nzSpaceItem>
+                        <nz-color-block style="margin: 1.6px" (click)="colorBlockSelected(controlKey)" [nzColor]="control.value"></nz-color-block>
+                    </nz-form-control>
+                }
             }
-        }
-        </nz-space>
-    </form>
-</nz-card>
+            @if(allowSelectMode()) {
+                @if(editorMode()) {
+                    <button 
+                        nz-button
+                        nzSize="small"
+                        nzType="text"
+                        [disabled]="!canAddColor"
+                        (click)="addNewColor()"
+                        nz-tooltip
+                        [nzTooltipTrigger]="canAddColor ? null : 'hover'"
+                        nzTooltipTitle="Can't add more than 5 colors to a chart."
+                        *nzSpaceItem>
+                        <nz-icon nzType="plus" nzTheme="outline"/>
+                    </button>
+                    <button nz-button nzSize="small" nzType="text" (click)="toggleEditorMode()" *nzSpaceItem>
+                        <nz-icon nzType="close" nzTheme="outline" />
+                    </button>
+                } @else {
+                    <button nz-button nzSize="small" nzType="text" (click)="toggleEditorMode()" *nzSpaceItem>
+                        <nz-icon nzType="edit" nzTheme="outline" />
+                    </button>
+                }
+            }
+            </nz-space>
+        </form>
+    </nz-card>
+}

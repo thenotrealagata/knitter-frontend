@@ -87,6 +87,7 @@
         }
     },
     "CHART_VIEWER": {
+        "PRINT": "Print",
         "RESULT": "Result"
     }
 }

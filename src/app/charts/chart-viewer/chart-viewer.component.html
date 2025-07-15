@@ -1,78 +1,102 @@
-<div class="chart-viewer">
+<div #chartViewer class="chart-viewer">
 @if (colorPaletteForm && chart()) {
     <div nz-row>
         <div nz-col [nzSpan]="12">
             <h2>{{ chart().title }}</h2>
+            <p>{{ chart().description }}</p>
         </div>
-        <div nz-col [nzSpan]="12" class="interaction-buttons">
-            @if (imageUrl()) {
-                <ng-template #chartResult>
-                    <img style="max-width: 100%;" [src]="imageUrl()">
-                </ng-template>
-
+        @if (!printLoading) {
+            <div nz-col [nzSpan]="12" class="interaction-buttons">
+                @if (imageUrl()) {
+                    <ng-template #chartResult>
+                        <img style="max-width: 300px;" [src]="imageUrl()">
+                    </ng-template>
+                    <button
+                        nz-button
+                        nzType="default"
+                        nz-popover
+                        [nzPopoverContent]="chartResult"
+                        nzPopconfirmPlacement="bottomRight"
+                    >
+                        <nz-icon nzType="picture" nzTheme="outline" />
+                        {{ 
+                            'CHART_VIEWER.RESULT' | translate
+                        }}
+                    </button>
+                }
                 <button
+                    (click)="exportPDF()"
                     nz-button
                     nzType="default"
-                    nz-popover
-                    [nzPopoverContent]="chartResult"
-                    nzPopconfirmPlacement="bottomRight"
                 >
-                    <nz-icon nzType="picture" nzTheme="outline" />
+                    @if(printLoading) {
+                        <nz-icon nzType="loading" nzTheme="outline" />
+                    } @else {
+                        <nz-icon nzType="printer" nzTheme="outline" />
+                    }
                     {{ 
-                        'CHART_VIEWER.RESULT' | translate
+                        'CHART_VIEWER.PRINT' | translate
                     }}
                 </button>
-            }
-            @if(canDelete) {
-                <button
-                    nz-button
-                    nzType="default"
-                    nz-popconfirm
-                    [nzPopconfirmTitle]="'Are you sure you want to delete this ' + 
-                        (isPanel ? 'panel' : 'chart')
-                    + '?'"
-                    nzPopconfirmPlacement="bottom"
-                    (nzOnConfirm)="deleteResource()"
-                >
-                    <nz-icon nzType="delete" nzTheme="outline" />
-                    Delete {{ isPanel ? 'panel' : 'chart' }}
-                </button>
-            }
-            @if (user && !isPanel) {            
-                <button (click)="toggleFavorite()" nz-button nzType="default">
-                    @if(isFavorite) {
-                        <nz-icon nzType="heart" nzTheme="fill" />
-                        In favorites
-                    } @else {
-                        <nz-icon nzType="heart" nzTheme="outline" />
-                        Favorite
-                    }
-                </button>
-                <button (click)="createVariation()" nz-button nzType="default">
-                    <nz-icon nzType="edit" nzTheme="outline" />
-                    Create variation
-                </button>
-            }
-        </div>
+                @if(canDelete) {
+                    <button
+                        nz-button
+                        nzType="default"
+                        nz-popconfirm
+                        [nzPopconfirmTitle]="'Are you sure you want to delete this ' + 
+                            (isPanel ? 'panel' : 'chart')
+                        + '?'"
+                        nzPopconfirmPlacement="bottom"
+                        (nzOnConfirm)="deleteResource()"
+                    >
+                        <nz-icon nzType="delete" nzTheme="outline" />
+                        Delete {{ isPanel ? 'panel' : 'chart' }}
+                    </button>
+                }
+                @if (user && !isPanel) {            
+                    <button (click)="toggleFavorite()" nz-button nzType="default">
+                        @if(isFavorite) {
+                            <nz-icon nzType="heart" nzTheme="fill" />
+                            In favorites
+                        } @else {
+                            <nz-icon nzType="heart" nzTheme="outline" />
+                            Favorite
+                        }
+                    </button>
+                    <button (click)="createVariation()" nz-button nzType="default">
+                        <nz-icon nzType="edit" nzTheme="outline" />
+                        Create variation
+                    </button>
+                }
+            </div>
+        }
     </div>
     <div class="hovered-stitch">
-        @if (hoveredStitch) {
+        @if (hoveredStitch && !printLoading) {
             {{ hoveredStitch | patternDescription : false }}
         }
     </div>
-    <div nz-row>
-        <div nz-col [nzSpan]="imageSrc ? 12 : 24" >
+    <div nz-row style="margin-bottom: 10px">
+        <div nz-col [nzSpan]="imageUrl() && printLoading ? 12 : 24">
             <app-chart-block [chart]="chart()" [colors]="colorPaletteForm" (stitchEvent)="stitchEvent($event)"></app-chart-block>
         </div>
-        <!--@if (imageSrc) {
+        @if (printLoading && imageUrl()) {
             <div nz-col [nzSpan]="12">
-                <img style="max-width: 100%;" [src]="imageSrc">
+                <div class="image-preview">
+                    <img [src]="imageUrl()">
+                </div>
             </div>
-        }-->
+        }
     </div>
-    <div class="color-palette">
-        <app-color-palette style="max-width: max-content;" [colors]="colorPaletteForm" [allowSelectMode]="false" [editorMode]="true" [canDelete]="false"></app-color-palette>
-    </div>
+    @if (!printLoading) {
+        <div class="color-palette">
+            <app-color-palette style="max-width: max-content;" [colors]="colorPaletteForm" [allowSelectMode]="false" [editorMode]="true" [canDelete]="false"></app-color-palette>
+        </div>
+    } @else {
+        <div nz-row [nzGutter]="32">
+            <app-color-palette nz-col [nzSpan]="24" [colors]="colorPaletteForm" [allowSelectMode]="false" [editorMode]="false" [printMode]="true"></app-color-palette>
+        </div>
+    }
     <div nz-row [nzGutter]="32">
         <div nz-col [nzSpan]="5">
             <h3>Stitches used</h3>
@@ -88,7 +112,7 @@
             <h3>Pattern</h3>
             @for(row of patternToDescription; let i = $index, isEvenRow = $even; track i) {
                 @let isRS = chart().flat ? isEvenRow : true;
-                Row {{ i + 1 }} ({{ isRS ? "RS" : "WS" }}): {{ row | patternDescription : isRS }} <br>
+                <b>Row {{ i + 1 }} ({{ isRS ? "RS" : "WS" }}):</b> {{ row | patternDescription : isRS }} <br>
             }
         </div>
     </div>
