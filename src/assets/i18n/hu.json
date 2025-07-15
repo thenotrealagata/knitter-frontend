@@ -69,6 +69,12 @@
             "WIDTH_DECREASE_CONFIRM": "Biztos benne, hogy csökkenteni akarja a szerkesztőfelület szélességét?",
             "WIDTH_PLACEHOLDER": "Szélesség"
         },
+        "LEFT_SIDER": {
+            "STITCHES": "Szemek",
+            "CABLE_STITCHES": "Csavart szemek",
+            "CHARTS": "Chartok",
+            "ADD_CHARTS": "Chartok hozzáadása"
+        },
         "MESSAGES": {
             "DRAW_STITCH_OUTSIDE_AREA": "A szem nem fér rá a rajzfelületre!",
             "DRAW_CHART_OUTSIDE_AREA": "A chart nem másolható rá a rajzfelületre, mert túl nagy a területe.",
@@ -84,10 +90,21 @@
         },
         "PREVIEW_MODAL": {
             "TITLE": "Előnézet"
+        },
+        "SELECTED": {
+            "STITCH": "Kiválasztott szem",
+            "CHART": "Kiválasztott chart"
         }
     },
     "CHART_VIEWER": {
+        "PATTERN": "Minta",
         "PRINT": "Nyomtatás",
-        "RESULT": "Előnézet"
+        "RESULT": "Előnézet",
+        "ROW_ABBREVIATION": "S",
+        "STITCHES_USED": "Felhasznált szemek"
+    },
+    "PATTERN_DESCRIPTION": {
+        "WITH": "{{ color }} színnel ",
+        "SWITCH_TO": "Váltson {{ color }} színre "
     }
 }

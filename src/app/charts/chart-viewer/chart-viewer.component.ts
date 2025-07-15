@@ -54,6 +54,9 @@ export class ChartViewerComponent implements OnChanges {
 
   user: User | null;
 
+  @ViewChild('chartViewer') chartViewer?: ElementRef<any>;
+  printLoading = false;
+
   constructor(
     httpClient: HttpClientService,
     activatedRoute: ActivatedRoute,
@@ -205,10 +208,6 @@ export class ChartViewerComponent implements OnChanges {
 
     return stitches;
   }
-
-  @ViewChild('chartViewer') chartViewer?: ElementRef<any>;
-
-  printLoading = false;
 
   exportPDF() {
     this.printLoading = true;

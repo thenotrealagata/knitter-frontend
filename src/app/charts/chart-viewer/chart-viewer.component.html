@@ -99,7 +99,7 @@
     }
     <div nz-row [nzGutter]="32">
         <div nz-col [nzSpan]="5">
-            <h3>Stitches used</h3>
+            <h3>{{ 'CHART_VIEWER.STITCHES_USED' | translate }}</h3>
             @for (stitch of stitchesUsed; let i = $index; track i) {
                 <div class="stitch-inventory-element">
                     <app-stitch [stitch]="stitch"></app-stitch>
@@ -109,10 +109,10 @@
             }
         </div>
         <div nz-col [nzSpan]="19">
-            <h3>Pattern</h3>
+            <h3>{{ 'CHART_VIEWER.PATTERN' | translate }}</h3>
             @for(row of patternToDescription; let i = $index, isEvenRow = $even; track i) {
                 @let isRS = chart().flat ? isEvenRow : true;
-                <b>Row {{ i + 1 }} ({{ isRS ? "RS" : "WS" }}):</b> {{ row | patternDescription : isRS }} <br>
+                <b>{{ ('CHART_VIEWER.ROW_ABBREVIATION' | translate) + (i + 1) + ' ' + (isRS ? "(RS)" : "(WS)") }}:</b> {{ row | patternDescription : isRS }} <br>
             }
         </div>
     </div>

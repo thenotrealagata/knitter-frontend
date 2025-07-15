@@ -69,6 +69,12 @@
             "WIDTH_DECREASE_CONFIRM": "Are you sure you want to decrease the width of this chart?",
             "WIDTH_PLACEHOLDER": "Width"
         },
+        "LEFT_SIDER": {
+            "STITCHES": "Stitches",
+            "CABLE_STITCHES": "Cable stitches",
+            "CHARTS": "Charts",
+            "ADD_CHARTS": "Add charts"
+        },
         "MESSAGES": {
             "DRAW_STITCH_OUTSIDE_AREA": "Stitch can't be added outside of drawing area!",
             "DRAW_CHART_OUTSIDE_AREA": "Chart can't be copied over the given stitch, as it does not fit unto the given surface.",
@@ -84,10 +90,21 @@
         },
         "PREVIEW_MODAL": {
             "TITLE": "Preview"
+        },
+        "SELECTED": {
+            "STITCH": "Selected stitch",
+            "CHART": "Selected chart"
         }
     },
     "CHART_VIEWER": {
+        "PATTERN": "Pattern",
         "PRINT": "Print",
-        "RESULT": "Result"
+        "RESULT": "Result",
+        "ROW_ABBREVIATION": "R",
+        "STITCHES_USED": "Stitches used"
+    },
+    "PATTERN_DESCRIPTION": {
+        "WITH": "With {{ color }} ",
+        "SWITCH_TO": "Switch to {{ color }} "
     }
 }
