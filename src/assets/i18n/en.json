@@ -68,6 +68,25 @@
             "UPLOAD_BUTTON": "Click to upload",
             "WIDTH_DECREASE_CONFIRM": "Are you sure you want to decrease the width of this chart?",
             "WIDTH_PLACEHOLDER": "Width"
+        },
+        "MESSAGES": {
+            "DRAW_STITCH_OUTSIDE_AREA": "Stitch can't be added outside of drawing area!",
+            "DRAW_CHART_OUTSIDE_AREA": "Chart can't be copied over the given stitch, as it does not fit unto the given surface.",
+            "INVALID_FILE_TYPE": "Invalid file type: only PNG and JPEG files are allowed.",
+            "INVALID_FILE_SIZE": "File is too large, maximum size is 3 MB.",
+            "FILE_UPLOAD_ERROR": "Error while uploading file.",
+            "PREVIEW_ERROR": "An error occurred while loading preview for panel.",
+            "PREVIEW_INVALID_FORM": "Please provide all required fields before previewing the panel.",
+            "SAVE_INVALID_FORM": "Can't save in this state, please provide all the required fields!",
+            "SAVE_ERROR_PANEL": "Error saving panel.",
+            "SAVE_ERROR_CHART": "Error saving chart.",
+            "STITCH_ALREADY_IN_INVENTORY": "Stitch can't be added, as the same one already exists in the stitch inventory."
+        },
+        "PREVIEW_MODAL": {
+            "TITLE": "Preview"
         }
+    },
+    "CHART_VIEWER": {
+        "RESULT": "Result"
     }
 }

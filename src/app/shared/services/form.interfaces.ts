@@ -8,7 +8,7 @@ export interface ChartForm {
   height: FormControl<number>;
   isFlat: FormControl<boolean>;
   pattern: FormControl<Stitch[][]>;
-  image: FormControl<string>;
+  image: FormControl<string | null>;
 }
 
 export interface CableStitchForm {

@@ -14,11 +14,11 @@ export class FormService {
   chartForm(chart?: Partial<Chart>): FormGroup<ChartForm> {
     return new FormGroup({
       title: new FormControl<string>(chart && chart.title ? chart.title : "", {
-        validators: Validators.required,
+        validators: [ Validators.required, Validators.minLength(1) ],
         nonNullable: true
       }),
       description: new FormControl<string>(chart && chart.description ? chart.description : "", {
-        validators: Validators.required,
+        validators: [ Validators.required, Validators.minLength(1) ],
         nonNullable: true
       }),
       width: new FormControl<number>(chart && chart.width ? chart.width : 0, {
@@ -36,7 +36,7 @@ export class FormService {
       pattern: new FormControl<Stitch[][]>(
         chart && chart.pattern ? chart.pattern : [], { validators: [Validators.required], nonNullable: true }
       ),
-      image: new FormControl<string>(chart && chart.filePath ? chart.filePath : "", { validators: Validators.required, nonNullable: true })
+      image: new FormControl<string>(chart && chart.filePath ? chart.filePath : "")
     });
   }
 

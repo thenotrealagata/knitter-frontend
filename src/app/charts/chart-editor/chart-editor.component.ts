@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { AtomicStitch, AtomicStitchType, CableNeedleDirection, CableStitch, Chart, Color, CompositeStitch, Stitch } from '../../shared/model/Chart';
+import { AtomicStitch, AtomicStitchType, CableNeedleDirection, CableStitch, Chart, Color, CompositeStitch, Panel, Stitch } from '../../shared/model/Chart';
 import { StitchComponent } from '../stitch/stitch.component';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { FormService } from '../../shared/services/form.service';
@@ -33,6 +33,7 @@ import { ChartService } from '../../shared/services/chart.service';
 import { CanDeactivate } from '../../shared/guards/can-deactivate/can-deactivate-interface';
 import { demoChart1, demoChart2 } from './demoCharts';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { ChartViewerComponent } from "../chart-viewer/chart-viewer.component";
 
 const ngZorroModules = [NzLayoutModule,
   NzFlexModule,
@@ -56,7 +57,7 @@ const ngZorroModules = [NzLayoutModule,
 @Component({
   selector: 'app-chart-editor',
   providers: [HttpClientService],
-  imports: [StitchComponent, ColorPaletteComponent, PatternDescriptionPipe, ReactiveFormsModule, FormsModule, TranslatePipe, ...ngZorroModules, ChartBlockComponent, ChartsListingElementComponent],
+  imports: [StitchComponent, ColorPaletteComponent, PatternDescriptionPipe, ReactiveFormsModule, FormsModule, TranslatePipe, ...ngZorroModules, ChartBlockComponent, ChartsListingElementComponent, ChartViewerComponent],
   templateUrl: './chart-editor.component.html',
   styleUrl: './chart-editor.component.less'
 })
@@ -125,7 +126,7 @@ export class ChartEditorComponent implements CanDeactivate {
       CableNeedleDirection.HOLD_IN_FRONT_OF_WORK
     )
   ];
-  chartInventory: Chart[] = []; // Only relevant for panel editor
+  chartInventory: Chart[] = [ demoChart2 ]; // Only relevant for panel editor
 
   httpClient: HttpClientService;
   formService: FormService;
@@ -146,7 +147,12 @@ export class ChartEditorComponent implements CanDeactivate {
   translate: TranslateService;
   currentLanguage: 'en' | 'hu';
 
+  // For demo
   isDocumentationModalVisible: boolean = false;
+  isPreviewModalVisible = false;
+  previewPanel?: Panel;
+  previewFile?: File;
+  imageUrl?: string | ArrayBuffer | null;
 
   constructor(
     formService: FormService,
@@ -166,6 +172,7 @@ export class ChartEditorComponent implements CanDeactivate {
     
     this.colorPaletteForm = formService.colorPaletteForm({
       [Color.MC]: "#fefefe",
+      [Color.CC1]: "#6e307b"
     });
     this.cableStitchForm = formService.cableStitchForm();
     this.cableStitchFormPreview = formService.formToCableStitch(this.cableStitchForm, this.selectedColor);
@@ -173,10 +180,10 @@ export class ChartEditorComponent implements CanDeactivate {
     this.isLoading = false;
     // Initialize chart
     this.chartForm = formService.chartForm({
-      width: 10,
-      height: 10,
+      width: 25,
+      height: 15,
       flat: true,
-      pattern: this.initializePattern(10, 10)
+      pattern: this.initializePattern(25, 15)
     });
     this.previousHeight = this.chartForm.controls.height.value;
     this.previousWidth = this.chartForm.controls.width.value;
@@ -295,7 +302,7 @@ export class ChartEditorComponent implements CanDeactivate {
           row.splice(stitchIndex + 1, 0, ...[...new Array(difference)].map(_ => new AtomicStitch(Color.MC, AtomicStitchType.Knit)));
         }
       } else {
-        this.nzMessageService.error("Stitch can't be added outside of drawing area!");
+        this.nzMessageService.error(this.translate.instant("CHART_EDITOR.MESSAGES.DRAW_STITCH_OUTSIDE_AREA"));
       }
     }
   }
@@ -313,7 +320,7 @@ export class ChartEditorComponent implements CanDeactivate {
       (stitchIndex + chart.width > this.chartForm.controls.width.value ||
         rowIndex + chart.height > this.chartForm.controls.height.value)) {
       // Chart does not fit into drawing area
-      this.nzMessageService.error('Chart can\'t be copied over the given stitch, as it does not fit unto the given surface');
+      this.nzMessageService.error(this.translate.instant("CHART_EDITOR.MESSAGES.DRAW_CHART_OUTSIDE_AREA"));
       return;
     }
 
@@ -332,23 +339,57 @@ export class ChartEditorComponent implements CanDeactivate {
   onFileUpload = (file: NzUploadFile) => {
     const fileName = file.name;
     if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
-      this.nzMessageService.error("Invalid file type: only PNG and JPEG files are allowed.");
+      this.nzMessageService.error(this.translate.instant("CHART_EDITOR.MESSAGES.INVALID_FILE_TYPE"));
     } else if (file.size && file.size > 3000000) {
       // File limit on the backend is 3 MB
-      this.nzMessageService.error("File is too large, maximum size is 3 MB.");
+      this.nzMessageService.error(this.translate.instant("CHART_EDITOR.MESSAGES.INVALID_FILE_SIZE"));
     } else {
-      this.httpClient.uploadImage(file as any).subscribe({
+      this.previewFile = file as any;
+
+      const reader = new FileReader();
+      reader.readAsDataURL(this.previewFile as Blob); 
+      reader.onload = (_event) => { 
+          this.imageUrl = reader.result; 
+      }
+      this.uploadedFileName = fileName;
+      /*this.httpClient.uploadImage(file as any).subscribe({
         next: (imageName) => {
           this.chartForm?.controls.image.setValue(imageName.message);
           this.uploadedFileName = fileName;
         },
         error: (error) => {
-          this.nzMessageService.error("Error while uploading file.");
+          this.nzMessageService.error(this.translate.instant("CHART_EDITOR.MESSAGES.FILE_UPLOAD_ERROR"));
         }
-      })
+      })*/
     }
 
     return "";
+  }
+
+  preview() {
+    if (!this.chartForm) {
+      this.nzMessageService.error(this.translate.instant("CHART_EDITOR.MESSAGES.PREVIEW_ERROR"));
+      return;
+    }
+
+    let hasError = false;
+    Object.values(this.chartForm.controls).forEach(control => {
+      control.markAsDirty();
+      control.updateValueAndValidity({ onlySelf: true });
+      hasError = hasError || control.invalid;
+    });
+
+    if (hasError) {
+      this.nzMessageService.error(this.translate.instant("CHART_EDITOR.MESSAGES.PREVIEW_INVALID_FORM"));
+      return;
+    }
+
+    this.previewPanel = this.formService.formToPanel(this.chartForm, this.colorPaletteForm, this.chartsAdded, undefined);
+    this.isPreviewModalVisible = true;
+  }
+
+  closePreviewModal() {
+    this.isPreviewModalVisible = false;
   }
 
   save() {
@@ -364,7 +405,7 @@ export class ChartEditorComponent implements CanDeactivate {
     });
 
     if (hasError) {
-      this.nzMessageService.error('Can\'t save in this state, please provide all the required fields!');
+      this.nzMessageService.error(this.translate.instant("CHART_EDITOR.MESSAGES.SAVE_INVALID_FORM"));
       return;
     }
 
@@ -377,7 +418,7 @@ export class ChartEditorComponent implements CanDeactivate {
             this.router.navigate([`/panels/view/${chart.id}`]);
           },
           error: (err) => {
-            this.nzMessageService.error("Error saving panel.");
+            this.nzMessageService.error(this.translate.instant("CHART_EDITOR.MESSAGES.SAVE_ERROR_PANEL"));
           },
           complete: () => {
             this.isSaving = false;
@@ -392,7 +433,7 @@ export class ChartEditorComponent implements CanDeactivate {
             this.router.navigate([`/charts/view/${chart.id}`]);
           },
           error: (err) => {
-            this.nzMessageService.error("Error saving chart.");
+            this.nzMessageService.error(this.translate.instant("CHART_EDITOR.MESSAGES.SAVE_ERROR_CHART"));
           },
           complete: () => {
             this.isSaving = false;
@@ -517,7 +558,7 @@ export class ChartEditorComponent implements CanDeactivate {
       this.cableStitchInventory.push(this.cableStitchFormPreview);
       this.isNewCableStitchModalVisible = false;
     } else {
-      this.nzMessageService.error("Stitch can't be added, as the same one already exists in the stitch inventory.");
+      this.nzMessageService.error(this.translate.instant("CHART_EDITOR.MESSAGES.STITCH_ALREADY_IN_INVENTORY"));
     }
   }
 

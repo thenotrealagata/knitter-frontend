@@ -1,10 +1,28 @@
 <div class="chart-viewer">
-@if (colorPaletteForm && chart) {
+@if (colorPaletteForm && chart()) {
     <div nz-row>
         <div nz-col [nzSpan]="12">
-            <h2>{{ chart.title }}</h2>
+            <h2>{{ chart().title }}</h2>
         </div>
         <div nz-col [nzSpan]="12" class="interaction-buttons">
+            @if (imageUrl()) {
+                <ng-template #chartResult>
+                    <img style="max-width: 100%;" [src]="imageUrl()">
+                </ng-template>
+
+                <button
+                    nz-button
+                    nzType="default"
+                    nz-popover
+                    [nzPopoverContent]="chartResult"
+                    nzPopconfirmPlacement="bottomRight"
+                >
+                    <nz-icon nzType="picture" nzTheme="outline" />
+                    {{ 
+                        'CHART_VIEWER.RESULT' | translate
+                    }}
+                </button>
+            }
             @if(canDelete) {
                 <button
                     nz-button
@@ -44,13 +62,13 @@
     </div>
     <div nz-row>
         <div nz-col [nzSpan]="imageSrc ? 12 : 24" >
-            <app-chart-block [chart]="chart" [colors]="colorPaletteForm" (stitchEvent)="stitchEvent($event)"></app-chart-block>
+            <app-chart-block [chart]="chart()" [colors]="colorPaletteForm" (stitchEvent)="stitchEvent($event)"></app-chart-block>
         </div>
-        @if (imageSrc) {
+        <!--@if (imageSrc) {
             <div nz-col [nzSpan]="12">
                 <img style="max-width: 100%;" [src]="imageSrc">
             </div>
-        }
+        }-->
     </div>
     <div class="color-palette">
         <app-color-palette style="max-width: max-content;" [colors]="colorPaletteForm" [allowSelectMode]="false" [editorMode]="true" [canDelete]="false"></app-color-palette>
@@ -69,7 +87,7 @@
         <div nz-col [nzSpan]="19">
             <h3>Pattern</h3>
             @for(row of patternToDescription; let i = $index, isEvenRow = $even; track i) {
-                @let isRS = chart.flat ? isEvenRow : true;
+                @let isRS = chart().flat ? isEvenRow : true;
                 Row {{ i + 1 }} ({{ isRS ? "RS" : "WS" }}): {{ row | patternDescription : isRS }} <br>
             }
         </div>

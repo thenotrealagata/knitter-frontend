@@ -68,6 +68,25 @@
             "UPLOAD_BUTTON": "Kattintson a feltöltéshez",
             "WIDTH_DECREASE_CONFIRM": "Biztos benne, hogy csökkenteni akarja a szerkesztőfelület szélességét?",
             "WIDTH_PLACEHOLDER": "Szélesség"
+        },
+        "MESSAGES": {
+            "DRAW_STITCH_OUTSIDE_AREA": "A szem nem fér rá a rajzfelületre!",
+            "DRAW_CHART_OUTSIDE_AREA": "A chart nem másolható rá a rajzfelületre, mert túl nagy a területe.",
+            "INVALID_FILE_TYPE": "Invalid fájl: csak PNG és JPEG fájlok tölthetőek fel.",
+            "INVALID_FILE_SIZE": "A fájl mérete túl nagy, maximum 3 MG megengedett.",
+            "FILE_UPLOAD_ERROR": "Hiba lépett fel a fájl feltöltése közben.",
+            "PREVIEW_ERROR": "Hiba lépett fel a panel előnézetének betöltése közben.",
+            "PREVIEW_INVALID_FORM": "Töltse ki az összes kötelező mezőt, mielőtt betöltené a panel előnézetét.",
+            "SAVE_INVALID_FORM": "A mentés nem lehetséges addig, amíg minden kötelező mező ki nem lett töltve.",
+            "SAVE_ERROR_PANEL": "Hiba lépett fel a panel mentése közben.",
+            "SAVE_ERROR_CHART": "Hiba lépett fel a chart mentése közben.",
+            "STITCH_ALREADY_IN_INVENTORY": "Ezt a szemet nem lehet hozzáadni, mert már létezik egy ugyanilyen a csavart szemek között."
+        },
+        "PREVIEW_MODAL": {
+            "TITLE": "Előnézet"
         }
+    },
+    "CHART_VIEWER": {
+        "RESULT": "Előnézet"
     }
 }

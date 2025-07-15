@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input, OnChanges, SimpleChanges } from '@angular/core';
 import { HttpClientService } from '../../shared/services/http-client.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChartBlockComponent } from "../chart-block/chart-block.component";
@@ -18,17 +18,20 @@ import { User } from '../../shared/model/User';
 import { ChartService } from '../../shared/services/chart.service';
 import { StitchComponent } from '../stitch/stitch.component';
 import { ChartsListingElementComponent } from "../charts-listing/charts-listing-element/charts-listing-element.component";
+import { TranslatePipe } from '@ngx-translate/core';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 @Component({
   selector: 'app-chart-viewer',
-  imports: [ChartBlockComponent, ColorPaletteComponent, NzGridModule, NzIconModule, NzButtonModule, PatternDescriptionPipe, NzPopconfirmModule, StitchComponent, ChartsListingElementComponent],
+  imports: [ChartBlockComponent, ColorPaletteComponent, NzGridModule, NzIconModule, NzButtonModule, PatternDescriptionPipe, NzPopconfirmModule, StitchComponent, ChartsListingElementComponent, TranslatePipe, NzPopoverModule],
   templateUrl: './chart-viewer.component.html',
   styleUrl: './chart-viewer.component.less'
 })
-export class ChartViewerComponent {
+export class ChartViewerComponent implements OnChanges {
   isPanel: boolean;
   isLoading = true;
-  chart?: Chart | Panel;
+  chart = input.required<Chart | Panel>();
+  imageUrl = input<string | ArrayBuffer | null>();
   variationData?: Chart;
   imageSrc?: string;
   colorPaletteForm?: FormGroup<ColorPaletteForm>;
@@ -67,9 +70,10 @@ export class ChartViewerComponent {
     this.chartService = chartService;
     this.formService = formService;
 
-    this.isPanel = activatedRoute.snapshot.routeConfig?.path?.includes("panels") ?? false;
+    // The demo displays a modal of panel viewer with a previously created panel passed down from parent component (panel editor).
+    this.isPanel = true; // activatedRoute.snapshot.routeConfig?.path?.includes("panels") ?? false;
 
-    const resourceId = Number(activatedRoute.snapshot.paramMap.get("id"));
+    /*const resourceId = Number(activatedRoute.snapshot.paramMap.get("id"));
     const observable = this.isPanel ? httpClient.getPanelById(resourceId) : httpClient.getChartById(resourceId);
 
     observable.subscribe({
@@ -82,23 +86,27 @@ export class ChartViewerComponent {
           router.navigate(['/404'])
         }
       }
-    });
+    });*/
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.initializeViewer();
   }
 
   initializeViewer() {
-    if (!this.chart) return;
+    if (!this.chart()) return;
 
-    this.colorPaletteForm = this.formService.colorPaletteForm(this.chart.colors);
-    this.patternToDescription = [...this.chart.pattern].reverse();
+    this.colorPaletteForm = this.formService.colorPaletteForm(this.chart().colors);
+    this.patternToDescription = [...this.chart().pattern].reverse();
     this.isLoading = false;
-    this.isFavorite = this.userService.isFavorite(this.chart.id!);
+    this.isFavorite = false; // this.userService.isFavorite(this.chart.id!);
     const userId = this.userService.getUser()?.id;
-    this.canDelete = this.userService.getUser() !== null
+    this.canDelete = false; /* this.userService.getUser() !== null
       && (!this.isPanel && userId === this.chart?.userId
-      || this.isPanel && userId === (this.chart as any).user.id);
-    this.stitchesUsed = this.getStitchesUsed(this.chart);
+      || this.isPanel && userId === (this.chart as any).user.id);*/
+    this.stitchesUsed = this.getStitchesUsed(this.chart());
 
-    if(this.chart.parentId !== undefined) {
+    /*if(this.chart.parentId !== undefined) {
       this.httpClient.getChartById(this.chart.parentId).subscribe(
         {
           next: (variationData) => { 
@@ -108,7 +116,7 @@ export class ChartViewerComponent {
           }
         }
       )
-    }
+    }*/
 
     this.loadChartImage();
   }
@@ -116,13 +124,13 @@ export class ChartViewerComponent {
   loadChartImage() {
     if (!this.chart) return;
 
-    this.httpClient.getImage(this.chart.filePath).subscribe({
+    /*this.httpClient.getImage(this.chart.filePath).subscribe({
       next: (img) => {
         this.imageSrc = URL.createObjectURL(img);
       },
       error: (err) => {
       }
-    })
+    })*/
   }
 
   stitchEvent(event: { stitch: Stitch; event: "click" | "mouseover" | "mouseout"; }) {
@@ -137,20 +145,23 @@ export class ChartViewerComponent {
   }
 
   async toggleFavorite() {
-    if (this.chart?.id === undefined) return;
+    // Adding favorite is disabled in demo
+    /*if (this.chart?.id === undefined) return;
     await this.userService.toggleFavorite(this.chart?.id, !this.isFavorite);
 
     this.user = this.userService.getUser();
-    this.isFavorite = this.user?.favorites.some(chart => chart.id === this.chart?.id) ?? false;
+    this.isFavorite = this.user?.favorites.some(chart => chart.id === this.chart?.id) ?? false;*/
   }
 
   createVariation() {
-    if (this.chart?.id === undefined) return;
-    this.router.navigate([`/charts/create/${this.chart.id}`]);
+    // Creating variation is disabled in demo
+    // if (this.chart?.id === undefined) return;
+    // this.router.navigate([`/charts/create/${this.chart.id}`]);
   }
 
   deleteResource() {
-    if (this.chart?.id === undefined) return;
+    // Deleting resource is disabled in demo
+    /*if (this.chart?.id === undefined) return;
 
     if (this.isPanel) {
       this.httpClient.deletePanel(this.chart.id).subscribe({
@@ -172,7 +183,7 @@ export class ChartViewerComponent {
           this.nzMessageService.error("Chart couldn't be deleted.");
         }
       });
-    }
+    }*/
   }
 
   getStitchesUsed(chart: Chart): Stitch[] {
