@@ -2,7 +2,8 @@
   <button class="documentation-button" nz-button nzSize="large" nzShape="circle" nzType="primary" (click)="setDocumentationModalVisible(true)">
     <nz-icon nzType="info-circle" nzTheme="outline" />
   </button>
-  <nz-sider nzTheme="light">
+  <nz-sider nzCollapsible [(nzCollapsed)]="leftSiderCollapsed" [nzBreakpoint]="'lg'" [nzWidth]="350" nzBreakpoint="lg" nzTheme="light">
+    @if (!leftSiderCollapsed) {
     <div style="padding: 10px;">
       <nz-divider nzPlain [nzText]="'CHART_EDITOR.LEFT_SIDER.STITCHES' | translate" nzOrientation="left"></nz-divider>
       <div class="stitch-inventory" nz-flex nzGap="middle" nzWrap="wrap">
@@ -44,6 +45,7 @@
         <nz-option nzValue="hu" nzLabel="Magyar"></nz-option>
       </nz-select>
     </div>
+    }
   </nz-sider>
   <nz-layout class="inner-layout">
     <nz-content>
@@ -74,7 +76,7 @@
       }
     </nz-content>
   </nz-layout>
-  <nz-sider nzCollapsible [(nzCollapsed)]="rightSiderCollapsed" [nzWidth]="350" nzTheme="light">
+  <nz-sider nzCollapsible [(nzCollapsed)]="rightSiderCollapsed" [nzBreakpoint]="'lg'" [nzWidth]="350" nzTheme="light">
     @if (chartForm && !rightSiderCollapsed) {
       <form style="width: max-content; margin: 10px" nz-form [formGroup]="chartForm">
         <nz-form-item>
@@ -275,6 +277,8 @@
     </p>
     <p>{{ 'DOCUMENTATION_MODAL.PARAGRAPH_1' | translate }}</p>
     <p>{{ 'DOCUMENTATION_MODAL.PARAGRAPH_2' | translate }}</p>
+    <a style="margin-right: 5px" href="https://github.com/thenotrealagata/knitter-frontend" target="_blank">Angular</a>
+    <a href="https://github.com/thenotrealagata/knitter-backend" target="_blank">Java Spring Boot</a>
   </ng-container>
 </nz-modal>
 

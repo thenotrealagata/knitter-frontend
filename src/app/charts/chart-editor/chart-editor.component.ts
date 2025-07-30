@@ -93,6 +93,7 @@ export class ChartEditorComponent implements CanDeactivate {
   saved = false;
 
   rightSiderCollapsed = false;
+  leftSiderCollapsed = false;
 
   atomicStitchInventory = Object.keys(AtomicStitchType)
     .filter(key => isNaN(Number(key)))

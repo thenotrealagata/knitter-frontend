@@ -3,7 +3,7 @@
         "TITLE": "Information",
         "INTRO": "This project is a partial demo of a full-stack web application that allows users to find, create and compose knitting charts. These charts are used to create different textures in the knitted fabric, as each symbol shows a different way of working a stitch. This implementation allows for the creation of knit/purl, lace, colorwork and cable diagrams.",
         "PARAGRAPH_1": "In the demo project the panel editor is initialized, which is used to compose smaller blocks (charts) into a larger structure. All features of the chart editor are available, plus a chart addition modal. Select the different stitches or charts to draw, or select from the color palette at the bottom of the drawing area to create colorful panels.",
-        "PARAGRAPH_2": "The application was implemented in Angular with the Ng-Zorro library for the frontend, and Java Spring Boot for the backend. Since I developed this as the final project for my Bachelor's, I won't make the source code public until I defend the implementation end of June."
+        "PARAGRAPH_2": "The application was implemented in Angular with the Ng-Zorro library for the frontend, and Java Spring Boot for the backend. Source code is available by clicking the links below."
     },
     "ATOMIC_STITCH": {
         "BOBBLE": "Bobble",

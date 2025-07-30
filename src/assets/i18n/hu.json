@@ -3,7 +3,7 @@
         "TITLE": "Információ",
         "INTRO": "Ez a demo projekt része egy full-stack webalkalmazásnak, amely kötésdiagramok létrehozását és kompozícióját teszi lehetővé. Ezen diagramok használhatóak arra, hogy a kötött anyagban különböző textúrákat hozzunk létre, minden négyzet egy szem lekötését mutatja meg. Az általam írt program sima/fordított, csipke, színes és csavart minták létrehozását teszi lehetővé.",
         "PARAGRAPH_1": "A panelszerkesztő és megtekintő komponens tekinthető meg ebben a projektben. A panelek olyan nagyobb egységek, amelyek kisebb elemekből, chartokból épülnek fel. Ennek megfelelően a panelszerkesztő tartalmaz minden chartszerkesztőben elérhető eszközt, és a chart hozzáadás opciót. A felhasználó kiválaszthatja a rajzeszközöket a bal oldalsávról, vagy színt válthat a rajzterület alján található színpalettával.",
-        "PARAGRAPH_2": "Az applikáció frontendjét Angularban írtam és az Ng-Zorro keretrendszert használtam hozzá. A backendhez a Java Spring Boot keretrendszert használtam."
+        "PARAGRAPH_2": "Az applikáció frontendjét Angularban írtam és az Ng-Zorro keretrendszert használtam hozzá. A backendhez a Java Spring Boot keretrendszert használtam. A forráskód az alábbi linkeken érhető el."
     },
     "ATOMIC_STITCH": {
         "BOBBLE": "Bogyó",
