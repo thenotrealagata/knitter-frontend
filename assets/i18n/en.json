@@ -1,0 +1,110 @@
+{
+    "DOCUMENTATION_MODAL": {
+        "TITLE": "Information",
+        "INTRO": "This project is a partial demo of a full-stack web application that allows users to find, create and compose knitting charts. These charts are used to create different textures in the knitted fabric, as each symbol shows a different way of working a stitch. This implementation allows for the creation of knit/purl, lace, colorwork and cable diagrams.",
+        "PARAGRAPH_1": "In the demo project the panel editor is initialized, which is used to compose smaller blocks (charts) into a larger structure. All features of the chart editor are available, plus a chart addition modal. Select the different stitches or charts to draw, or select from the color palette at the bottom of the drawing area to create colorful panels.",
+        "PARAGRAPH_2": "The application was implemented in Angular with the Ng-Zorro library for the frontend, and Java Spring Boot for the backend. Source code is available by clicking the links below."
+    },
+    "ATOMIC_STITCH": {
+        "BOBBLE": "Bobble",
+        "K2TOG": "Knit two together",
+        "KFB": "Knit front and back loop",
+        "KNIT": "Knit",
+        "NOSTITCH": "No stitch",
+        "P2TOG": "Purl two together",
+        "PURL": "Purl",
+        "SLIP": "Slip",
+        "SSK": "Slip slip knit",
+        "SSPK": "Slip slip purl",
+        "YO": "Yarn over"
+    },
+    "ATOMIC_STITCH_ABBREVIATIONS": {
+        "BOBBLE": "Bobble",
+        "K2TOG": "K2tog",
+        "KFB": "Kfb",
+        "KNIT": "Knit",
+        "NOSTITCH": "No stitch",
+        "P2TOG": "P2tog",
+        "PURL": "Purl",
+        "SLIP": "Sl",
+        "SSK": "SSK",
+        "SSPK": "SSPK",
+        "YO": "YO"
+    },
+    "CABLE_NEEDLE_DIRECTION": {
+        "BEHIND": "Behind work",
+        "IN_FRONT": "In front of work"
+    },
+    "CHART_EDITOR": {
+        "ADD_CHARTS_MODAL": {
+            "NOT_SELECTED": "Not selected",
+            "NO_FAVORITES": "You haven't added any charts to your favorites yet.",
+            "OK": "Add charts",
+            "SELECTED": "Selected",
+            "TITLE": "Add charts"
+        },
+        "CABLE_STITCH_MODAL": {
+            "HOLD_CABLE_NEEDLE": "Hold cable needle",
+            "PREVIEW": "Preview",
+            "SEQUENCE": "Sequence",
+            "SEQUENCE_TIP": "Click to switch between knit and purl stitches.",
+            "SIZE": "Size",
+            "SIZE_PLACEHOLDER": "Size",
+            "TITLE": "Create cable stitch",
+            "TO_CABLE_NEEDLE": "To cable needle",
+            "TO_CABLE_NEEDLE_PLACEHOLDER": "To CN"
+        },
+        "FORM": {
+            "DESCRIPTION": "Description",
+            "DESCRIPTION_PLACEHOLDER": "Description",
+            "HEIGHT_DECREASE_CONFIRM": "Are you sure you want to decrease the height of this chart?",
+            "HEIGHT_PLACEHOLDER": "Height",
+            "IMAGE": "Image",
+            "KNITTED_FLAT": "Knitted flat",
+            "PREVIEW": "Preview",
+            "SIZE": "Size",
+            "TITLE": "Title",
+            "TITLE_PLACEHOLDER": "Title",
+            "UPLOAD_BUTTON": "Click to upload",
+            "WIDTH_DECREASE_CONFIRM": "Are you sure you want to decrease the width of this chart?",
+            "WIDTH_PLACEHOLDER": "Width"
+        },
+        "LEFT_SIDER": {
+            "STITCHES": "Stitches",
+            "CABLE_STITCHES": "Cable stitches",
+            "CHARTS": "Charts",
+            "ADD_CHARTS": "Add charts"
+        },
+        "MESSAGES": {
+            "DRAW_STITCH_OUTSIDE_AREA": "Stitch can't be added outside of drawing area!",
+            "DRAW_CHART_OUTSIDE_AREA": "Chart can't be copied over the given stitch, as it does not fit unto the given surface.",
+            "INVALID_FILE_TYPE": "Invalid file type: only PNG and JPEG files are allowed.",
+            "INVALID_FILE_SIZE": "File is too large, maximum size is 3 MB.",
+            "FILE_UPLOAD_ERROR": "Error while uploading file.",
+            "PREVIEW_ERROR": "An error occurred while loading preview for panel.",
+            "PREVIEW_INVALID_FORM": "Please provide all required fields before previewing the panel.",
+            "SAVE_INVALID_FORM": "Can't save in this state, please provide all the required fields!",
+            "SAVE_ERROR_PANEL": "Error saving panel.",
+            "SAVE_ERROR_CHART": "Error saving chart.",
+            "STITCH_ALREADY_IN_INVENTORY": "Stitch can't be added, as the same one already exists in the stitch inventory."
+        },
+        "PREVIEW_MODAL": {
+            "TITLE": "Preview"
+        },
+        "SELECTED": {
+            "STITCH": "Selected stitch",
+            "CHART": "Selected chart"
+        }
+    },
+    "CHART_VIEWER": {
+        "PATTERN": "Pattern",
+        "PRINT": "Print",
+        "RESULT": "Result",
+        "ROW_ABBREVIATION": "R",
+        "STITCHES_USED": "Stitches used"
+    },
+    "PATTERN_DESCRIPTION": {
+        "WITH": "With {{ color }} ",
+        "SWITCH_TO": "Switch to {{ color }} "
+    }
+}

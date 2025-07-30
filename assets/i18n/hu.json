@@ -1,0 +1,110 @@
+{
+    "DOCUMENTATION_MODAL": {
+        "TITLE": "Információ",
+        "INTRO": "Ez a demo projekt része egy full-stack webalkalmazásnak, amely kötésdiagramok létrehozását és kompozícióját teszi lehetővé. Ezen diagramok használhatóak arra, hogy a kötött anyagban különböző textúrákat hozzunk létre, minden négyzet egy szem lekötését mutatja meg. Az általam írt program sima/fordított, csipke, színes és csavart minták létrehozását teszi lehetővé.",
+        "PARAGRAPH_1": "A panelszerkesztő és megtekintő komponens tekinthető meg ebben a projektben. A panelek olyan nagyobb egységek, amelyek kisebb elemekből, chartokból épülnek fel. Ennek megfelelően a panelszerkesztő tartalmaz minden chartszerkesztőben elérhető eszközt, és a chart hozzáadás opciót. A felhasználó kiválaszthatja a rajzeszközöket a bal oldalsávról, vagy színt válthat a rajzterület alján található színpalettával.",
+        "PARAGRAPH_2": "Az applikáció frontendjét Angularban írtam és az Ng-Zorro keretrendszert használtam hozzá. A backendhez a Java Spring Boot keretrendszert használtam. A forráskód az alábbi linkeken érhető el."
+    },
+    "ATOMIC_STITCH": {
+        "BOBBLE": "Bogyó",
+        "K2TOG": "2 szemet simán összekötünk",
+        "KFB": "A szem első és hátsó lábába kötünk",
+        "KNIT": "Sima",
+        "NOSTITCH": "Nincs szem",
+        "P2TOG": "2 szemet fordítottan összekötünk",
+        "PURL": "Fordított",
+        "SLIP": "Leemelünk 1 szemet",
+        "SSK": "2 szemet leemelünk és összekötünk",
+        "SSPK": "2 szemet leemelünk és fordítottan összekötünk",
+        "YO": "Ráhajtás"
+    },
+    "ATOMIC_STITCH_ABBREVIATIONS": {
+        "BOBBLE": "Bogyó",
+        "K2TOG": "2 szemet S összekötünk",
+        "KFB": "A szem első és hátsó lábába kötünk",
+        "KNIT": "S",
+        "NOSTITCH": "Nincs szem",
+        "P2TOG": "2 szemet F összekötünk",
+        "PURL": "F",
+        "SLIP": "Leemelünk 1 szemet",
+        "SSK": "2 szemet leemelünk és S összekötünk",
+        "SSPK": "2 szemet leemelünk és F összekötünk",
+        "YO": "Ráhajtás"
+    },
+    "CABLE_NEEDLE_DIRECTION": {
+        "BEHIND": "Munka előtt",
+        "IN_FRONT": "Munka mögött"
+    },
+    "CHART_EDITOR": {
+        "ADD_CHARTS_MODAL": {
+            "NOT_SELECTED": "Nincs kiválasztva",
+            "NO_FAVORITES": "Ön még nem adott egy chartot sem a kedvenceihez.",
+            "OK": "Chartok hozzáadása",
+            "SELECTED": "Kiválasztva",
+            "TITLE": "Chartok hozzáadása"
+        },
+        "CABLE_STITCH_MODAL": {
+            "HOLD_CABLE_NEEDLE": "Csavarótű tartása",
+            "PREVIEW": "Előnézet",
+            "SEQUENCE": "Szekvencia",
+            "SEQUENCE_TIP": "Kattintson a négyzetekre a sima és fordított szemek közötti váltáshoz.",
+            "SIZE": "Szélesség",
+            "SIZE_PLACEHOLDER": "Szélesség",
+            "TITLE": "Csavart szem létrehozása",
+            "TO_CABLE_NEEDLE": "Csavarótűre",
+            "TO_CABLE_NEEDLE_PLACEHOLDER": "Csavarótűre"
+        },
+        "FORM": {
+            "DESCRIPTION": "Leírás",
+            "DESCRIPTION_PLACEHOLDER": "Leírás",
+            "HEIGHT_DECREASE_CONFIRM": "Biztos benne, hogy csökkenteni akarja a szerkesztőfelület magasságát?",
+            "HEIGHT_PLACEHOLDER": "Magasság",
+            "IMAGE": "Kép",
+            "KNITTED_FLAT": "Oda-vissza kötve",
+            "PREVIEW": "Előnézet",
+            "SIZE": "Méret",
+            "TITLE": "Cím",
+            "TITLE_PLACEHOLDER": "Cím",
+            "UPLOAD_BUTTON": "Kattintson a feltöltéshez",
+            "WIDTH_DECREASE_CONFIRM": "Biztos benne, hogy csökkenteni akarja a szerkesztőfelület szélességét?",
+            "WIDTH_PLACEHOLDER": "Szélesség"
+        },
+        "LEFT_SIDER": {
+            "STITCHES": "Szemek",
+            "CABLE_STITCHES": "Csavart szemek",
+            "CHARTS": "Chartok",
+            "ADD_CHARTS": "Chartok hozzáadása"
+        },
+        "MESSAGES": {
+            "DRAW_STITCH_OUTSIDE_AREA": "A szem nem fér rá a rajzfelületre!",
+            "DRAW_CHART_OUTSIDE_AREA": "A chart nem másolható rá a rajzfelületre, mert túl nagy a területe.",
+            "INVALID_FILE_TYPE": "Invalid fájl: csak PNG és JPEG fájlok tölthetőek fel.",
+            "INVALID_FILE_SIZE": "A fájl mérete túl nagy, maximum 3 MG megengedett.",
+            "FILE_UPLOAD_ERROR": "Hiba lépett fel a fájl feltöltése közben.",
+            "PREVIEW_ERROR": "Hiba lépett fel a panel előnézetének betöltése közben.",
+            "PREVIEW_INVALID_FORM": "Töltse ki az összes kötelező mezőt, mielőtt betöltené a panel előnézetét.",
+            "SAVE_INVALID_FORM": "A mentés nem lehetséges addig, amíg minden kötelező mező ki nem lett töltve.",
+            "SAVE_ERROR_PANEL": "Hiba lépett fel a panel mentése közben.",
+            "SAVE_ERROR_CHART": "Hiba lépett fel a chart mentése közben.",
+            "STITCH_ALREADY_IN_INVENTORY": "Ezt a szemet nem lehet hozzáadni, mert már létezik egy ugyanilyen a csavart szemek között."
+        },
+        "PREVIEW_MODAL": {
+            "TITLE": "Előnézet"
+        },
+        "SELECTED": {
+            "STITCH": "Kiválasztott szem",
+            "CHART": "Kiválasztott chart"
+        }
+    },
+    "CHART_VIEWER": {
+        "PATTERN": "Minta",
+        "PRINT": "Nyomtatás",
+        "RESULT": "Előnézet",
+        "ROW_ABBREVIATION": "S",
+        "STITCHES_USED": "Felhasznált szemek"
+    },
+    "PATTERN_DESCRIPTION": {
+        "WITH": "{{ color }} színnel ",
+        "SWITCH_TO": "Váltson {{ color }} színre "
+    }
+}
