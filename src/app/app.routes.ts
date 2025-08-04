@@ -5,6 +5,6 @@ import { authGuard } from './shared/guards/auth-guard/auth.guard';
 
 // Keep in mind: Angular uses first-match strategy
 export const routes: Routes = [
-    { path: '', component: ChartEditorComponent, canDeactivate: [canDeactivateGuard], canActivate: [authGuard] },
-    { path: '**', redirectTo: '' },
+    { path: '', component: ChartEditorComponent },
+    { path: '**', redirectTo: '/' },
 ];
