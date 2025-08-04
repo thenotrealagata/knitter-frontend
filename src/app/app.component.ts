@@ -1,7 +1,5 @@
-import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { NzAvatarComponent } from 'ng-zorro-antd/avatar';
+import { RouterOutlet } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -10,12 +8,12 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { UserService } from './shared/services/user.service';
 
 const ngZorroModules = [
-  NzPageHeaderModule, NzDropDownModule, NzSpaceModule, NzIconModule, NzButtonModule, NzAvatarComponent
+  NzPageHeaderModule, NzDropDownModule, NzSpaceModule, NzIconModule, NzButtonModule
 ]
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,  RouterLink, ...ngZorroModules],
+  imports: [RouterOutlet, ...ngZorroModules],
   templateUrl: './app.component.html',
   styleUrl: './app.component.less'
 })
