@@ -2,8 +2,14 @@
   <button class="documentation-button" nz-button nzSize="large" nzShape="circle" nzType="primary" (click)="setDocumentationModalVisible(true)">
     <nz-icon nzType="info-circle" nzTheme="outline" />
   </button>
-  <nz-sider nzCollapsible [(nzCollapsed)]="leftSiderCollapsed" [nzBreakpoint]="'lg'" [nzWidth]="350" nzBreakpoint="lg" nzTheme="light">
-    @if (!leftSiderCollapsed) {
+  
+  <nz-sider [nzWidth]="350" nzBreakpoint="lg" nzTheme="light">
+    <div class="language-selector">
+      <nz-select [(ngModel)]="currentLanguage" (ngModelChange)="useLanguage($any($event))">
+        <nz-option nzValue="en" nzLabel="English"></nz-option>
+        <nz-option nzValue="hu" nzLabel="Magyar"></nz-option>
+      </nz-select>
+    </div>
     <div style="padding: 10px;">
       <nz-divider nzPlain [nzText]="'CHART_EDITOR.LEFT_SIDER.STITCHES' | translate" nzOrientation="left"></nz-divider>
       <div class="stitch-inventory" nz-flex nzGap="middle" nzWrap="wrap">
@@ -37,15 +43,7 @@
         </button>
       }
       </div>
-      
     </div>
-    <div class="language-selector">
-      <nz-select [(ngModel)]="currentLanguage" (ngModelChange)="useLanguage($any($event))">
-        <nz-option nzValue="en" nzLabel="English"></nz-option>
-        <nz-option nzValue="hu" nzLabel="Magyar"></nz-option>
-      </nz-select>
-    </div>
-    }
   </nz-sider>
   <nz-layout class="inner-layout">
     <nz-content>
@@ -240,9 +238,10 @@
         <div nz-col [nzSpan]="8">
           <app-charts-listing-element
             [chart]="chart"
+            [colors]="colorPaletteForm"
             [showFavorite]="false"
             [showViewMore]="false"
-            [showDescription]="false"
+            [showDescription]="true"
             [customActions]="[chartSelectedTemplate]"
             >
           </app-charts-listing-element>

@@ -449,6 +449,10 @@ export class ChartEditorComponent implements CanDeactivate {
     if (!(this.previousHeight && this.chartForm)) return;
 
     const newValue = this.chartForm?.controls.height.value;
+    if (!newValue) {
+      this.chartForm.controls.height.setValue(this.previousHeight);
+      return;
+    }
 
     const stitchCountChange = Math.abs(this.previousHeight - newValue);
     if (this.previousHeight < newValue) {
@@ -486,6 +490,10 @@ export class ChartEditorComponent implements CanDeactivate {
     if (!(this.previousWidth && this.chartForm)) return;
 
     const newValue = this.chartForm?.controls.width.value;
+    if (!newValue) {
+      this.chartForm.controls.width.setValue(this.previousWidth);
+      return;
+    }
 
     const stitchCountChange = Math.abs(this.previousWidth - newValue);
     if (this.previousWidth < newValue) {
@@ -575,6 +583,9 @@ export class ChartEditorComponent implements CanDeactivate {
 
   onStitchNumberChange() {
     const newSize = this.cableStitchForm.controls.stitchNumber.value;
+    if (!newSize) {
+      this.cableStitchForm.controls.stitchNumber.setValue(2);
+    }
     const previousSize = this.cableStitchForm.controls.sequence.value.length
     const difference = newSize - previousSize;
     if (difference > 0) {
@@ -588,7 +599,7 @@ export class ChartEditorComponent implements CanDeactivate {
 
     // If toCableNeedle value would be invalid, decrease it
     if (this.cableStitchForm.controls.toCableNeedle.value >= newSize) {
-      this.cableStitchForm.controls.toCableNeedle.setValue(newSize - 1);
+      this.cableStitchForm.controls.toCableNeedle.setValue(Math.max(newSize - 1, 1));
     }
 
     this.regenerateCablePreview();

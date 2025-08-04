@@ -8,10 +8,13 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { HttpClientService } from '../../../shared/services/http-client.service';
 import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { ChartBlockComponent } from '../../chart-block/chart-block.component';
+import { ColorPaletteForm } from '../../../shared/services/form.interfaces';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-charts-listing-element',
-  imports: [NzGridModule, NzCardModule, ParagraphPipe, RouterLink, NzIconModule, NzSkeletonModule, NzSpaceModule],
+  imports: [NzGridModule, NzCardModule, ParagraphPipe, RouterLink, NzIconModule, NzSkeletonModule, NzSpaceModule, ChartBlockComponent],
   templateUrl: './charts-listing-element.component.html',
   styleUrl: './charts-listing-element.component.less'
 })
@@ -21,6 +24,7 @@ export class ChartsListingElementComponent implements OnInit, AfterViewInit, OnC
   cardActions: TemplateRef<void>[] = [];
 
   chart = input.required<Chart>();
+  colors = input<FormGroup<ColorPaletteForm>>();
   isFavorited = input<boolean>();
   isPanel = input<boolean>(false);
 
