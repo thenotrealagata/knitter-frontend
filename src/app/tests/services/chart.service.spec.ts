@@ -39,6 +39,19 @@ describe('ChartService', () => {
             .toBe("1/1 RPC");
     })
 
+    // Test getStitchWidth()
+    it('getStitchWidth for atomic stitch', () => {
+        expect(service.getStitchWidth(
+            new AtomicStitch(Color.MC, AtomicStitchType.KFB)))
+            .toBe(1);
+    })
+
+    it('getStitchWidth for cable', () => {
+        expect(service.getStitchWidth(
+            new CableStitch(Color.MC, [AtomicStitchType.Knit, AtomicStitchType.Purl], 1, CableNeedleDirection.HOLD_BEHIND_WORK)))
+            .toBe(2);
+    })
+
     // Test areStitchesEqual()
     it('areStitchesEqual for atomic stitches', () => {
         const knitMC = new AtomicStitch(Color.MC, AtomicStitchType.Knit);

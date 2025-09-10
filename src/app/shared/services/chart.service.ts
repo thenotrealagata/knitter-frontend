@@ -32,6 +32,17 @@ export class ChartService {
       && stitch1.sequence.every((stitch, i) => stitch2.sequence[i] === stitch))
   }
 
+  getStitchWidth(stitch: Stitch) {
+    if (this.isAtomicStitch(stitch)) {
+      return 1;
+    }
+    if (this.isCableStitch(stitch)) {
+      return stitch.sequence.length;
+    }
+
+    return 0;
+  }
+
   isStitch(obj: unknown): obj is Stitch {
     return typeof obj === "object" && obj !== null && 'color' in obj;
   }

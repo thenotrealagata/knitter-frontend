@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { PatternDescriptionPipe } from '../../shared/pipes/pattern-description.pipe';
 import { ChartService } from '../../shared/services/chart.service';
 import { AtomicStitch, AtomicStitchType, Color } from '../../shared/model/Chart';
+import { TranslateService } from '@ngx-translate/core';
 
 describe('PatternDescriptionPipe', () => {
     let pipe: PatternDescriptionPipe;
@@ -10,7 +11,7 @@ describe('PatternDescriptionPipe', () => {
         TestBed.configureTestingModule({
             providers: [ ChartService ]
          });
-        pipe = new PatternDescriptionPipe(TestBed.inject(ChartService));
+        pipe = new PatternDescriptionPipe(TestBed.inject(ChartService), TestBed.inject(TranslateService));
     });
 
     it('should be created', () => {

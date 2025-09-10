@@ -130,10 +130,6 @@ export class ChartEditorComponent implements CanDeactivate {
   ];
   chartInventory: Chart[] = [ demoChart2 ]; // Only relevant for panel editor
 
-  httpClient: HttpClientService;
-  formService: FormService;
-  router: Router;
-  nzMessageService: NzMessageService;
   chartService: ChartService;
 
   isAddChartsModalVisible = false;
@@ -146,7 +142,6 @@ export class ChartEditorComponent implements CanDeactivate {
   CableNeedleDirection = CableNeedleDirection;
   AtomicStitchType = AtomicStitchType;
 
-  translate: TranslateService;
   currentLanguage: 'en' | 'hu';
 
   // For demo
@@ -157,19 +152,14 @@ export class ChartEditorComponent implements CanDeactivate {
   imageUrl?: string | ArrayBuffer | null;
 
   constructor(
-    formService: FormService,
-    httpClient: HttpClientService,
-    router: Router,
-    nzMessageService: NzMessageService,
-    userService: UserService,
+    private formService: FormService,
+    private httpClient: HttpClientService,
+    private router: Router,
+    private nzMessageService: NzMessageService,
+    private userService: UserService,
     chartService: ChartService,
-    translate: TranslateService) {
-    this.httpClient = httpClient;
-    this.formService = formService;
-    this.router = router;
-    this.nzMessageService = nzMessageService;
+    private translate: TranslateService) {
     this.chartService = chartService;
-    this.translate = translate;
     this.currentLanguage = (translate.currentLang || 'en') as 'en' | 'hu';
     
     this.colorPaletteForm = formService.colorPaletteForm({
@@ -316,7 +306,16 @@ export class ChartEditorComponent implements CanDeactivate {
     const rowIndex = this.chartForm?.controls.pattern.value.findIndex(row => row.includes(startPoint))!;
     const row = this.chartForm?.controls.pattern.value[rowIndex];
     const stitchIndex = row?.indexOf(startPoint);
-    if (stitchIndex === undefined) return;
+
+    if (stitchIndex === undefined || row === undefined) return;
+
+    // Row offset means the width (in units) of the area that is before the starting point
+    // Because of stitches that have a unit width > 1, this needs to be recalculated for every row
+    let rowOffset = 0;
+    for (let i = 0; i < stitchIndex; i++) {
+      const stitch = row[i];
+      rowOffset += this.chartService.getStitchWidth(stitch);
+    }
 
     if (this.chartForm &&
       (stitchIndex + chart.width > this.chartForm.controls.width.value ||
@@ -329,8 +328,17 @@ export class ChartEditorComponent implements CanDeactivate {
     // Chart can be added, copy over elements
     const formPattern = this.chartForm?.controls.pattern.value!;
     pattern.forEach((row, patternRowIndex) => {
+      // Calculate how many stitches take up the needed space
+      const formRow = formPattern[rowIndex + patternRowIndex];
+      let patternRowOffset = 0;
+      let stitchWidthSum = 0;
+      while (stitchWidthSum < rowOffset) {
+        stitchWidthSum += this.chartService.getStitchWidth(formRow[patternRowOffset]);
+        patternRowOffset++;
+      }
+
       row.forEach((stitch, patternStitchIndex) => {
-        const formStitch = formPattern[rowIndex + patternRowIndex][stitchIndex + patternStitchIndex];
+        const formStitch = formPattern[rowIndex + patternRowIndex][patternRowOffset + patternStitchIndex];
         this.drawStitch(formStitch, stitch);
       });
     })
