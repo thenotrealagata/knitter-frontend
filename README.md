@@ -1,6 +1,16 @@
-# KnitterFrontend
+# Knitter
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.5.
+This repo contains the frontend for my stitch dictionary application. In both machine and hand knitting, the knitted fabric is created by forming loops. The way these loops are worked influences the resulting fabric, providing the opportunity to work cable, lace or colorwork designs. A knitting chart visualizes this: it is read from the bottom right corner, (mostly) right to left.
+
+Each square on the chart symbolizes 1 stitch and how it is worked. There are many different approaches to these symbols, I mostly adhered to the Craft Yarn Council's recommendations. This application allows for the creation of:
+- Cable designs
+- Lace designs
+- Colorwork designs (with up to 4 contrast colors)
+- Knit/purl designs
+
+Smaller units of these designs (charts) can be composed into larger designs (panels) using the panel editor function.
+
+The backend repo is available [here](https://github.com/thenotrealagata/knitter-backend). A demo of this frontend (with limited functionality) can be found [here](https://thenotrealagata.github.io/knitter-frontend/).
 
 ## Development server
 
@@ -11,49 +21,3 @@ ng serve
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
